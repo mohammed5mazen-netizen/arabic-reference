@@ -46,7 +46,8 @@ Base package: `com.mrsoft.arabicreference`
 | `dictionary` | Lexical entries, senses, forms, relations, roots, public lookup |
 | `source` | Works, licenses, citations |
 | `linguistics` | Normalization, editorial states, slugs, content revisions |
-| `grammar`, `morphology`, `content`, `learning`, `ai` | Package boundaries only |
+| `morphology` | Patterns, manual readings, a bounded rule analyzer, and limited sound-verb conjugation |
+| `grammar`, `content`, `learning`, `ai` | Package boundaries only |
 
 Domain code does not depend on web or persistence. Controllers do not call repositories.
 
@@ -56,7 +57,7 @@ The core is a knowledge model, not a generic CMS. S2 implements:
 
 `Surface form → Lexical entry / lemma → optional root → senses → forms → relations → examples → sources → citations`
 
-Morphology and grammar rules are still later stages. The model is described in [DICTIONARY_MODEL.md](DICTIONARY_MODEL.md).
+S3 adds a bounded morphology engine beside that model. It is documented in [MORPHOLOGY_ENGINE.md](MORPHOLOGY_ENGINE.md). Grammar is still a later stage. The dictionary model is described in [DICTIONARY_MODEL.md](DICTIONARY_MODEL.md).
 
 Every published sense points at a citation. Entries also carry contributor, reviewer, verification state, revision, and publication state. See ADR-004, ADR-020, and ADR-025.
 
@@ -77,7 +78,7 @@ Public traffic is anonymous by design. Later capacity controls attach to the edg
 - bot protection
 - search throttling
 
-Redis is present so those controls have a place to land. S1 uses Redis for admin login rate limits and access-token revocation. Public reads are still not rate limited.
+Redis is present so those controls have a place to land. S1 uses Redis for admin login rate limits and access-token revocation. S3 adds a fail-open cache and a generous limiter for public morphology analysis. Other public reads are not rate limited.
 
 ## SEO
 

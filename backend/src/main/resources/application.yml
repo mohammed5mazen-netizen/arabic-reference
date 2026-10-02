@@ -69,6 +69,11 @@ app:
       email: ${BOOTSTRAP_OWNER_EMAIL:}
       display-name: ${BOOTSTRAP_OWNER_DISPLAY_NAME:}
       password: ${BOOTSTRAP_OWNER_PASSWORD:}
+  morphology:
+    max-candidates: ${MORPHOLOGY_MAX_CANDIDATES:8}
+    max-input-length: ${MORPHOLOGY_MAX_INPUT_LENGTH:80}
+    rate-limit-per-minute: ${MORPHOLOGY_RATE_LIMIT:120}
+    cache-ttl: ${MORPHOLOGY_CACHE_TTL:10m}
 
 logging:
   level:

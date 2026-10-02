@@ -13,6 +13,7 @@ export const adminNav: AdminNavItem[] = [
   { href: "/admin/dictionary/roots", label: "الجذور", permission: "dictionary.root.view" },
   { href: "/admin/sources", label: "المصادر", permission: "source.view" },
   { href: "/admin/review", label: "المراجعات", permission: "dictionary.entry.review" },
+  { href: "/admin/morphology", label: "الصرف", permission: "morphology.view" },
 ];
 
 export function visibleAdminNav(permissions: readonly string[]): AdminNavItem[] {

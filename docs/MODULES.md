@@ -46,6 +46,10 @@ Lexical entries, senses, forms, usage examples, roots, and linguistic relations.
 
 Reference works, licenses, and citations. It does not depend on the dictionary module. Dictionary evidence tables hold the foreign keys back to citations.
 
-## grammar, morphology, content, learning, ai
+## morphology
 
-Package placeholders. Architecture tests fail if these packages gain implementation classes. Morphology, conjugation, and automatic root extraction wait for later stages.
+Patterns, manual morphological readings, clitic segmentation, and a dictionary-first analyzer. It reads published dictionary data through `PublishedDictionaryQuery` and does not let dictionary code depend on it. Conjugation covers a sound triliteral فَعَلَ only when the class and, for the imperfect, the stem vowel are recorded. See [MORPHOLOGY_ENGINE.md](MORPHOLOGY_ENGINE.md).
+
+## grammar, content, learning, ai
+
+Package placeholders. Architecture tests fail if these packages gain implementation classes. Sentence syntax waits for a later stage.

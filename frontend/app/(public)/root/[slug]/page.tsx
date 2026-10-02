@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { canonicalSlug, partOfSpeechLabel, publicJson, type LookupHit } from "@/lib/dictionary";
+import { morphologyLabel, type RootMorphology } from "@/lib/morphology";
 import { siteUrl } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
@@ -31,6 +32,8 @@ export default async function RootPage({ params }: { params: Promise<{ slug: str
   const slug = canonicalSlug(rawSlug);
   const root = await publicJson<PublicRoot>(`/api/v1/public/dictionary/roots/${encodeURIComponent(slug)}`);
   if (!root) notFound();
+  const morphology = await publicJson<RootMorphology>(`/api/v1/public/morphology/roots/${encodeURIComponent(root.slug)}`);
+  const patterns = morphology?.patterns ?? [];
 
   return (
     <main id="content" className="relative z-10 mx-auto w-full max-w-3xl px-5 py-10">
@@ -53,6 +56,21 @@ export default async function RootPage({ params }: { params: Promise<{ slug: str
           </ul>
         )}
       </section>
+      {patterns.length > 0 ? (
+        <section className="mt-10">
+          <h2 className="font-display text-3xl">أوزان مسجّلة</h2>
+          <ul className="mt-4 space-y-3">
+            {patterns.map((pattern) => (
+              <li key={`${pattern.entrySlug}-${pattern.code ?? pattern.original}`} className="rounded-[1.5rem] border border-line bg-raised p-4">
+                <Link href={`/word/${pattern.entrySlug}`} className="font-display text-3xl">
+                  {pattern.lemma}
+                </Link>
+                <p className="text-sm text-muted">{[pattern.original, morphologyLabel(pattern.derivation)].filter(Boolean).join(" · ")}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
     </main>
   );
 }

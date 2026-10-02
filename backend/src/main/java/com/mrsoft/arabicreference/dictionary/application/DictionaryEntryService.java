@@ -521,13 +521,14 @@ public class DictionaryEntryService {
                 throw new ConflictException("The root must be published before the entry.");
             }
         }
+        Map<UUID, List<UUID>> citationsBySense = citationIdsBySense(entrySenses.stream().map(LexicalSenseEntity::getId).toList());
         List<UUID> citationIds = new ArrayList<>();
         for (LexicalSenseEntity sense : entrySenses) {
-            List<SenseCitationEntity> links = senseCitations.findByOwnerId(sense.getId());
+            List<UUID> links = citationsBySense.getOrDefault(sense.getId(), List.of());
             if (links.isEmpty()) {
                 throw new ConflictException("Every published sense needs at least one citation.");
             }
-            links.forEach(link -> citationIds.add(link.getCitationId()));
+            citationIds.addAll(links);
         }
         for (CitationView citation : sources.citations(citationIds)) {
             if (!"PUBLISHED".equals(citation.sourceStatus()) || !citation.publishableLicense()) {
@@ -548,6 +549,7 @@ public class DictionaryEntryService {
         List<LexicalSenseEntity> entrySenses = senses.findByLexicalEntryIdOrderByDisplayOrderAsc(entry.getId());
         List<UUID> senseIds = entrySenses.stream().map(LexicalSenseEntity::getId).toList();
         List<UsageExampleEntity> entryExamples = senseIds.isEmpty() ? List.of() : examples.findBySenseIdInOrderByDisplayOrderAsc(senseIds);
+        Map<UUID, List<UUID>> citationsBySense = citationIdsBySense(senseIds);
         List<Map<String, Object>> senseMaps = new ArrayList<>();
         for (LexicalSenseEntity sense : entrySenses) {
             if (sense.getStatus() == PublicationStatus.ARCHIVED) {
@@ -566,7 +568,7 @@ public class DictionaryEntryService {
                 exampleMap.put("kind", example.getExampleKind().name());
                 return exampleMap;
             }).toList());
-            List<UUID> ids = senseCitations.findByOwnerId(sense.getId()).stream().map(SenseCitationEntity::getCitationId).toList();
+            List<UUID> ids = citationsBySense.getOrDefault(sense.getId(), List.of());
             senseMap.put("sources", sources.citations(ids).stream().map(this::attributionMap).toList());
             senseMaps.add(senseMap);
         }
@@ -675,6 +677,7 @@ public class DictionaryEntryService {
         List<LexicalSenseEntity> entrySenses = senses.findByLexicalEntryIdOrderByDisplayOrderAsc(entry.getId());
         List<UUID> senseIds = entrySenses.stream().map(LexicalSenseEntity::getId).toList();
         List<UsageExampleEntity> entryExamples = senseIds.isEmpty() ? List.of() : examples.findBySenseIdInOrderByDisplayOrderAsc(senseIds);
+        Map<UUID, List<UUID>> citationsBySense = citationIdsBySense(senseIds);
         List<AdminSense> senseViews = entrySenses.stream().map(sense -> new AdminSense(
                 sense.getId(),
                 sense.getDefinition(),
@@ -684,7 +687,7 @@ public class DictionaryEntryService {
                 sense.getDisplayOrder(),
                 sense.getStatus().name(),
                 sense.getVersion(),
-                senseCitations.findByOwnerId(sense.getId()).stream().map(SenseCitationEntity::getCitationId).toList(),
+                citationsBySense.getOrDefault(sense.getId(), List.of()),
                 entryExamples.stream().filter(example -> example.getSenseId().equals(sense.getId())).map(example -> new AdminExample(example.getId(), example.getExampleKind().name(), example.getTextOriginal(), example.getExplanation(), example.getCitationId(), example.getDisplayOrder(), example.getStatus().name())).toList())).toList();
         List<AdminForm> formViews = forms.findByLexicalEntryIdOrderByDisplayOrderAsc(entry.getId()).stream()
                 .map(form -> new AdminForm(form.getId(), form.getFormType().name(), form.getOriginalForm(), form.getNormalizedForm(), form.getNotes(), form.getDisplayOrder(), form.getStatus().name()))
@@ -744,12 +747,6 @@ public class DictionaryEntryService {
         }
     }
 
-    private void remember(LexicalEntryEntity entry, UUID actor, String reason) {
-        if (entry.getPublishedSnapshot() != null) {
-            revisions.record("lexical_entry", entry.getId(), Map.of("lemma", entry.getLemmaOriginal(), "status", entry.getStatus().name()), actor, reason);
-        }
-    }
-
     private void requireCitation(UUID citationId) {
         if (sources.citations(List.of(citationId)).isEmpty()) {
             throw new ResourceNotFoundException("Citation was not found.");
@@ -797,6 +794,17 @@ public class DictionaryEntryService {
             throw invalid(field, "This text is too long.");
         }
         return text.normalize(value.trim());
+    }
+
+    private Map<UUID, List<UUID>> citationIdsBySense(List<UUID> senseIds) {
+        Map<UUID, List<UUID>> grouped = new LinkedHashMap<>();
+        if (senseIds.isEmpty()) {
+            return grouped;
+        }
+        for (SenseCitationEntity link : senseCitations.findByOwnerIdIn(senseIds)) {
+            grouped.computeIfAbsent(link.getOwnerId(), ignored -> new ArrayList<>()).add(link.getCitationId());
+        }
+        return grouped;
     }
 
     private static boolean visible(LexicalEntryEntity entry) {

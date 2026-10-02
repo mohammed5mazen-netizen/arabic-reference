@@ -4,7 +4,7 @@ PostgreSQL is the only database. Schema changes go through Flyway. Hibernate `dd
 
 ## Migration names
 
-`V1__foundation_schema.sql`, `V2__admin_identity.sql`, then `V3__dictionary_core.sql`. Do not edit a migration after it has been applied to a shared database.
+`V1__foundation_schema.sql`, `V2__admin_identity.sql`, `V3__dictionary_core.sql`, then `V4__morphology_core.sql`. Do not edit a migration after it has been applied to a shared database.
 
 ## S0 schema
 
@@ -31,7 +31,17 @@ Usernames and emails are stored normalized and are unique without relying on let
 - evidence tables `sense_citation`, `entry_citation`, `relation_citation`, `root_citation`
 - `content_revision` for recoverable snapshots
 
-There is still no morphology table and no search-engine index.
+There is still no search-engine index.
+
+## S3 schema
+
+`V4__morphology_core.sql` adds morphology tables and extends the audit check. `V1`, `V2`, and `V3` are unchanged.
+
+- `morphological_pattern` is unique on `code` and indexed by status
+- `morphology_analysis` indexes the lexical entry, status, and published readings
+- `morphology_analysis_citation` points at the existing `source_citation` table
+- `morphology_rule` stores an enabled flag, not executable code
+- `morphology_state` holds one generation counter used in cache keys
 
 ## Unicode and time
 
@@ -39,8 +49,8 @@ The compose service initializes PostgreSQL with UTF-8. Timestamps use `timestamp
 
 ## What is postponed
 
-Morphology tables wait for a later stage. Staff and public identifiers are UUIDs. Sequential keys may exist inside the database but are not the public id.
+Staff and public identifiers are UUIDs. Sequential keys may exist inside the database but are not the public id. Grammar tables wait for a later stage.
 
 ## Redis
 
-Redis is not a system of record. S1 uses it for admin authentication rate limits and a short access-token denylist. It does not cache linguistic data.
+Redis is not a system of record. S1 uses it for admin authentication rate limits and a short access-token denylist. S3 may cache a deterministic public morphology analysis. The key includes the rule-set version, the morphology generation, and a dictionary timestamp. A Redis error does not change the analysis.

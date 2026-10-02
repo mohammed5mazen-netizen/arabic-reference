@@ -40,6 +40,14 @@ public final class PermissionCatalog {
     public static final String RELATION_MANAGE = "dictionary.relation.manage";
     public static final String EXAMPLE_MANAGE = "dictionary.example.manage";
     public static final String CITATION_MANAGE = "citation.manage";
+    public static final String MORPHOLOGY_VIEW = "morphology.view";
+    public static final String MORPHOLOGY_PATTERN_MANAGE = "morphology.pattern.manage";
+    public static final String MORPHOLOGY_ANALYSIS_CREATE = "morphology.analysis.create";
+    public static final String MORPHOLOGY_ANALYSIS_EDIT = "morphology.analysis.edit";
+    public static final String MORPHOLOGY_ANALYSIS_REVIEW = "morphology.analysis.review";
+    public static final String MORPHOLOGY_ANALYSIS_PUBLISH = "morphology.analysis.publish";
+    public static final String MORPHOLOGY_RULE_VIEW = "morphology.rule.view";
+    public static final String MORPHOLOGY_RULE_MANAGE = "morphology.rule.manage";
 
     private static final List<String> ALL = List.of(
             USER_VIEW,
@@ -76,7 +84,15 @@ public final class PermissionCatalog {
             SENSE_MANAGE,
             RELATION_MANAGE,
             EXAMPLE_MANAGE,
-            CITATION_MANAGE);
+            CITATION_MANAGE,
+            MORPHOLOGY_VIEW,
+            MORPHOLOGY_PATTERN_MANAGE,
+            MORPHOLOGY_ANALYSIS_CREATE,
+            MORPHOLOGY_ANALYSIS_EDIT,
+            MORPHOLOGY_ANALYSIS_REVIEW,
+            MORPHOLOGY_ANALYSIS_PUBLISH,
+            MORPHOLOGY_RULE_VIEW,
+            MORPHOLOGY_RULE_MANAGE);
 
     private PermissionCatalog() {
     }

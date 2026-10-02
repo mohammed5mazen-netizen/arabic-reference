@@ -1,5 +1,5 @@
 /**
- * Future morphology module: word structure, derivation, and conjugation.
- * No morphology engine is implemented in S0.
+ * S3 morphology engine. The root package stays a marker; implementation lives in subpackages.
+ * Coverage is a documented subset of Arabic morphology, not a complete morphological grammar.
  */
 package com.mrsoft.arabicreference.morphology;

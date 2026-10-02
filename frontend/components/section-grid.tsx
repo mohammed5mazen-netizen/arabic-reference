@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { sections } from "@/lib/site";
 
 export function SectionGrid() {
@@ -17,10 +18,17 @@ export function SectionGrid() {
             <article className="flex h-full flex-col rounded-3xl border border-line bg-raised p-5">
               <div className="mb-6 flex items-center justify-between">
                 <span className="font-display text-2xl text-library">{String(index + 1).padStart(2, "0")}</span>
-                <span className="rounded-full bg-library-soft px-3 py-1 text-xs font-medium text-library">قريبًا</span>
+                <span className="rounded-full bg-library-soft px-3 py-1 text-xs font-medium text-library">
+                  {section.id === "morphology" ? "متاح" : "قريبًا"}
+                </span>
               </div>
               <h3 className="font-display text-3xl">{section.title}</h3>
               <p className="mt-3 text-sm leading-7 text-muted">{section.description}</p>
+              {section.id === "morphology" ? (
+                <Link href="/tools/morphology" className="mt-4 text-library">
+                  المحلل الصرفي
+                </Link>
+              ) : null}
             </article>
           </li>
         ))}

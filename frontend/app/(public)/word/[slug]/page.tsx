@@ -11,6 +11,7 @@ import {
   wordTitle,
   type PublicEntry,
 } from "@/lib/dictionary";
+import { featureLines, morphologyLabel, type EntryMorphology } from "@/lib/morphology";
 import { siteUrl } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
@@ -35,6 +36,10 @@ export default async function WordPage({ params }: { params: Promise<{ slug: str
   const slug = canonicalSlug(rawSlug);
   const entry = await publicJson<PublicEntry>(`/api/v1/public/dictionary/by-slug/${encodeURIComponent(slug)}`);
   if (!entry) notFound();
+  const morphology = await publicJson<EntryMorphology>(`/api/v1/public/dictionary/entries/${entry.id}/morphology`);
+  const readings = morphology?.readings ?? [];
+  const plurals = morphology?.recordedPlurals ?? [];
+  const showMorphology = readings.length > 0 || plurals.length > 0;
 
   return (
     <main id="content" className="relative z-10 mx-auto w-full max-w-3xl px-5 py-10">
@@ -76,6 +81,31 @@ export default async function WordPage({ params }: { params: Promise<{ slug: str
           ))}
         </ol>
       </section>
+      {showMorphology ? (
+        <section className="mt-10">
+          <h2 className="font-display text-3xl">التحليل الصرفي</h2>
+          <div className="mt-4 space-y-4">
+            {readings.map((reading, index) => (
+              <article key={`${reading.patternOriginal ?? "reading"}-${index}`} className="rounded-[1.5rem] border border-line bg-raised p-5">
+                <p>{[reading.patternOriginal, morphologyLabel(reading.patternCategory), morphologyLabel(reading.derivation)].filter(Boolean).join(" · ")}</p>
+                {reading.verbClass ? <p className="mt-2 text-sm text-muted">الصنف: {morphologyLabel(reading.verbClass)}</p> : null}
+                {reading.imperfectVowel ? <p className="text-sm text-muted">حركة العين في المضارع: {morphologyLabel(reading.imperfectVowel)}</p> : null}
+                {reading.notes ? <p className="mt-2">{reading.notes}</p> : null}
+                {featureLines(reading.features).length > 0 ? (
+                  <ul className="mt-2 text-sm">
+                    {featureLines(reading.features).map((line) => (
+                      <li key={line}>{line}</li>
+                    ))}
+                  </ul>
+                ) : null}
+              </article>
+            ))}
+            {plurals.length > 0 ? (
+              <p>جموع مسجّلة في المعجم: {plurals.join("، ")}</p>
+            ) : null}
+          </div>
+        </section>
+      ) : null}
       {entry.forms.length > 0 ? (
         <section className="mt-10">
           <h2 className="font-display text-3xl">الأشكال</h2>
