@@ -1,0 +1,34 @@
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Backend
+backend/target/
+backend/.mvn/wrapper/maven-wrapper.jar
+
+# Frontend
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/coverage/
+frontend/*.tsbuildinfo
+
+# Logs and runtime
+*.log
+logs/
+*.pid
+
+# IDE and OS
+.idea/
+*.iml
+.vscode/
+.project
+.classpath
+.settings/
+.DS_Store
+Thumbs.db
+
+# Generated
+dist/
+build/

@@ -1,0 +1,27 @@
+spring:
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+  flyway:
+    enabled: true
+  mvc:
+    throw-exception-if-no-handler-found: true
+  web:
+    resources:
+      add-mappings: false
+  data:
+    redis:
+      password: local-dev-only
+
+management:
+  endpoint:
+    health:
+      show-details: always
+
+app:
+  frontend-url: http://localhost:3000

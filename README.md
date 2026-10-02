@@ -1,0 +1,107 @@
+# المرجع العربي — Arabic Reference
+
+منصة معرفة لغوية عربية طويلة الأجل. المرحلة الحالية هي **S0: Architecture & Foundation** فقط.
+
+المرجع مفتوح للقراءة. الزائر يصل من النطاق إلى الصفحة الرئيسية ثم إلى البحث والتصفح، دون حساب ودون شاشة دخول.
+
+> Arabic Reference is an open linguistic reference. Authentication must never become a prerequisite for ordinary access to public linguistic knowledge.
+
+## الرؤية
+
+ستجمع المنصة لاحقًا المعجم، الجذور، الصرف، النحو، الإملاء، البلاغة، الأدب، المصادر، الأدوات، والتعليم، ومساعدًا لغويًا. المعلومة الموثّقة بمصدرها هي الأصل. الذكاء الاصطناعي مساعد، وليس سلطة لغوية.
+
+## المعمارية
+
+Modular monolith وAPI-first. الخلفية Java 25 وSpring Boot 4.1.1. الواجهة Next.js وTypeScript واتجاه RTL عربي. PostgreSQL هو سجل النظام، وRedis محجوز للتوسع. التفاصيل في [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+
+```
+arabic-reference/
+├── backend/
+├── frontend/
+├── docs/
+├── infrastructure/
+├── scripts/
+├── .github/
+├── docker-compose.yml
+├── .env.example
+└── README.md
+```
+
+## المتطلبات
+
+- JDK 25
+- Node.js 24 وnpm
+- Docker مع Docker Compose
+- لا حاجة إلى تثبيت Maven على الجهاز؛ المشروع يستخدم Maven Wrapper
+
+## التشغيل المحلي
+
+من PowerShell في جذر المستودع:
+
+```powershell
+Copy-Item .env.example .env
+docker compose up -d
+```
+
+أو:
+
+```powershell
+.\scripts\dev.ps1
+```
+
+القيم `local-dev-only` في `.env.example` خاصة بالتشغيل المحلي داخل Docker. لا تستخدمها في أي بيئة مشتركة، ولا تضع كلمة مرور حقيقية في Git.
+
+الخلفية تقرأ المتغيرات من البيئة، وقيم `application.yml` الافتراضية تطابق Docker Compose المحلي، لذلك يمكن التشغيل بعد `docker compose up` دون تحميل ملف `.env` يدويًا.
+
+### الخلفية
+
+```powershell
+cd backend
+.\mvnw.cmd spring-boot:run
+```
+
+الصحة: `http://localhost:8080/actuator/health`
+
+الأساس العام: `http://localhost:8080/api/v1/public/foundation`
+
+### الواجهة
+
+```powershell
+cd frontend
+npm install
+npm run dev
+```
+
+الصفحة الرئيسية: `http://localhost:3000`
+
+## الاختبارات
+
+```powershell
+cd backend
+.\mvnw.cmd clean verify
+```
+
+```powershell
+cd frontend
+npm install
+npm run lint
+npm run typecheck
+npm run build
+npm test
+```
+
+اختبارات التكامل تستخدم Testcontainers، وتحتاج Docker قيد التشغيل. لا يُستخدم H2 بدل PostgreSQL.
+
+## متغيرات البيئة
+
+| المتغير | الغرض |
+| --- | --- |
+| `DB_HOST` `DB_PORT` `DB_NAME` `DB_USERNAME` `DB_PASSWORD` | PostgreSQL |
+| `REDIS_HOST` `REDIS_PORT` `REDIS_PASSWORD` | Redis |
+| `SERVER_PORT` | منفذ الخلفية |
+| `FRONTEND_URL` | أصل CORS للواجهة |
+| `NEXT_PUBLIC_SITE_URL` | العنوان الأساسي للبيانات الوصفية وخريطة الموقع |
+
+## ما الذي لا يوجد في S0
+
+لا تسجيل عام، ولا دخول عام، ولا مستخدمون، ولا RBAC، ولا معجم، ولا محرك صرف أو بحث، ولا ذكاء اصطناعي. هوية الإدارة الداخلية مؤجلة إلى S1، وهي للإدارة فقط وليست شرطًا لزيارة المرجع.

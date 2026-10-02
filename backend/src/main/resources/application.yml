@@ -1,0 +1,59 @@
+spring:
+  application:
+    name: arabic-reference
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:arabic_reference}
+    username: ${DB_USERNAME:arabic_reference}
+    password: ${DB_PASSWORD:local-dev-only}
+    hikari:
+      pool-name: arabic-reference
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:local-dev-only}
+      timeout: 2s
+  mvc:
+    throw-exception-if-no-handler-found: true
+  web:
+    resources:
+      add-mappings: false
+
+server:
+  port: ${SERVER_PORT:8080}
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never
+      probes:
+        enabled: true
+
+app:
+  frontend-url: ${FRONTEND_URL:http://localhost:3000}
+
+logging:
+  level:
+    root: INFO
+    org.hibernate.SQL: WARN
+    io.lettuce: WARN
