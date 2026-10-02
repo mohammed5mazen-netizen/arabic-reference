@@ -43,23 +43,28 @@ Base package: `com.mrsoft.arabicreference`
 | `search` | `LinguisticSearchPort` with no adapter |
 | `admin` | Staff HTTP API. It calls identity services and does not own accounts. |
 | `identity` | Editorial accounts, roles, permissions, tokens, audit, owner bootstrap |
-| `dictionary`, `grammar`, `morphology`, `content`, `source`, `learning`, `ai` | Package boundaries only |
+| `dictionary` | Lexical entries, senses, forms, relations, roots, public lookup |
+| `source` | Works, licenses, citations |
+| `linguistics` | Normalization, editorial states, slugs, content revisions |
+| `grammar`, `morphology`, `content`, `learning`, `ai` | Package boundaries only |
 
 Domain code does not depend on web or persistence. Controllers do not call repositories.
 
 ## Linguistic knowledge model
 
-The future core is a knowledge model, not a generic CMS:
+The core is a knowledge model, not a generic CMS. S2 implements:
 
-`Word → Lemma → Root → Meanings → Morphology → Derivations → Synonyms → Antonyms → Examples → Linguistic Rules → Sources → Citations`
+`Surface form → Lexical entry / lemma → optional root → senses → forms → relations → examples → sources → citations`
 
-S0 does not create these tables. The module boundaries leave room for them from S2 onward.
+Morphology and grammar rules are still later stages. The model is described in [DICTIONARY_MODEL.md](DICTIONARY_MODEL.md).
 
-Every linguistic fact must be able to point at a source, citation, contributor, reviewer, verification state, revision, and publication state. See ADR-004 and ADR-009.
+Every published sense points at a citation. Entries also carry contributor, reviewer, verification state, revision, and publication state. See ADR-004, ADR-020, and ADR-025.
 
-Editorial lifecycle, documented only:
+Editorial lifecycle:
 
 `DRAFT → IN_REVIEW → VERIFIED → PUBLISHED → ARCHIVED`
+
+`CHANGES_REQUESTED` returns an item from review. A published edit keeps the last public snapshot and opens a new draft.
 
 ## Anonymous scale
 

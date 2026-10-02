@@ -4,7 +4,7 @@ PostgreSQL is the only database. Schema changes go through Flyway. Hibernate `dd
 
 ## Migration names
 
-`V1__foundation_schema.sql`, then `V2__...sql`. Do not edit a migration after it has been applied to a shared database.
+`V1__foundation_schema.sql`, `V2__admin_identity.sql`, then `V3__dictionary_core.sql`. Do not edit a migration after it has been applied to a shared database.
 
 ## S0 schema
 
@@ -20,7 +20,18 @@ PostgreSQL is the only database. Schema changes go through Flyway. Hibernate `dd
 
 Usernames and emails are stored normalized and are unique without relying on letter case. System roles and the permission catalog are seeded. No platform owner row is seeded. `V1` is unchanged.
 
-There are still no word, root, meaning, or morphology tables.
+## S2 schema
+
+`V3__dictionary_core.sql` adds the linguistic core and extends the audit event check. `V1` and `V2` are unchanged.
+
+- `linguistic_root` is unique on the normalized letters
+- `lexical_entry` indexes the normalized lemma and the published lookup key, and does not make the lemma unique
+- `lexical_sense`, `lexical_form`, `usage_example`, `linguistic_relation`
+- `reference_source`, `source_citation`
+- evidence tables `sense_citation`, `entry_citation`, `relation_citation`, `root_citation`
+- `content_revision` for recoverable snapshots
+
+There is still no morphology table and no search-engine index.
 
 ## Unicode and time
 
@@ -28,7 +39,7 @@ The compose service initializes PostgreSQL with UTF-8. Timestamps use `timestamp
 
 ## What is postponed
 
-Dictionary tables and editorial revisions wait for later stages. Staff and future public identifiers are UUIDs. Sequential keys may exist inside the database but are not the public id.
+Morphology tables wait for a later stage. Staff and public identifiers are UUIDs. Sequential keys may exist inside the database but are not the public id.
 
 ## Redis
 

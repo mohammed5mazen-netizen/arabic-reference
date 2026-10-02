@@ -11,7 +11,7 @@ Public knowledge pages must be reachable by crawlers. Authentication middleware 
 - semantic landmarks: header, main, sections, footer
 - one `h1`
 
-No large generated sitemap is produced. There is no search action in structured data, because search does not exist yet.
+No large generated sitemap is produced. Exact dictionary lookup exists at `/search`. Word and root pages are server-rendered from published records. A meaning is used as the description only when one is published.
 
 ## Canonical strategy
 

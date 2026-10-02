@@ -26,7 +26,7 @@ A valid token without the required permission receives `403`. That is different 
 
 The staff UI is `/admin/login` and `/admin`. The public homepage does not link to it and does not require it.
 
-Content mutations on `/api/v1/public/**` stay closed. The public API is read-only.
+Content mutations on `/api/v1/public/**` stay closed. The public dictionary API is read-only and returns published snapshots only. Admin dictionary and source routes require a staff token and a matching permission. A creator cannot verify their own content, and the reviewer cannot publish it.
 
 ## Actuator
 

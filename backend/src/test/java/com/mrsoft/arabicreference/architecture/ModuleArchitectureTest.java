@@ -71,12 +71,21 @@ class ModuleArchitectureTest {
     @ArchTest
     static final ArchRule future_modules_have_no_implementation = classes()
             .that().resideInAnyPackage(
-                    "com.mrsoft.arabicreference.dictionary",
                     "com.mrsoft.arabicreference.grammar",
                     "com.mrsoft.arabicreference.morphology",
                     "com.mrsoft.arabicreference.content",
-                    "com.mrsoft.arabicreference.source",
                     "com.mrsoft.arabicreference.learning",
                     "com.mrsoft.arabicreference.ai")
             .should().haveSimpleName("package-info");
+
+    @ArchTest
+    static final ArchRule dictionary_does_not_depend_on_ai = noClasses()
+            .that().resideInAnyPackage(
+                    "com.mrsoft.arabicreference.dictionary..",
+                    "com.mrsoft.arabicreference.source..")
+            .should().dependOnClassesThat().resideInAnyPackage(
+                    "com.mrsoft.arabicreference.ai..",
+                    "com.mrsoft.arabicreference.morphology..",
+                    "org.elasticsearch..",
+                    "org.opensearch..");
 }

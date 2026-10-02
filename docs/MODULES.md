@@ -15,7 +15,7 @@ Cross-cutting kernel and delivery:
 
 ## linguistics
 
-Arabic text handling. S0 owns normalization only: original text stays intact and a separate normalized form is derived. Morphology and dictionary logic do not live here yet.
+Arabic text handling, editorial lifecycle types, content slugs, and content revisions. Dictionary and source both use this package so they do not depend on each other for those shared types. Morphology still does not live here.
 
 ## search
 
@@ -38,16 +38,14 @@ Editorial accounts only. S1 owns:
 
 It is not a visitor account system.
 
-## dictionary, grammar, morphology, content, source, learning, ai
+## dictionary
 
-Package placeholders. Their future ownership:
+Lexical entries, senses, forms, usage examples, roots, and linguistic relations. Public reads and admin commands go through application services. The module may call the source application to read citations. It does not call source repositories, and it does not depend on morphology or AI.
 
-- dictionary: lemmas, meanings, roots, synonyms, antonyms, number, gender
-- grammar: syntactic rules and i'rab
-- morphology: derivation and conjugation
-- content: articles and publication lifecycle
-- source: works, editions, licenses, citations
-- learning: lessons and optional learner state
-- ai: assistant and retrieval that cites `source` and never replaces it
+## source
 
-Architecture tests fail if these packages gain implementation classes during S1. Editorial permissions for them exist so later stages can attach behavior without inventing a second authorization model.
+Reference works, licenses, and citations. It does not depend on the dictionary module. Dictionary evidence tables hold the foreign keys back to citations.
+
+## grammar, morphology, content, learning, ai
+
+Package placeholders. Architecture tests fail if these packages gain implementation classes. Morphology, conjugation, and automatic root extraction wait for later stages.

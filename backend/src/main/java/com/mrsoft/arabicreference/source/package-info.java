@@ -1,5 +1,5 @@
 /**
- * Future source module: works, citations, licenses, and attribution.
- * AI output must never be stored here as an authority.
+ * Source module: works, licenses, and citations.
+ * AI output is not an authority and is not stored here.
  */
 package com.mrsoft.arabicreference.source;

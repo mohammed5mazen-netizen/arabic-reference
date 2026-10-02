@@ -12,7 +12,7 @@ import {
   storeAdminTokens,
   type AdminSession,
 } from "@/lib/admin-api";
-import { futureAdminNav, visibleAdminNav } from "@/lib/admin-nav";
+import { visibleAdminNav } from "@/lib/admin-nav";
 
 let session: AdminSession | null = null;
 let loaded = false;
@@ -85,12 +85,6 @@ export function AdminDesk({ children }: { children: ReactNode }) {
             <Link key={item.href} href={item.href} className="block rounded-2xl px-3 py-2 hover:bg-library-soft">
               {item.label}
             </Link>
-          ))}
-          {futureAdminNav.map((label) => (
-            <p key={label} className="flex items-center justify-between px-3 py-2 text-muted" aria-disabled="true">
-              <span>{label}</span>
-              <span className="text-xs">قريبًا</span>
-            </p>
           ))}
         </nav>
         <div className="mt-6 flex gap-2">

@@ -27,6 +27,19 @@ public final class PermissionCatalog {
     public static final String CONTENT_ARCHIVE = "editorial.content.archive";
     public static final String SOURCE_VIEW = "source.view";
     public static final String SOURCE_MANAGE = "source.manage";
+    public static final String ENTRY_VIEW = "dictionary.entry.view";
+    public static final String ENTRY_CREATE = "dictionary.entry.create";
+    public static final String ENTRY_EDIT = "dictionary.entry.edit";
+    public static final String ENTRY_SUBMIT = "dictionary.entry.submit";
+    public static final String ENTRY_REVIEW = "dictionary.entry.review";
+    public static final String ENTRY_PUBLISH = "dictionary.entry.publish";
+    public static final String ENTRY_ARCHIVE = "dictionary.entry.archive";
+    public static final String ROOT_VIEW = "dictionary.root.view";
+    public static final String ROOT_MANAGE = "dictionary.root.manage";
+    public static final String SENSE_MANAGE = "dictionary.sense.manage";
+    public static final String RELATION_MANAGE = "dictionary.relation.manage";
+    public static final String EXAMPLE_MANAGE = "dictionary.example.manage";
+    public static final String CITATION_MANAGE = "citation.manage";
 
     private static final List<String> ALL = List.of(
             USER_VIEW,
@@ -50,7 +63,20 @@ public final class PermissionCatalog {
             CONTENT_PUBLISH,
             CONTENT_ARCHIVE,
             SOURCE_VIEW,
-            SOURCE_MANAGE);
+            SOURCE_MANAGE,
+            ENTRY_VIEW,
+            ENTRY_CREATE,
+            ENTRY_EDIT,
+            ENTRY_SUBMIT,
+            ENTRY_REVIEW,
+            ENTRY_PUBLISH,
+            ENTRY_ARCHIVE,
+            ROOT_VIEW,
+            ROOT_MANAGE,
+            SENSE_MANAGE,
+            RELATION_MANAGE,
+            EXAMPLE_MANAGE,
+            CITATION_MANAGE);
 
     private PermissionCatalog() {
     }

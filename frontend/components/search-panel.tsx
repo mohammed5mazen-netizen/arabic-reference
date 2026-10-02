@@ -1,22 +1,24 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useId, useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
+import { searchPath } from "@/lib/dictionary";
 import { searchPlaceholder } from "@/lib/site";
 
 export function SearchPanel() {
   const inputId = useId();
-  const noticeId = useId();
-  const [notice, setNotice] = useState(false);
+  const router = useRouter();
+  const [query, setQuery] = useState("");
+
+  function onSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const value = query.trim();
+    if (!value) return;
+    router.push(searchPath(value));
+  }
 
   return (
-    <form
-      role="search"
-      className="mt-8"
-      onSubmit={(event) => {
-        event.preventDefault();
-        setNotice(true);
-      }}
-    >
+    <form role="search" className="mt-8" onSubmit={onSubmit}>
       <label htmlFor={inputId} className="mb-3 block text-sm font-medium text-muted">
         البحث في المرجع
       </label>
@@ -25,6 +27,8 @@ export function SearchPanel() {
           id={inputId}
           name="q"
           type="search"
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
           placeholder={searchPlaceholder}
           autoComplete="off"
           className="min-h-14 w-full bg-transparent px-4 text-lg text-ink outline-none placeholder:text-muted"
@@ -36,11 +40,7 @@ export function SearchPanel() {
           بحث
         </button>
       </div>
-      <p id={noticeId} role="status" aria-live="polite" className="mt-4 min-h-6 text-sm text-muted">
-        {notice
-          ? "البحث العربي المتقدم لم يُفعَّل بعد. هذه المرحلة تؤسس للمنصة، ولا تعرض نتائج وهمية."
-          : "اكتب سؤالك اللغوي هنا. النتائج ستصل مع محرك البحث، دون الحاجة إلى حساب."}
-      </p>
+      <p className="mt-4 min-h-6 text-sm text-muted">اكتب كلمة عربية. البحث يطابق الشكل المطبّع دون أن يبدّل النص المعروض.</p>
     </form>
   );
 }

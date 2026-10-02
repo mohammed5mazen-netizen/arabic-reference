@@ -24,7 +24,7 @@ Preserved on purpose, because folding them changes meaning:
 - alef maksura `ى` is not folded to yeh
 - hamza on waw or yeh stays (`ؤ`, `ئ`, `ء`)
 
-A later profile can add those folds for search if the product decision is explicit. That profile must still keep `originalText`.
+S2 dictionary lookup uses this same normalized form against `published_lemma_normalized`. The page still renders `lemmaOriginal` and the vocalized form. The normalized string is not a display form and does not merge two lexical entries. A later profile can add more folds for ranked search if that decision is explicit. That profile must still keep `originalText`.
 
 ## Tests
 
