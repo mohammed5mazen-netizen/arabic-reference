@@ -4,27 +4,44 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.mrsoft.arabicreference.shared.infrastructure.security.ApiAccessDeniedHandler;
 import com.mrsoft.arabicreference.shared.infrastructure.security.ApiAuthenticationEntryPoint;
 import com.mrsoft.arabicreference.shared.infrastructure.security.SecurityConfig;
 import com.mrsoft.arabicreference.shared.infrastructure.time.UtcTimeProvider;
 import com.mrsoft.arabicreference.shared.infrastructure.web.TraceIdFilter;
+import com.mrsoft.arabicreference.shared.kernel.exception.ErrorCode;
+import com.mrsoft.arabicreference.shared.kernel.security.AccessAuthentication;
+import com.mrsoft.arabicreference.shared.kernel.security.AccessTokenAuthenticator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.security.autoconfigure.UserDetailsServiceAutoConfiguration;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 import testprobe.ErrorProbeController;
 
-@WebMvcTest(controllers = ErrorProbeController.class)
+@WebMvcTest(controllers = ErrorProbeController.class, excludeAutoConfiguration = UserDetailsServiceAutoConfiguration.class)
 @Import({
         ErrorProbeController.class,
         GlobalExceptionHandler.class,
         UtcTimeProvider.class,
         SecurityConfig.class,
         ApiAuthenticationEntryPoint.class,
-        TraceIdFilter.class
+        ApiAccessDeniedHandler.class,
+        TraceIdFilter.class,
+        GlobalExceptionHandlerTest.SliceSecurity.class
 })
 class GlobalExceptionHandlerTest {
+
+    @TestConfiguration
+    static class SliceSecurity {
+        @Bean
+        AccessTokenAuthenticator accessTokenAuthenticator() {
+            return token -> new AccessAuthentication.Rejected(ErrorCode.TOKEN_INVALID, "The access token is invalid.");
+        }
+    }
 
     @Autowired
     private MockMvc mockMvc;

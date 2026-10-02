@@ -1,6 +1,6 @@
 # Roadmap
 
-Only S0 is in progress. Later stages are sequencing, not a commitment to build them now.
+S1 is the current stage. Later stages are sequencing, not a commitment to build them now. S1 authentication is for internal administration only, not public visitors.
 
 | Stage | Name | Intent |
 | --- | --- | --- |

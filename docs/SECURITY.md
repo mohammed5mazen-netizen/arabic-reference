@@ -17,9 +17,16 @@ S0 does not implement:
 
 ## Staff boundary
 
-`/api/v1/admin/**` requires authentication. S0 has no user store and no login form, so these routes fail closed with `401` and a JSON body. There is no redirect to a login page.
+`/api/v1/admin/**` is for editorial staff. Anonymous calls receive `401` and a JSON body, with no redirect. Two routes are open so staff can obtain a token:
 
-Content mutations (`POST`, `PUT`, `PATCH`, `DELETE`) on `/api/**` are also closed. The public API is read-only.
+- `POST /api/v1/admin/auth/login`
+- `POST /api/v1/admin/auth/refresh`
+
+A valid token without the required permission receives `403`. That is different from `401`. A method the route does not support, such as writing to the audit log, receives `405` with `METHOD_NOT_ALLOWED`. The response does not include a stack trace.
+
+The staff UI is `/admin/login` and `/admin`. The public homepage does not link to it and does not require it.
+
+Content mutations on `/api/v1/public/**` stay closed. The public API is read-only.
 
 ## Actuator
 
@@ -27,19 +34,19 @@ Content mutations (`POST`, `PUT`, `PATCH`, `DELETE`) on `/api/**` are also close
 
 ## Sessions and CSRF
 
-The API is stateless. CSRF protection is disabled because S0 does not use a browser session cookie for authentication, public methods are safe reads, and mutations are rejected for anonymous clients. S1 must revisit CSRF if admin authentication uses cookies. A header-based admin credential can keep CSRF disabled.
+The API is stateless. Staff authentication uses a bearer access token, not a browser session cookie, so CSRF protection stays disabled. See ADR-014. If a later stage moves the admin credential into a cookie, CSRF must be revisited.
 
-CORS allows the configured `FRONTEND_URL` to call `GET`, `HEAD`, and `OPTIONS` on `/api/v1/public/**` without credentials.
+CORS allows the configured `FRONTEND_URL` to call public reads and the admin API. Credentials are not allowed. The admin browser sends `Authorization` instead.
 
 ## Secrets and logs
 
-Passwords in Git are limited to the documented local placeholder `local-dev-only`. Production must override `DB_PASSWORD` and `REDIS_PASSWORD`.
+Passwords in Git are limited to the documented local placeholder `local-dev-only` and the local JWT placeholder. Production must override `DB_PASSWORD`, `REDIS_PASSWORD`, and `ADMIN_JWT_SECRET`. `BOOTSTRAP_OWNER_PASSWORD` has no default and is never logged.
 
 Logs include method, path, status, duration, and trace id. They do not include query strings, bodies, passwords, or tokens. Unexpected errors are logged on the server. The client receives a stable code and a generic message, never a stack trace or SQL text.
 
 ## Anonymous abuse
 
-Accounts are not the abuse-control mechanism. Rate limiting, throttling, caching, and bot protection can sit in front of the public read API later.
+Accounts are not the abuse-control mechanism for public reading. Admin login and refresh are rate limited in Redis. Public reads are not rate limited yet.
 
 ## Optional personal accounts
 

@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Amiri, IBM_Plex_Sans_Arabic } from "next/font/google";
-import { SiteFooter } from "@/components/site-footer";
-import { SiteHeader } from "@/components/site-header";
 import { siteName, siteTagline, siteUrl } from "@/lib/site";
 import "./globals.css";
 
@@ -75,9 +73,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
         <a className="skip-link" href="#content">
           تخطي إلى المحتوى
         </a>
-        <SiteHeader />
         {children}
-        <SiteFooter />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       </body>
     </html>

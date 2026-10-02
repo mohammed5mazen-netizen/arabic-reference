@@ -28,7 +28,7 @@ API conventions:
 
 - `GET /api/v1/public/**` — anonymous reads
 - `POST`, `PUT`, `PATCH`, `DELETE` under `/api/**` — not public
-- `/api/v1/admin/**` — editorial staff, closed until S1
+- `/api/v1/admin/**` — editorial staff only. `POST /api/v1/admin/auth/login` and `/refresh` are the staff entry points. Other admin routes require a bearer token and a permission.
 
 The public API must not grow into a content-editing API.
 
@@ -36,13 +36,14 @@ The public API must not grow into a content-editing API.
 
 Base package: `com.mrsoft.arabicreference`
 
-| Module | S0 contents |
+| Module | S1 contents |
 | --- | --- |
-| `shared` | Errors, time, ids, trace id, security, public foundation endpoint |
+| `shared` | Errors, time, ids, trace id, security filter, public foundation endpoint |
 | `linguistics` | `ArabicTextNormalizer` |
 | `search` | `LinguisticSearchPort` with no adapter |
-| `admin` | Closed boundary controller |
-| `identity`, `dictionary`, `grammar`, `morphology`, `content`, `source`, `learning`, `ai` | Package boundaries only |
+| `admin` | Staff HTTP API. It calls identity services and does not own accounts. |
+| `identity` | Editorial accounts, roles, permissions, tokens, audit, owner bootstrap |
+| `dictionary`, `grammar`, `morphology`, `content`, `source`, `learning`, `ai` | Package boundaries only |
 
 Domain code does not depend on web or persistence. Controllers do not call repositories.
 
@@ -71,11 +72,11 @@ Public traffic is anonymous by design. Later capacity controls attach to the edg
 - bot protection
 - search throttling
 
-Redis is present so those controls have a place to land. S0 does not implement them.
+Redis is present so those controls have a place to land. S1 uses Redis for admin login rate limits and access-token revocation. Public reads are still not rate limited.
 
 ## SEO
 
-Public knowledge pages are server-rendered and indexable. There is no authentication middleware in the frontend. Canonical metadata, `robots.txt`, and a one-entry sitemap exist for the homepage. The scaling strategy is in [SEO.md](SEO.md).
+Public knowledge pages are server-rendered and indexable. There is no authentication middleware in the frontend. `/admin` is `noindex` and disallowed in `robots.txt`. Canonical metadata and a one-entry sitemap stay on the homepage. The scaling strategy is in [SEO.md](SEO.md).
 
 ## Time and identity
 

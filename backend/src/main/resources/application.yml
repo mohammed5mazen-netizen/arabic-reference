@@ -1,6 +1,9 @@
 spring:
   application:
     name: arabic-reference
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.security.autoconfigure.UserDetailsServiceAutoConfiguration
   datasource:
     url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:arabic_reference}
     username: ${DB_USERNAME:arabic_reference}
@@ -51,6 +54,21 @@ management:
 
 app:
   frontend-url: ${FRONTEND_URL:http://localhost:3000}
+  admin:
+    jwt-secret: ${ADMIN_JWT_SECRET:local-dev-only-admin-jwt-secret-key-32b}
+    access-token-ttl: ${ADMIN_ACCESS_TOKEN_TTL:10m}
+    refresh-token-ttl: ${ADMIN_REFRESH_TOKEN_TTL:14d}
+    max-failed-attempts: ${ADMIN_MAX_FAILED_ATTEMPTS:5}
+    lockout-duration: ${ADMIN_LOCKOUT_DURATION:15m}
+    rate-limit:
+      login: ${ADMIN_LOGIN_RATE_LIMIT:10}
+      refresh: ${ADMIN_REFRESH_RATE_LIMIT:30}
+      window: ${ADMIN_AUTH_RATE_WINDOW:1m}
+    bootstrap:
+      username: ${BOOTSTRAP_OWNER_USERNAME:}
+      email: ${BOOTSTRAP_OWNER_EMAIL:}
+      display-name: ${BOOTSTRAP_OWNER_DISPLAY_NAME:}
+      password: ${BOOTSTRAP_OWNER_PASSWORD:}
 
 logging:
   level:

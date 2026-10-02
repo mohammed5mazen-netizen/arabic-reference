@@ -32,14 +32,21 @@ cd backend && ./mvnw clean verify
 
 ## JDK
 
-The compiler target is Java 25. Maven Wrapper downloads Maven itself; a system Maven install is unnecessary. `JAVA_HOME` must point at JDK 25 before `mvnw`.
+The compiler target is Java 25. Maven Wrapper downloads Maven itself; a system Maven install is unnecessary. `JAVA_HOME` must point at JDK 25 before `mvnw`. On this machine the default `java` on `PATH` may still be 21. Point the shell at Temurin 25 before building:
+
+```powershell
+$env:JAVA_HOME = "$env:USERPROFILE\.jdks\temurin-25\jdk-25.0.4.1+1"
+$env:Path = "$env:JAVA_HOME\bin;" + $env:Path
+java -version
+```
 
 ## Tests
 
 - Unit tests cover Arabic normalization, ids, time, and error JSON.
 - `@WebMvcTest` covers the error model without containers.
-- `FoundationIntegrationTest` starts PostgreSQL and Redis with Testcontainers and checks Flyway, health, anonymous public reads, and the closed admin boundary.
-- ArchUnit guards module boundaries and the absence of a public user model.
+- `FoundationIntegrationTest` starts PostgreSQL and Redis with Testcontainers and checks Flyway, health, and anonymous public reads.
+- `AdminIdentityIntegrationTest` checks staff login, RBAC, token rotation, lockout, the last owner, optimistic locking, and the audit trail.
+- ArchUnit guards module boundaries. There is still no public visitor account type.
 
 ## Port conflicts
 

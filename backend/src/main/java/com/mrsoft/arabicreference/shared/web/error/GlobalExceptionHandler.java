@@ -4,15 +4,23 @@ import com.mrsoft.arabicreference.shared.kernel.exception.ConflictException;
 import com.mrsoft.arabicreference.shared.kernel.exception.ErrorCode;
 import com.mrsoft.arabicreference.shared.kernel.exception.FieldErrorDetail;
 import com.mrsoft.arabicreference.shared.kernel.exception.ForbiddenOperationException;
+import com.mrsoft.arabicreference.shared.kernel.exception.RateLimitedException;
 import com.mrsoft.arabicreference.shared.kernel.exception.ResourceNotFoundException;
+import com.mrsoft.arabicreference.shared.kernel.exception.ServiceUnavailableException;
+import com.mrsoft.arabicreference.shared.kernel.exception.UnauthorizedException;
 import com.mrsoft.arabicreference.shared.kernel.exception.ValidationException;
 import com.mrsoft.arabicreference.shared.kernel.time.TimeProvider;
 import com.mrsoft.arabicreference.shared.kernel.trace.TraceIds;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -82,7 +90,68 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ForbiddenOperationException.class)
     ResponseEntity<ApiErrorResponse> handleForbidden(ForbiddenOperationException exception) {
-        return respond(HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN_OPERATION, exception.getMessage(), List.of(), List.of());
+        return respond(HttpStatus.FORBIDDEN, exception.code(), exception.getMessage(), List.of(), List.of());
+    }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    ResponseEntity<ApiErrorResponse> handleUnauthorized(UnauthorizedException exception) {
+        return respond(HttpStatus.UNAUTHORIZED, exception.code(), exception.getMessage(), List.of(), List.of());
+    }
+
+    @ExceptionHandler(RateLimitedException.class)
+    ResponseEntity<ApiErrorResponse> handleRateLimit(RateLimitedException exception) {
+        return respond(HttpStatus.TOO_MANY_REQUESTS, ErrorCode.RATE_LIMITED, exception.getMessage(), List.of(), List.of());
+    }
+
+    @ExceptionHandler(ServiceUnavailableException.class)
+    ResponseEntity<ApiErrorResponse> handleUnavailable(ServiceUnavailableException exception) {
+        return respond(HttpStatus.SERVICE_UNAVAILABLE, ErrorCode.SERVICE_UNAVAILABLE, exception.getMessage(), List.of(), List.of());
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    ResponseEntity<ApiErrorResponse> handleAccessDenied(AccessDeniedException exception) {
+        return respond(
+                HttpStatus.FORBIDDEN,
+                ErrorCode.FORBIDDEN_OPERATION,
+                "You do not have permission to perform this operation.",
+                List.of(),
+                List.of());
+    }
+
+    @ExceptionHandler(OptimisticLockingFailureException.class)
+    ResponseEntity<ApiErrorResponse> handleStaleUpdate(OptimisticLockingFailureException exception) {
+        return respond(
+                HttpStatus.CONFLICT,
+                ErrorCode.CONFLICT,
+                "The record was updated by someone else. Reload and try again.",
+                List.of(),
+                List.of());
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    ResponseEntity<ApiErrorResponse> handleDataIntegrity(DataIntegrityViolationException exception) {
+        log.warn("Data integrity conflict traceId={}", TraceIds.current());
+        return respond(
+                HttpStatus.CONFLICT,
+                ErrorCode.CONFLICT,
+                "The request conflicts with an existing record.",
+                List.of(),
+                List.of());
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    ResponseEntity<ApiErrorResponse> handleUnreadable(HttpMessageNotReadableException exception) {
+        return respond(HttpStatus.BAD_REQUEST, ErrorCode.VALIDATION_FAILED, "The request body could not be read.", List.of(), List.of());
+    }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    ResponseEntity<ApiErrorResponse> handleMethodNotAllowed(HttpRequestMethodNotSupportedException exception) {
+        return respond(
+                HttpStatus.METHOD_NOT_ALLOWED,
+                ErrorCode.METHOD_NOT_ALLOWED,
+                "This method is not allowed.",
+                List.of(),
+                List.of());
     }
 
     @ExceptionHandler(Exception.class)

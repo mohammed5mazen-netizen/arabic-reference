@@ -23,11 +23,20 @@ Arabic text handling. S0 owns normalization only: original text stays intact and
 
 ## admin
 
-`/api/v1/admin/**` is the editorial boundary for a future platform owner, admin, editor, linguistic reviewer, and content reviewer. S0 exposes the route and rejects anonymous calls. It does not implement staff identity or content management.
+`/api/v1/admin/**` is the editorial HTTP boundary. Controllers call identity services. They do not talk to repositories. Anonymous calls still fail closed, except login and refresh.
 
 ## identity
 
-Empty boundary. S1 will add **admin** identity and RBAC here. It will not become a public login wall.
+Editorial accounts only. S1 owns:
+
+- `AdminUser` with UUID, normalized username and email, Argon2id password hash, status, and optimistic version
+- system roles `PLATFORM_OWNER`, `ADMIN`, `EDITOR`, `LINGUISTIC_REVIEWER`, `PUBLISHER`, `AUDITOR`
+- granular permission codes, including future editorial permissions that do not yet have content tables
+- short-lived access tokens and rotating refresh tokens
+- append-only audit events
+- one-time platform-owner bootstrap
+
+It is not a visitor account system.
 
 ## dictionary, grammar, morphology, content, source, learning, ai
 
@@ -41,4 +50,4 @@ Package placeholders. Their future ownership:
 - learning: lessons and optional learner state
 - ai: assistant and retrieval that cites `source` and never replaces it
 
-Architecture tests fail if these packages gain implementation classes during S0.
+Architecture tests fail if these packages gain implementation classes during S1. Editorial permissions for them exist so later stages can attach behavior without inventing a second authorization model.

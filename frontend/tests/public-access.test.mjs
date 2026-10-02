@@ -26,7 +26,7 @@ function sourceFiles(directory) {
   const files = [];
   for (const entry of entries) {
     const fullPath = path.join(directory, entry);
-    if (entry === "node_modules" || entry === ".next" || entry === "tests") {
+    if (entry === "node_modules" || entry === ".next" || entry === "tests" || entry === "admin") {
       continue;
     }
     const stats = statSync(fullPath);
@@ -65,7 +65,7 @@ test("GET / is public and renders the Arabic homepage", async () => {
   });
 
   try {
-    const response = await waitForOk(`http://127.0.0.1:${port}/`);
+    const response = await waitForOk(`http://127.0.0.1:${port}/`, child);
     assert.equal(response.status, 200);
     assert.equal(response.headers.get("location"), null);
     const html = await response.text();
@@ -77,6 +77,24 @@ test("GET / is public and renders the Arabic homepage", async () => {
     assert.equal(html.includes("تسجيل الدخول"), false);
     assert.equal(html.includes("إنشاء حساب"), false);
     assert.equal(html.includes('href="/login"'), false);
+    assert.equal(html.includes('href="/admin/login"'), false);
+
+    const loginPage = await fetch(`http://127.0.0.1:${port}/admin/login`);
+    assert.equal(loginPage.status, 200);
+    const loginHtml = await loginPage.text();
+    assert.match(loginHtml, /dir="rtl"/);
+    assert.match(loginHtml, /دخول الإدارة/);
+    assert.match(loginHtml, /اسم المستخدم/);
+    assert.equal(loginHtml.includes("إنشاء حساب"), false);
+    assert.equal(loginHtml.includes('href="/register"'), false);
+
+    const adminHome = await fetch(`http://127.0.0.1:${port}/admin`);
+    assert.equal(adminHome.status, 200);
+    assert.equal(adminHome.headers.get("location"), null);
+    const adminHtml = await adminHome.text();
+    assert.match(adminHtml, /dir="rtl"/);
+    assert.match(adminHtml, /جارٍ فتح مكتب التحرير/);
+    assert.equal(adminHtml.includes("المستخدمون الإداريون"), false);
   } catch (error) {
     throw new Error(`${error instanceof Error ? error.message : error}\n${logs}`);
   } finally {
@@ -84,10 +102,13 @@ test("GET / is public and renders the Arabic homepage", async () => {
   }
 });
 
-async function waitForOk(url) {
+async function waitForOk(url, child) {
   const started = Date.now();
   let lastError = "server did not start";
   while (Date.now() - started < 30000) {
+    if (child.exitCode !== null) {
+      throw new Error(lastError);
+    }
     try {
       const response = await fetch(url);
       if (response.status === 200) {
@@ -103,10 +124,16 @@ async function waitForOk(url) {
 }
 
 async function stop(child) {
+  if (child.exitCode !== null) {
+    return;
+  }
   if (process.platform === "win32" && child.pid) {
     spawn("taskkill", ["/pid", String(child.pid), "/t", "/f"], { stdio: "ignore" });
   } else {
     child.kill();
   }
-  await new Promise((resolve) => child.once("exit", resolve));
+  await new Promise((resolve) => {
+    child.once("exit", resolve);
+    setTimeout(resolve, 5000);
+  });
 }

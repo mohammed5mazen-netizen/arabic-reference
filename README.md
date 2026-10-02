@@ -1,8 +1,8 @@
 # المرجع العربي — Arabic Reference
 
-منصة معرفة لغوية عربية طويلة الأجل. المرحلة الحالية هي **S0: Architecture & Foundation** فقط.
+منصة معرفة لغوية عربية طويلة الأجل. المرحلة الحالية هي **S1: Admin Identity / RBAC / Editorial Administration**.
 
-المرجع مفتوح للقراءة. الزائر يصل من النطاق إلى الصفحة الرئيسية ثم إلى البحث والتصفح، دون حساب ودون شاشة دخول.
+المرجع مفتوح للقراءة. الزائر يصل من النطاق إلى الصفحة الرئيسية ثم إلى البحث والتصفح، دون حساب ودون شاشة دخول. دخول الإدارة في `/admin/login` لفريق التحرير فقط.
 
 > Arabic Reference is an open linguistic reference. Authentication must never become a prerequisite for ordinary access to public linguistic knowledge.
 
@@ -74,6 +74,8 @@ npm run dev
 
 الصفحة الرئيسية: `http://localhost:3000`
 
+دخول الإدارة، بعد ضبط متغيرات المالك: `http://localhost:3000/admin/login`
+
 ## الاختبارات
 
 ```powershell
@@ -101,7 +103,10 @@ npm test
 | `SERVER_PORT` | منفذ الخلفية |
 | `FRONTEND_URL` | أصل CORS للواجهة |
 | `NEXT_PUBLIC_SITE_URL` | العنوان الأساسي للبيانات الوصفية وخريطة الموقع |
+| `NEXT_PUBLIC_API_URL` | أصل واجهة الإدارة عند استدعاء الخلفية |
+| `ADMIN_JWT_SECRET` | سر توقيع رمز الدخول الإداري، 32 بايتًا على الأقل |
+| `BOOTSTRAP_OWNER_USERNAME` `BOOTSTRAP_OWNER_EMAIL` `BOOTSTRAP_OWNER_DISPLAY_NAME` `BOOTSTRAP_OWNER_PASSWORD` | إنشاء مالك المنصة مرة واحدة إذا لم يوجد مالك |
 
-## ما الذي لا يوجد في S0
+## ما الذي لا يوجد في S1
 
-لا تسجيل عام، ولا دخول عام، ولا مستخدمون، ولا RBAC، ولا معجم، ولا محرك صرف أو بحث، ولا ذكاء اصطناعي. هوية الإدارة الداخلية مؤجلة إلى S1، وهي للإدارة فقط وليست شرطًا لزيارة المرجع.
+لا تسجيل عام، ولا دخول للزائر، ولا معجم، ولا جذور، ولا صرف، ولا نحو، ولا ذكاء اصطناعي. المصادقة الحالية للإدارة والتحرير فقط.

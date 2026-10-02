@@ -8,7 +8,19 @@ PostgreSQL is the only database. Schema changes go through Flyway. Hibernate `dd
 
 ## S0 schema
 
-`foundation_marker` proves that Flyway ran and that UUID plus `timestamptz` are available. It is not a linguistic entity and not a user table. No seed users exist.
+`foundation_marker` proves that Flyway ran and that UUID plus `timestamptz` are available. It is not a linguistic entity and not a user table.
+
+## S1 schema
+
+`V2__admin_identity.sql` adds editorial staff tables only:
+
+- `admin_user`, `admin_role`, `admin_permission`, `admin_role_permission`, `admin_user_role`
+- `admin_refresh_token` stores a SHA-256 hash, a family id, expiry, and revocation. The raw token is not stored.
+- `admin_audit_event` is append-only. A trigger rejects `UPDATE` and `DELETE`.
+
+Usernames and emails are stored normalized and are unique without relying on letter case. System roles and the permission catalog are seeded. No platform owner row is seeded. `V1` is unchanged.
+
+There are still no word, root, meaning, or morphology tables.
 
 ## Unicode and time
 
@@ -16,8 +28,8 @@ The compose service initializes PostgreSQL with UTF-8. Timestamps use `timestamp
 
 ## What is postponed
 
-Dictionary tables, editorial revisions, and staff accounts wait for their stages. When they arrive, public identifiers are UUIDs. Sequential keys may exist inside the database but are not the public id.
+Dictionary tables and editorial revisions wait for later stages. Staff and future public identifiers are UUIDs. Sequential keys may exist inside the database but are not the public id.
 
 ## Redis
 
-Redis is not a system of record. S0 connects to it and checks it from the health endpoint in tests. No cache region is enabled.
+Redis is not a system of record. S1 uses it for admin authentication rate limits and a short access-token denylist. It does not cache linguistic data.

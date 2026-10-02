@@ -1,7 +1,5 @@
 /**
- * Identity boundary.
- * S0 does not create visitors, passwords, or tokens.
- * S1 adds authentication for internal administration only.
- * Public reading of linguistic knowledge stays anonymous.
+ * Editorial identity.
+ * Accounts here are platform staff. They are not visitor accounts, and they do not gate public reading.
  */
 package com.mrsoft.arabicreference.identity;
