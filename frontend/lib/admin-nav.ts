@@ -21,6 +21,7 @@ export const adminNav: AdminNavItem[] = [
   { href: "/admin/rhetoric", label: "البلاغة", anyOf: ["rhetoric.topic.view", "rhetoric.device.review", "rhetoric.device.publish"] },
   { href: "/admin/literature", label: "الأدب", anyOf: ["literature.view", "literature.review", "literature.publish"] },
   { href: "/admin/articles", label: "المقالات", anyOf: ["content.article.view", "content.article.review", "content.article.publish"] },
+  { href: "/admin/tools", label: "الأدوات", permission: "tools.view" },
 ];
 
 export function visibleAdminNav(permissions: readonly string[]): AdminNavItem[] {

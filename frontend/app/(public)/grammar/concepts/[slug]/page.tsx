@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { attributionLine, publicJson } from "@/lib/dictionary";
 import { grammarCrumbs, grammarSlug, grammarTitle } from "@/lib/grammar";
-import { siteUrl } from "@/lib/site";
+import { resolveSiteUrl } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
@@ -21,7 +21,7 @@ type Concept = {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const concept = await load(params);
   if (!concept) return { title: "مصطلح غير منشور", robots: { index: false, follow: false } };
-  return { title: grammarTitle("concept", concept.term), description: concept.shortDefinition ?? undefined, alternates: { canonical: `${siteUrl}/grammar/concepts/${concept.slug}` } };
+  return { title: grammarTitle("concept", concept.term), description: concept.shortDefinition ?? undefined, alternates: { canonical: `${resolveSiteUrl()}/grammar/concepts/${concept.slug}` } };
 }
 
 export default async function GrammarConceptPage({ params }: { params: Promise<{ slug: string }> }) {

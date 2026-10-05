@@ -124,7 +124,7 @@ public class SpellingAdminService {
         UUID actor = authorization.requireAccess().userId();
         editorial.open(topic, actor, "topic update", TOPIC);
         applyTopic(topic, update.title(), update.summary(), update.displayOrder());
-        editorial.persist(topics, topic, actor, AuditEventType.SPELLING_TOPIC_CREATED, TOPIC);
+        editorial.persist(topics, topic, actor, AuditEventType.SPELLING_TOPIC_UPDATED, TOPIC);
         return topicAdmin(topic);
     }
 
@@ -220,7 +220,7 @@ public class SpellingAdminService {
         UUID actor = authorization.requireAccess().userId();
         editorial.open(rule, actor, "rule update", RULE);
         applyRule(rule, update.title(), update.summary(), update.coreRule(), update.difficulty());
-        editorial.persist(rules, rule, actor, AuditEventType.SPELLING_RULE_CREATED, RULE);
+        editorial.persist(rules, rule, actor, AuditEventType.SPELLING_RULE_UPDATED, RULE);
         return ruleAdmin(rule);
     }
 
@@ -241,7 +241,7 @@ public class SpellingAdminService {
         clause.setBody(KnowledgeText.required(draft.body(), "body", 4000));
         clause.setDisplayOrder(clauses.findByRuleIdOrderByDisplayOrderAsc(id).size());
         clauses.save(clause);
-        editorial.persist(rules, rule, actor, AuditEventType.SPELLING_RULE_CREATED, RULE);
+        editorial.persist(rules, rule, actor, AuditEventType.SPELLING_RULE_UPDATED, RULE);
         return ruleAdmin(rule);
     }
 
@@ -274,7 +274,7 @@ public class SpellingAdminService {
         example.setCitationId(draft.citationId());
         example.setDisplayOrder(examples.findByRuleIdOrderByDisplayOrderAsc(id).size());
         examples.save(example);
-        editorial.persist(rules, rule, actor, AuditEventType.SPELLING_RULE_CREATED, RULE);
+        editorial.persist(rules, rule, actor, AuditEventType.SPELLING_RULE_UPDATED, RULE);
         return ruleAdmin(rule);
     }
 

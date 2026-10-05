@@ -1,5 +1,7 @@
+import Link from "next/link";
 import { SearchPanel } from "@/components/search-panel";
 import { SectionGrid } from "@/components/section-grid";
+import { featuredTools } from "@/lib/tools";
 import { siteName, siteTagline } from "@/lib/site";
 
 export default function HomePage() {
@@ -16,6 +18,23 @@ export default function HomePage() {
           </p>
         </div>
         <SearchPanel />
+        <section aria-labelledby="tools-title" className="mt-12">
+          <div className="flex items-end justify-between gap-4">
+            <h2 id="tools-title" className="font-display text-4xl">أدوات تقرأ المرجع</h2>
+            <Link href="/tools" className="text-library">كل الأدوات</Link>
+          </div>
+          <ul className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {featuredTools.map((tool) => (
+              <li key={tool.code}>
+                <article className="h-full rounded-3xl border border-line bg-raised p-5">
+                  <h3 className="font-display text-2xl">{tool.name}</h3>
+                  <p className="mt-2 text-sm leading-7 text-muted">{tool.description}</p>
+                  <Link href={tool.route} className="mt-4 inline-block text-library">استخدام الأداة</Link>
+                </article>
+              </li>
+            ))}
+          </ul>
+        </section>
       </section>
       <SectionGrid />
     </main>

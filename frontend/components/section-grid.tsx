@@ -26,7 +26,7 @@ export function SectionGrid() {
               <p className="mt-3 text-sm leading-7 text-muted">{section.description}</p>
               {section.href ? (
                 <Link href={section.href} className="mt-4 text-library">
-                  {section.id === "grammar" ? "مرجع النحو" : "المحلل الصرفي"}
+                  {section.action}
                 </Link>
               ) : null}
             </article>

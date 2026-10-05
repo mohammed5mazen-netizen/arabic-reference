@@ -10,6 +10,13 @@ public interface LexicalFormRepository extends JpaRepository<LexicalFormEntity, 
 
     List<LexicalFormEntity> findByLexicalEntryIdOrderByDisplayOrderAsc(UUID lexicalEntryId);
 
+    @Query("""
+            select form from LexicalFormEntity form
+            where form.normalizedForm = :normalized
+              and form.status = com.mrsoft.arabicreference.linguistics.domain.editorial.PublicationStatus.PUBLISHED
+            """)
+    List<LexicalFormEntity> findPublishedByNormalized(@Param("normalized") String normalized);
+
     @Query("select coalesce(max(form.displayOrder), 0) from LexicalFormEntity form where form.lexicalEntryId = :entryId")
     int maxOrder(@Param("entryId") UUID entryId);
 }

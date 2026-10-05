@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { connection } from "next/server";
 import { Amiri, IBM_Plex_Sans_Arabic } from "next/font/google";
-import { siteName, siteTagline, siteUrl, textDirection } from "@/lib/site";
+import { resolveSiteUrl, siteName, siteTagline, textDirection } from "@/lib/site";
 import "./globals.css";
 
 const amiri = Amiri({
@@ -18,7 +19,10 @@ const plex = IBM_Plex_Sans_Arabic({
   display: "swap",
 });
 
-export const metadata: Metadata = {
+export async function generateMetadata(): Promise<Metadata> {
+  await connection();
+  const siteUrl = resolveSiteUrl();
+  return {
   metadataBase: new URL(siteUrl),
   title: {
     default: siteName,
@@ -39,7 +43,8 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
-};
+  };
+}
 
 const themeScript = `
 (function () {
@@ -54,14 +59,15 @@ const themeScript = `
 })();
 `;
 
-export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
+  await connection();
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: siteName,
     description: siteTagline,
     inLanguage: "ar",
-    url: siteUrl,
+    url: resolveSiteUrl(),
   };
 
   return (

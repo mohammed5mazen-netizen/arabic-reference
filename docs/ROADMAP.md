@@ -1,6 +1,6 @@
 # Roadmap
 
-S6 is the current stage. Later stages are sequencing, not a commitment to build them now. Public reading stays anonymous. Staff authentication is for internal administration only.
+S7 is the current stage. Later stages are sequencing, not a commitment to build them now. Public reading stays anonymous. Staff authentication is for internal administration only. S8 is not started.
 
 | Stage | Name | Intent |
 | --- | --- | --- |
@@ -10,9 +10,9 @@ S6 is the current stage. Later stages are sequencing, not a commitment to build 
 | S3 | Morphology Engine | Done: bounded patterns, ambiguity-aware analysis, and sound triliteral فَعَلَ conjugation |
 | S4 | Grammar Knowledge Base | Done: structured topics, rules, concepts, and manual syntax annotations |
 | S5 | Arabic Search Engine | Done: one published search across dictionary, roots, and grammar |
-| S6 | Content / Spelling / Rhetoric / Literature | **Current:** spelling, rhetoric, literature metadata, and articles in the same editorial and search model |
-| S7 | Arabic Linguistic Tools | Analysis, diacritics, proofing |
-| S8 | AI Linguistic Assistant + RAG | Assistant grounded in reviewed sources |
+| S6 | Content / Spelling / Rhetoric / Literature | Done: spelling, rhetoric, literature metadata, and articles in the same editorial and search model |
+| S7 | Arabic Linguistic Tools | **Current:** anonymous tools over published knowledge. No automatic sentence parser and no automatic spelling corrector |
+| S8 | AI Linguistic Assistant + RAG | Not started. Assistant grounded in reviewed sources |
 | S9 | Learning Platform | Lessons without closing public reading |
 | S10 | Advanced Public UX | Deeper public experience on the open reference |
 | S11 | Editorial / Review / Verification | The full review lifecycle |

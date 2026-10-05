@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { publicJson } from "@/lib/dictionary";
 import { articlePath, emptyArticlesMessage, knowledgeCrumbs } from "@/lib/knowledge";
-import { siteUrl } from "@/lib/site";
+import { resolveSiteUrl } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 type Item = { title: string; slug: string; excerpt?: string | null };
@@ -11,8 +11,8 @@ type Item = { title: string; slug: string; excerpt?: string | null };
 export const metadata: Metadata = {
   title: "المقالات",
   description: "مقالات معرفية منشورة عن العربية.",
-  alternates: { canonical: `${siteUrl}/articles` },
-  openGraph: { title: "المقالات | المرجع العربي", description: "مقالات معرفية منشورة.", url: `${siteUrl}/articles` },
+  alternates: { canonical: `${resolveSiteUrl()}/articles` },
+  openGraph: { title: "المقالات | المرجع العربي", description: "مقالات معرفية منشورة.", url: `${resolveSiteUrl()}/articles` },
 };
 
 export default async function ArticlesPage() {

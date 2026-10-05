@@ -209,7 +209,7 @@ public class LiteratureAdminService {
         UUID actor = authorization.requireAccess().userId();
         editorial.open(era, actor, "era update", ERA);
         applyEra(era, update.name(), update.startDescription(), update.endDescription(), update.summary(), update.historicalContext(), update.displayOrder());
-        editorial.persist(eras, era, actor, AuditEventType.LITERARY_ERA_CREATED, ERA);
+        editorial.persist(eras, era, actor, AuditEventType.LITERARY_ERA_UPDATED, ERA);
         return eraAdmin(era);
     }
 
@@ -499,7 +499,7 @@ public class LiteratureAdminService {
         UUID actor = authorization.requireAccess().userId();
         editorial.open(figure, actor, "figure update", FIGURE);
         applyFigure(figure, update.canonicalName(), update.biographySummary(), update.birth(), update.death());
-        editorial.persist(figures, figure, actor, AuditEventType.LITERARY_FIGURE_CREATED, FIGURE);
+        editorial.persist(figures, figure, actor, AuditEventType.LITERARY_FIGURE_UPDATED, FIGURE);
         return figureAdmin(figure);
     }
 
@@ -524,7 +524,7 @@ public class LiteratureAdminService {
         row.setNormalized(normalized);
         row.setKind(draft.kind());
         aliases.save(row);
-        editorial.persist(figures, figure, actor, AuditEventType.LITERARY_FIGURE_CREATED, FIGURE);
+        editorial.persist(figures, figure, actor, AuditEventType.LITERARY_FIGURE_UPDATED, FIGURE);
         return figureAdmin(figure);
     }
 
@@ -541,7 +541,7 @@ public class LiteratureAdminService {
         UUID actor = authorization.requireAccess().userId();
         editorial.open(figure, actor, "role added", FIGURE);
         roles.save(new LiteraryFigureRoleEntity(id, draft.role()));
-        editorial.persist(figures, figure, actor, AuditEventType.LITERARY_FIGURE_CREATED, FIGURE);
+        editorial.persist(figures, figure, actor, AuditEventType.LITERARY_FIGURE_UPDATED, FIGURE);
         return figureAdmin(figure);
     }
 
@@ -556,7 +556,7 @@ public class LiteratureAdminService {
         UUID actor = authorization.requireAccess().userId();
         editorial.open(figure, actor, "era linked", FIGURE);
         figureEras.save(new LiteraryFigureEraEntity(id, draft.eraId()));
-        editorial.persist(figures, figure, actor, AuditEventType.LITERARY_FIGURE_CREATED, FIGURE);
+        editorial.persist(figures, figure, actor, AuditEventType.LITERARY_FIGURE_UPDATED, FIGURE);
         return figureAdmin(figure);
     }
 
@@ -571,7 +571,7 @@ public class LiteratureAdminService {
         UUID actor = authorization.requireAccess().userId();
         editorial.open(figure, actor, "school linked", FIGURE);
         schoolFigures.save(new LiterarySchoolFigureEntity(draft.schoolId(), id));
-        editorial.persist(figures, figure, actor, AuditEventType.LITERARY_FIGURE_CREATED, FIGURE);
+        editorial.persist(figures, figure, actor, AuditEventType.LITERARY_FIGURE_UPDATED, FIGURE);
         return figureAdmin(figure);
     }
 
@@ -670,7 +670,7 @@ public class LiteratureAdminService {
         UUID actor = authorization.requireAccess().userId();
         editorial.open(work, actor, "work update", WORK);
         applyWork(work, update.title(), update.description(), update.languageCode(), update.genreId(), update.eraId(), update.compositionDisplay(), update.attribution());
-        editorial.persist(works, work, actor, AuditEventType.LITERARY_WORK_CREATED, WORK);
+        editorial.persist(works, work, actor, AuditEventType.LITERARY_WORK_UPDATED, WORK);
         return workAdmin(work);
     }
 
@@ -691,7 +691,7 @@ public class LiteratureAdminService {
         row.setAlias(alias);
         row.setNormalized(normalized);
         workAliases.save(row);
-        editorial.persist(works, work, actor, AuditEventType.LITERARY_WORK_CREATED, WORK);
+        editorial.persist(works, work, actor, AuditEventType.LITERARY_WORK_UPDATED, WORK);
         return workAdmin(work);
     }
 
@@ -706,7 +706,7 @@ public class LiteratureAdminService {
         UUID actor = authorization.requireAccess().userId();
         editorial.open(work, actor, "figure linked", WORK);
         workFigures.save(new LiteraryWorkFigureEntity(id, draft.figureId(), KnowledgeText.optional(draft.roleLabel(), "roleLabel", 80)));
-        editorial.persist(works, work, actor, AuditEventType.LITERARY_WORK_CREATED, WORK);
+        editorial.persist(works, work, actor, AuditEventType.LITERARY_WORK_UPDATED, WORK);
         return workAdmin(work);
     }
 
@@ -725,7 +725,7 @@ public class LiteratureAdminService {
         editorial.open(work, actor, "rights updated", WORK);
         work.setRightsStatus(update.rights());
         work.setRightsNote(note);
-        editorial.persist(works, work, actor, AuditEventType.LITERARY_WORK_CREATED, WORK);
+        editorial.persist(works, work, actor, AuditEventType.LITERARY_WORK_UPDATED, WORK);
         return workAdmin(work);
     }
 
@@ -745,7 +745,7 @@ public class LiteratureAdminService {
         excerpt.setCitationId(draft.citationId());
         excerpt.setDisplayOrder(excerpts.findByWorkIdOrderByDisplayOrderAsc(id).size());
         excerpts.save(excerpt);
-        editorial.persist(works, work, actor, AuditEventType.LITERARY_WORK_CREATED, WORK);
+        editorial.persist(works, work, actor, AuditEventType.LITERARY_WORK_UPDATED, WORK);
         return workAdmin(work);
     }
 

@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { canonicalSlug, publicJson } from "@/lib/dictionary";
 import { emptyWorksMessage, knowledgeCrumbs, literaryRoleLabel, literatureWorkPath } from "@/lib/knowledge";
-import { siteUrl } from "@/lib/site";
+import { resolveSiteUrl } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 type Figure = {
@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const figure = await publicJson<Figure>(`/api/v1/public/literature/figures/${encodeURIComponent(canonicalSlug(slug))}`);
   const title = figure?.name ?? "أديب";
-  return { title, description: figure?.biography || title, alternates: { canonical: `${siteUrl}/literature/figures/${slug}` }, openGraph: { title, description: figure?.biography || title, url: `${siteUrl}/literature/figures/${slug}` } };
+  return { title, description: figure?.biography || title, alternates: { canonical: `${resolveSiteUrl()}/literature/figures/${slug}` }, openGraph: { title, description: figure?.biography || title, url: `${resolveSiteUrl()}/literature/figures/${slug}` } };
 }
 
 export default async function FigurePage({ params }: { params: Promise<{ slug: string }> }) {

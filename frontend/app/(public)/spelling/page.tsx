@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { publicJson } from "@/lib/dictionary";
 import { emptySpellingMessage, knowledgeCrumbs, spellingTopicPath } from "@/lib/knowledge";
-import { siteUrl } from "@/lib/site";
+import { resolveSiteUrl } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
@@ -12,8 +12,8 @@ type LinkItem = { title: string; slug: string; summary?: string | null };
 export const metadata: Metadata = {
   title: "الإملاء",
   description: "قواعد الكتابة العربية: الهمزة، والألف اللينة، والتاء، موثّقة بمصادرها.",
-  alternates: { canonical: `${siteUrl}/spelling` },
-  openGraph: { title: "الإملاء | المرجع العربي", description: "قواعد الكتابة العربية موثّقة بمصادرها.", url: `${siteUrl}/spelling` },
+  alternates: { canonical: `${resolveSiteUrl()}/spelling` },
+  openGraph: { title: "الإملاء | المرجع العربي", description: "قواعد الكتابة العربية موثّقة بمصادرها.", url: `${resolveSiteUrl()}/spelling` },
 };
 
 export default async function SpellingHomePage() {

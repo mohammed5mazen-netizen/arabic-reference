@@ -70,6 +70,10 @@ Eras, figures, aliases, roles, works, genres, schools, and rights. Dates use `Hi
 
 Articles, sections, tags, and cross-domain relations. The root `content` package stays a package marker; article code lives in the subpackages. See [ARTICLE_CONTENT_MODEL.md](ARTICLE_CONTENT_MODEL.md).
 
+## tools
+
+Orchestration for the public linguistic tools. The root `tools` package stays a package marker. Application services call published query ports and `LinguisticSearchPort`. They do not call foreign repositories or controllers. See [LINGUISTIC_TOOLS.md](LINGUISTIC_TOOLS.md).
+
 ## learning, ai
 
 Package placeholders. Architecture tests fail if these root packages gain implementation classes.

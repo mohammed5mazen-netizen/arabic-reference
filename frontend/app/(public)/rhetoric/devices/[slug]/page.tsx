@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { canonicalSlug, publicJson } from "@/lib/dictionary";
 import { knowledgeCrumbs, poetryClass } from "@/lib/knowledge";
-import { siteUrl } from "@/lib/site";
+import { resolveSiteUrl } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 type Example = { text?: string; explanation?: string; interpretation?: string; scholarlyNote?: string; alternativeInterpretation?: string; highlightedSegment?: string };
@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const device = await publicJson<Device>(`/api/v1/public/rhetoric/devices/${encodeURIComponent(canonicalSlug(slug))}`);
   const title = device?.name ?? "فن بلاغي";
-  return { title, description: device?.shortDefinition || title, alternates: { canonical: `${siteUrl}/rhetoric/devices/${slug}` }, openGraph: { title, description: device?.shortDefinition || title, url: `${siteUrl}/rhetoric/devices/${slug}` } };
+  return { title, description: device?.shortDefinition || title, alternates: { canonical: `${resolveSiteUrl()}/rhetoric/devices/${slug}` }, openGraph: { title, description: device?.shortDefinition || title, url: `${resolveSiteUrl()}/rhetoric/devices/${slug}` } };
 }
 
 export default async function RhetoricDevicePage({ params }: { params: Promise<{ slug: string }> }) {

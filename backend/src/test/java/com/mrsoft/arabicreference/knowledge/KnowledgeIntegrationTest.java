@@ -122,6 +122,10 @@ class KnowledgeIntegrationTest {
         bare = act(staff.editor, "/api/v1/admin/spelling/rules/" + id(bare) + "/submit", bare);
         bare = act(staff.reviewer, "/api/v1/admin/spelling/rules/" + id(bare) + "/verify", bare);
         mockMvc.perform(post("/api/v1/admin/spelling/rules/" + id(bare) + "/publish").header("Authorization", bearer(staff.publisher)).contentType(MediaType.APPLICATION_JSON).content(versionBody(version(bare)))).andExpect(status().isConflict());
+        bare = body(mockMvc.perform(post("/api/v1/admin/spelling/rules/" + id(bare) + "/request-changes").header("Authorization", bearer(staff.reviewer)).contentType(MediaType.APPLICATION_JSON).content("""
+                {"version":%d,"reason":"أضف مصدرًا قبل النشر"}
+                """.formatted(version(bare)))).andExpect(status().isOk()).andReturn());
+        assertThat((String) JsonPath.read(bare, "$.data.status")).isEqualTo("CHANGES_REQUESTED");
         rule = cite(staff.editor, "/api/v1/admin/spelling/rules/" + id(rule) + "/citations", rule, citation);
         rule = act(staff.editor, "/api/v1/admin/spelling/rules/" + id(rule) + "/submit", rule);
         rule = act(staff.owner, "/api/v1/admin/spelling/rules/" + id(rule) + "/verify", rule);
@@ -143,6 +147,8 @@ class KnowledgeIntegrationTest {
         assertThat(revisions).isGreaterThan(0);
         Integer audits = jdbc.queryForObject("select count(*) from admin_audit_event where event_type = 'SPELLING_RULE_PUBLISHED' and target_id = ?", Integer.class, id(rule));
         assertThat(audits).isEqualTo(1);
+        Integer updates = jdbc.queryForObject("select count(*) from admin_audit_event where event_type = 'SPELLING_RULE_UPDATED' and target_id = ?", Integer.class, id(rule));
+        assertThat(updates).isGreaterThan(0);
         mockMvc.perform(patch("/api/v1/admin/spelling/rules/" + id(rule)).header("Authorization", bearer(staff.editor)).contentType(MediaType.APPLICATION_JSON).content("""
                 {"version":1,"title":"تعارض %s","summary":"ملخص","coreRule":"نص","difficulty":"BEGINNER"}
                 """.formatted(label))).andExpect(status().isConflict());

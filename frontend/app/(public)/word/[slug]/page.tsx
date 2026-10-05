@@ -12,7 +12,7 @@ import {
   type PublicEntry,
 } from "@/lib/dictionary";
 import { featureLines, morphologyLabel, type EntryMorphology } from "@/lib/morphology";
-import { siteUrl } from "@/lib/site";
+import { resolveSiteUrl } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: wordTitle(entry.lemmaOriginal),
     description: wordDescription(meaning),
-    alternates: { canonical: `${siteUrl}/word/${entry.slug}` },
+    alternates: { canonical: `${resolveSiteUrl()}/word/${entry.slug}` },
   };
 }
 

@@ -1,6 +1,8 @@
 package com.mrsoft.arabicreference.spelling.application;
 
 import com.mrsoft.arabicreference.linguistics.domain.editorial.PublicationStatus;
+import com.mrsoft.arabicreference.linguistics.domain.text.ArabicTextNormalizer;
+import com.mrsoft.arabicreference.spelling.application.SpellingViews.SpellingMatch;
 import com.mrsoft.arabicreference.shared.kernel.exception.ResourceNotFoundException;
 import com.mrsoft.arabicreference.spelling.application.SpellingViews.PublicLink;
 import com.mrsoft.arabicreference.spelling.application.SpellingViews.PublicRule;
@@ -19,6 +21,7 @@ public class SpellingQueryService {
 
     private final SpellingTopicRepository topics;
     private final SpellingRuleRepository rules;
+    private final ArabicTextNormalizer normalizer = new ArabicTextNormalizer();
 
     public SpellingQueryService(SpellingTopicRepository topics, SpellingRuleRepository rules) {
         this.topics = topics;
@@ -65,6 +68,50 @@ public class SpellingQueryService {
                 maps(snapshot.get("clauses")),
                 maps(snapshot.get("examples")),
                 maps(snapshot.get("sources")));
+    }
+
+    @Transactional(readOnly = true)
+    public List<SpellingMatch> matches(String normalized) {
+        List<SpellingMatch> matches = new ArrayList<>();
+        int scanned = 0;
+        for (SpellingRuleEntity rule : rules.visibleToPublic(PublicationStatus.ARCHIVED)) {
+            if (matches.size() >= 12 || scanned >= 200) {
+                break;
+            }
+            scanned++;
+            Map<String, Object> snapshot = rule.getPublishedSnapshot();
+            for (Map<String, Object> example : maps(snapshot.get("examples"))) {
+                if (matches.size() >= 12) {
+                    break;
+                }
+                if (same(normalized, text(example.get("correctForm")))
+                        || same(normalized, text(example.get("incorrectForm")))
+                        || same(normalized, text(example.get("commonForm")))) {
+                    matches.add(new SpellingMatch(
+                            text(snapshot.get("title")),
+                            text(snapshot.get("slug")),
+                            text(example.get("kind")),
+                            blank(example.get("correctForm")),
+                            blank(example.get("incorrectForm")),
+                            blank(example.get("commonForm")),
+                            blank(example.get("explanation")),
+                            blank(example.get("contextNote")),
+                            blank(example.get("reason"))));
+                }
+            }
+        }
+        return matches;
+    }
+
+    private boolean same(String normalized, String value) {
+        if (value == null || value.isBlank()) {
+            return false;
+        }
+        return normalized.equals(normalizer.normalize(value).normalizedText());
+    }
+
+    private static String blank(Object value) {
+        return value == null ? null : String.valueOf(value);
     }
 
     private static String text(Object value) {

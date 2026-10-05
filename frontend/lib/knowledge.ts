@@ -69,7 +69,12 @@ export const articleAdminSections = ["المقالة", "الأقسام", "الا
 export function knowledgeWorkflowActions(status: string, permissions: readonly string[], edit: string, review: string, publish: string): string[] {
   if ((status === "DRAFT" || status === "CHANGES_REQUESTED") && permissions.includes(edit)) return ["submit"];
   if (status === "IN_REVIEW" && permissions.includes(review)) return ["verify", "request-changes"];
-  if (status === "VERIFIED" && permissions.includes(publish)) return ["publish"];
+  if (status === "VERIFIED") {
+    const actions: string[] = [];
+    if (permissions.includes(review)) actions.push("request-changes");
+    if (permissions.includes(publish)) actions.push("publish");
+    return actions;
+  }
   if (status === "PUBLISHED" && permissions.includes(publish)) return ["archive"];
   return [];
 }

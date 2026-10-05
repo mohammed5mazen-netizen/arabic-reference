@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { canonicalSlug, partOfSpeechLabel, publicJson, type LookupHit } from "@/lib/dictionary";
 import { morphologyLabel, type RootMorphology } from "@/lib/morphology";
-import { siteUrl } from "@/lib/site";
+import { resolveSiteUrl } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: `${root.original} - الجذر`,
     description: `المداخل المنشورة المرتبطة بالجذر ${root.original}.`,
-    alternates: { canonical: `${siteUrl}/root/${root.slug}` },
+    alternates: { canonical: `${resolveSiteUrl()}/root/${root.slug}` },
   };
 }
 

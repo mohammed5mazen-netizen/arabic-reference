@@ -128,7 +128,7 @@ public class ArticleAdminService {
         UUID actor = authorization.requireAccess().userId();
         editorial.open(article, actor, "article update", ARTICLE);
         apply(article, update.title(), update.excerpt(), update.articleType(), update.coverLabel(), update.editorName());
-        editorial.persist(articles, article, actor, AuditEventType.ARTICLE_CREATED, ARTICLE);
+        editorial.persist(articles, article, actor, AuditEventType.ARTICLE_UPDATED, ARTICLE);
         return articleAdmin(article);
     }
 
@@ -147,7 +147,7 @@ public class ArticleAdminService {
         section.setBody(body);
         section.setDisplayOrder(sections.findByArticleIdOrderByDisplayOrderAsc(id).size());
         sections.save(section);
-        editorial.persist(articles, article, actor, AuditEventType.ARTICLE_CREATED, ARTICLE);
+        editorial.persist(articles, article, actor, AuditEventType.ARTICLE_UPDATED, ARTICLE);
         return articleAdmin(article);
     }
 
@@ -170,7 +170,7 @@ public class ArticleAdminService {
         UUID actor = authorization.requireAccess().userId();
         editorial.open(article, actor, "tag added", ARTICLE);
         tagLinks.save(new ArticleTagLinkEntity(id, tag.getId()));
-        editorial.persist(articles, article, actor, AuditEventType.ARTICLE_CREATED, ARTICLE);
+        editorial.persist(articles, article, actor, AuditEventType.ARTICLE_UPDATED, ARTICLE);
         return articleAdmin(article);
     }
 
@@ -219,7 +219,7 @@ public class ArticleAdminService {
         relation.setTargetType(target.type());
         relation.setTargetId(target.id());
         relations.save(relation);
-        editorial.persist(articles, article, actor, AuditEventType.ARTICLE_CREATED, ARTICLE);
+        editorial.persist(articles, article, actor, AuditEventType.ARTICLE_UPDATED, ARTICLE);
         return articleAdmin(article);
     }
 

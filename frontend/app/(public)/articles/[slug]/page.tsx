@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { canonicalSlug, publicJson } from "@/lib/dictionary";
 import { knowledgeCrumbs } from "@/lib/knowledge";
-import { siteUrl } from "@/lib/site";
+import { resolveSiteUrl } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 type Article = {
@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const article = await publicJson<Article>(`/api/v1/public/articles/${encodeURIComponent(canonicalSlug(slug))}`);
   const title = article?.title ?? "مقالة";
-  return { title, description: article?.excerpt || title, alternates: { canonical: `${siteUrl}/articles/${slug}` }, openGraph: { title, description: article?.excerpt || title, url: `${siteUrl}/articles/${slug}` } };
+  return { title, description: article?.excerpt || title, alternates: { canonical: `${resolveSiteUrl()}/articles/${slug}` }, openGraph: { title, description: article?.excerpt || title, url: `${resolveSiteUrl()}/articles/${slug}` } };
 }
 
 export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {

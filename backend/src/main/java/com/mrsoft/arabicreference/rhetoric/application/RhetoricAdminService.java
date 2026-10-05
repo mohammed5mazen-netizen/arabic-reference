@@ -212,7 +212,7 @@ public class RhetoricAdminService {
         component.setBody(KnowledgeText.required(draft.body(), "body", 4000));
         component.setDisplayOrder(components.findByDeviceIdOrderByDisplayOrderAsc(id).size());
         components.save(component);
-        editorial.persist(devices, device, actor, AuditEventType.RHETORIC_DEVICE_CREATED, DEVICE);
+        editorial.persist(devices, device, actor, AuditEventType.RHETORIC_DEVICE_UPDATED, DEVICE);
         return deviceAdmin(device);
     }
 
@@ -241,7 +241,7 @@ public class RhetoricAdminService {
         example.setCitationId(draft.citationId());
         example.setDisplayOrder(examples.findByDeviceIdOrderByDisplayOrderAsc(id).size());
         examples.save(example);
-        editorial.persist(devices, device, actor, AuditEventType.RHETORIC_DEVICE_CREATED, DEVICE);
+        editorial.persist(devices, device, actor, AuditEventType.RHETORIC_DEVICE_UPDATED, DEVICE);
         return deviceAdmin(device);
     }
 
@@ -269,7 +269,7 @@ public class RhetoricAdminService {
         relation.setTargetDeviceId(draft.targetDeviceId());
         relation.setKind(draft.kind());
         relations.save(relation);
-        editorial.persist(devices, device, actor, AuditEventType.RHETORIC_DEVICE_CREATED, DEVICE);
+        editorial.persist(devices, device, actor, AuditEventType.RHETORIC_DEVICE_UPDATED, DEVICE);
         return deviceAdmin(device);
     }
 

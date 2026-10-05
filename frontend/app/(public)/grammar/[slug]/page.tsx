@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { attributionLine, publicJson } from "@/lib/dictionary";
 import { grammarCrumbs, grammarSlug, grammarTitle, type GrammarCrumb } from "@/lib/grammar";
-import { siteUrl } from "@/lib/site";
+import { resolveSiteUrl } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: grammarTitle("topic", topic.title),
     description: topic.summary ?? undefined,
-    alternates: { canonical: `${siteUrl}/grammar/${topic.slug}` },
+    alternates: { canonical: `${resolveSiteUrl()}/grammar/${topic.slug}` },
   };
 }
 

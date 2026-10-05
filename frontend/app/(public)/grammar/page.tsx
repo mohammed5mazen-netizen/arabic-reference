@@ -3,7 +3,7 @@ import Link from "next/link";
 import { grammarLabel, type GrammarCrumb } from "@/lib/grammar";
 import { publicJson } from "@/lib/dictionary";
 import { Breadcrumbs } from "@/components/breadcrumbs";
-import { siteUrl } from "@/lib/site";
+import { resolveSiteUrl } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
@@ -19,7 +19,7 @@ type SearchPage = { items: { kind: string; title: string; slug: string; summary?
 export const metadata: Metadata = {
   title: "النحو",
   description: "مرجع منظّم في النحو العربي: موضوعات، قواعد، ومصطلحات موثّقة.",
-  alternates: { canonical: `${siteUrl}/grammar` },
+  alternates: { canonical: `${resolveSiteUrl()}/grammar` },
 };
 
 export default async function GrammarHomePage({ searchParams }: { searchParams: Promise<{ q?: string }> }) {

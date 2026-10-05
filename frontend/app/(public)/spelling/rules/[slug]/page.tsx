@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { canonicalSlug, publicJson } from "@/lib/dictionary";
 import { knowledgeCrumbs, poetryClass, spellingTopicPath } from "@/lib/knowledge";
-import { siteUrl } from "@/lib/site";
+import { resolveSiteUrl } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
@@ -31,8 +31,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title,
     description: rule?.summary || rule?.coreRule || title,
-    alternates: { canonical: `${siteUrl}/spelling/rules/${slug}` },
-    openGraph: { title: `${title} | المرجع العربي`, description: rule?.summary || title, url: `${siteUrl}/spelling/rules/${slug}` },
+    alternates: { canonical: `${resolveSiteUrl()}/spelling/rules/${slug}` },
+    openGraph: { title: `${title} | المرجع العربي`, description: rule?.summary || title, url: `${resolveSiteUrl()}/spelling/rules/${slug}` },
   };
 }
 

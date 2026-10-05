@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { publicJson } from "@/lib/dictionary";
 import { emptyLiteratureMessage, knowledgeCrumbs } from "@/lib/knowledge";
-import { siteUrl } from "@/lib/site";
+import { resolveSiteUrl } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 type EraItem = { name: string; slug: string; summary?: string | null };
@@ -12,8 +12,8 @@ type LinkItem = { title: string; slug: string; summary?: string | null };
 export const metadata: Metadata = {
   title: "الأدب",
   description: "حقب وأعلام وأعمال من الأدب العربي، ببيانات حقوق واضحة.",
-  alternates: { canonical: `${siteUrl}/literature` },
-  openGraph: { title: "الأدب | المرجع العربي", description: "معرفة عن الأدب العربي، لا مكتبة كتب.", url: `${siteUrl}/literature` },
+  alternates: { canonical: `${resolveSiteUrl()}/literature` },
+  openGraph: { title: "الأدب | المرجع العربي", description: "معرفة عن الأدب العربي، لا مكتبة كتب.", url: `${resolveSiteUrl()}/literature` },
 };
 
 export default async function LiteratureHomePage() {

@@ -1,5 +1,7 @@
 import type { MetadataRoute } from "next";
-import { siteUrl } from "@/lib/site";
+import { resolveSiteUrl } from "@/lib/site";
+
+export const dynamic = "force-dynamic";
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -8,7 +10,7 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: ["/admin", "/admin/"],
     },
-    sitemap: `${siteUrl}/sitemap.xml`,
-    host: siteUrl,
+    sitemap: `${resolveSiteUrl()}/sitemap.xml`,
+    host: resolveSiteUrl(),
   };
 }

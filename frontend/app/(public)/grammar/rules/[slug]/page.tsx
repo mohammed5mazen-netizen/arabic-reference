@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { attributionLine, publicJson } from "@/lib/dictionary";
 import { exampleCards, grammarAttribution, grammarCrumbs, grammarLabel, grammarSlug, grammarTitle, missingAnnotationMessage, type GrammarExample } from "@/lib/grammar";
-import { siteUrl } from "@/lib/site";
+import { resolveSiteUrl } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
@@ -26,7 +26,7 @@ type Rule = {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const rule = await load(params);
   if (!rule) return { title: "قاعدة غير منشورة", robots: { index: false, follow: false } };
-  return { title: grammarTitle("rule", rule.title), description: rule.summary ?? rule.ruleText ?? undefined, alternates: { canonical: `${siteUrl}/grammar/rules/${rule.slug}` } };
+  return { title: grammarTitle("rule", rule.title), description: rule.summary ?? rule.ruleText ?? undefined, alternates: { canonical: `${resolveSiteUrl()}/grammar/rules/${rule.slug}` } };
 }
 
 export default async function GrammarRulePage({ params }: { params: Promise<{ slug: string }> }) {

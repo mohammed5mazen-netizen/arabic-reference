@@ -70,6 +70,7 @@ test("admin knowledge navigation follows permissions", () => {
   assert.deepEqual(articleAdminSections.includes("المعرفة المرتبطة"), true);
   assert.deepEqual(knowledgeWorkflowActions("IN_REVIEW", ["spelling.rule.review"], "spelling.rule.edit", "spelling.rule.review", "spelling.rule.publish"), ["verify", "request-changes"]);
   assert.deepEqual(knowledgeWorkflowActions("VERIFIED", ["content.article.publish"], "content.article.edit", "content.article.review", "content.article.publish"), ["publish"]);
+  assert.deepEqual(knowledgeWorkflowActions("VERIFIED", ["content.article.review"], "content.article.edit", "content.article.review", "content.article.publish"), ["request-changes"]);
   assert.deepEqual(knowledgeWorkflowActions("DRAFT", ["literature.view"], "literature.figure.manage", "literature.review", "literature.publish"), []);
 });
 

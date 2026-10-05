@@ -76,6 +76,12 @@ app:
     max-input-length: ${MORPHOLOGY_MAX_INPUT_LENGTH:80}
     rate-limit-per-minute: ${MORPHOLOGY_RATE_LIMIT:120}
     cache-ttl: ${MORPHOLOGY_CACHE_TTL:10m}
+  tools:
+    rate-limit-per-minute: ${TOOLS_RATE_LIMIT:90}
+    cache-ttl: ${TOOLS_CACHE_TTL:10m}
+    graph-depth: ${TOOLS_GRAPH_DEPTH:2}
+    graph-nodes: ${TOOLS_GRAPH_NODES:50}
+    candidate-cap: ${TOOLS_CANDIDATE_CAP:8}
 
 logging:
   level:

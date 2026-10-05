@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { canonicalSlug, publicJson } from "@/lib/dictionary";
 import { excerptBlockedMessage, knowledgeCrumbs, poetryClass, rightsAllowExcerpt, rightsLabel, showsFullTextButton } from "@/lib/knowledge";
-import { siteUrl } from "@/lib/site";
+import { resolveSiteUrl } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 type Work = {
@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const work = await publicJson<Work>(`/api/v1/public/literature/works/${encodeURIComponent(canonicalSlug(slug))}`);
   const title = work?.title ?? "عمل أدبي";
-  return { title, description: work?.description || title, alternates: { canonical: `${siteUrl}/literature/works/${slug}` }, openGraph: { title, description: work?.description || title, url: `${siteUrl}/literature/works/${slug}` } };
+  return { title, description: work?.description || title, alternates: { canonical: `${resolveSiteUrl()}/literature/works/${slug}` }, openGraph: { title, description: work?.description || title, url: `${resolveSiteUrl()}/literature/works/${slug}` } };
 }
 
 export default async function WorkPage({ params }: { params: Promise<{ slug: string }> }) {

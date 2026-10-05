@@ -10,6 +10,8 @@ public interface KnowledgeRelationRepository extends JpaRepository<KnowledgeRela
 
     List<KnowledgeRelationEntity> findByOwnerTypeAndOwnerId(KnowledgeOwnerType ownerType, UUID ownerId);
 
+    List<KnowledgeRelationEntity> findByTargetTypeAndTargetId(KnowledgeTargetType targetType, UUID targetId);
+
     boolean existsByOwnerTypeAndOwnerIdAndTargetTypeAndTargetId(
             KnowledgeOwnerType ownerType,
             UUID ownerId,

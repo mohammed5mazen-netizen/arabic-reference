@@ -25,7 +25,7 @@ public final class EditorialWorkflow {
     }
 
     public static PublicationStatus requestChanges(PublicationStatus current) {
-        if (current != PublicationStatus.IN_REVIEW) {
+        if (current != PublicationStatus.IN_REVIEW && current != PublicationStatus.VERIFIED) {
             throw illegal(current, "return");
         }
         return PublicationStatus.CHANGES_REQUESTED;

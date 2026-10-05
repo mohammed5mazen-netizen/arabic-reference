@@ -91,6 +91,18 @@ public final class SpellingViews {
     public record ReviewItem(String kind, UUID id, String title, String status, long version) {
     }
 
+    public record SpellingMatch(
+            String ruleTitle,
+            String ruleSlug,
+            String kind,
+            String correctForm,
+            String incorrectForm,
+            String commonForm,
+            String explanation,
+            String contextNote,
+            String reason) {
+    }
+
     public record PublicLink(String title, String slug, String summary) {
     }
 

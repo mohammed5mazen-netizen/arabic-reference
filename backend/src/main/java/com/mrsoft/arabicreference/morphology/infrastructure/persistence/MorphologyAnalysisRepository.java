@@ -28,4 +28,12 @@ public interface MorphologyAnalysisRepository extends JpaRepository<MorphologyAn
               and analysis.publishedSnapshot is not null
             """)
     List<MorphologyAnalysisEntity> findPublishedByEntries(@Param("entryIds") Collection<UUID> entryIds);
+
+    @Query("""
+            select analysis from MorphologyAnalysisEntity analysis
+            where analysis.patternId = :patternId
+              and analysis.publishedSnapshot is not null
+              and analysis.status <> com.mrsoft.arabicreference.linguistics.domain.editorial.PublicationStatus.ARCHIVED
+            """)
+    List<MorphologyAnalysisEntity> findPublishedByPattern(@Param("patternId") UUID patternId);
 }

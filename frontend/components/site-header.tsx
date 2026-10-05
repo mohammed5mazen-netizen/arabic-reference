@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { siteName } from "@/lib/site";
 import { ThemeToggle } from "@/components/theme-toggle";
 
@@ -13,7 +14,12 @@ export function SiteHeader() {
         </span>
         <span className="font-display text-2xl">{siteName}</span>
       </a>
-      <ThemeToggle />
+      <nav aria-label="التنقل" className="flex items-center gap-4 text-sm">
+        <Link href="/">الرئيسية</Link>
+        <Link href="/tools">الأدوات</Link>
+        <Link href="/search">البحث</Link>
+        <ThemeToggle />
+      </nav>
     </header>
   );
 }

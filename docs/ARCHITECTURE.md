@@ -66,7 +66,7 @@ Editorial lifecycle:
 
 `DRAFT → IN_REVIEW → VERIFIED → PUBLISHED → ARCHIVED`
 
-`CHANGES_REQUESTED` returns an item from review. A published edit keeps the last public snapshot and opens a new draft.
+`CHANGES_REQUESTED` returns an item from review. A verified record that fails publication can also return to `CHANGES_REQUESTED`, so it becomes editable again. A published edit keeps the last public snapshot and opens a new draft.
 
 ## Anonymous scale
 
@@ -83,7 +83,11 @@ Redis is present so those controls have a place to land. S1 uses Redis for admin
 
 ## S6 knowledge
 
-Spelling, rhetoric, literature, and articles are separate modules. They reuse the editorial statuses, the source citation, and the search ports. Literature rights and historical dates are described in ADR-063 and ADR-064. Articles link to other published records through `KnowledgeTargetSource` (ADR-069).
+Spelling, rhetoric, literature, and articles are separate modules. They reuse the editorial statuses, the source citation, and the search ports. Literature rights and historical dates are described in ADR-063 and ADR-064. Articles link to other published records through `KnowledgeTargetSource` (ADR-069). Updates record an update audit event rather than a second created event.
+
+## S7 tools
+
+`tools` orchestrates published dictionary, morphology, grammar, search, spelling, and article ports. It does not own the morphology engine and knowledge modules do not depend on it. The public center is `/tools`. See [LINGUISTIC_TOOLS.md](LINGUISTIC_TOOLS.md) and ADR-070.
 
 ## SEO
 

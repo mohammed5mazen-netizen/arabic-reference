@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { publicJson } from "@/lib/dictionary";
 import { emptyRhetoricMessage, knowledgeCrumbs } from "@/lib/knowledge";
-import { siteUrl } from "@/lib/site";
+import { resolveSiteUrl } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 type LinkItem = { title: string; slug: string; summary?: string | null };
@@ -11,8 +11,8 @@ type LinkItem = { title: string; slug: string; summary?: string | null };
 export const metadata: Metadata = {
   title: "البلاغة",
   description: "علم المعاني والبيان والبديع، بأجهزة بلاغية موثّقة.",
-  alternates: { canonical: `${siteUrl}/rhetoric` },
-  openGraph: { title: "البلاغة | المرجع العربي", description: "أجهزة بلاغية موثّقة.", url: `${siteUrl}/rhetoric` },
+  alternates: { canonical: `${resolveSiteUrl()}/rhetoric` },
+  openGraph: { title: "البلاغة | المرجع العربي", description: "أجهزة بلاغية موثّقة.", url: `${resolveSiteUrl()}/rhetoric` },
 };
 
 export default async function RhetoricHomePage() {

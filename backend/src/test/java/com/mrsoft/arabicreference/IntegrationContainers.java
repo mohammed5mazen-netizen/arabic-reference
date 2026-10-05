@@ -7,7 +7,8 @@ import org.testcontainers.utility.DockerImageName;
 
 public final class IntegrationContainers {
 
-    public static final PostgreSQLContainer POSTGRES = new PostgreSQLContainer("postgres:16-alpine");
+    public static final PostgreSQLContainer POSTGRES = new PostgreSQLContainer("postgres:16-alpine")
+            .withCommand("postgres", "-c", "max_connections=300");
 
     @SuppressWarnings("resource")
     public static final GenericContainer<?> REDIS = new GenericContainer<>(DockerImageName.parse("redis:7-alpine"))
@@ -29,6 +30,7 @@ public final class IntegrationContainers {
         registry.add("spring.data.redis.host", REDIS::getHost);
         registry.add("spring.data.redis.port", () -> Integer.toString(REDIS.getMappedPort(6379)));
         registry.add("spring.data.redis.password", () -> "local-dev-only");
+        registry.add("spring.datasource.hikari.maximum-pool-size", () -> "4");
         registry.add("app.frontend-url", () -> "http://localhost:3000");
         registry.add("app.admin.jwt-secret", () -> "test-only-admin-jwt-secret-key-32b!");
     }

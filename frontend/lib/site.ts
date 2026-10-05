@@ -2,7 +2,15 @@ export const siteName = "المرجع العربي";
 export const siteTagline = "بوابتك الشاملة إلى اللغة العربية";
 export const searchPlaceholder = "ابحث عن كلمة، معنى، جذر، قاعدة لغوية...";
 
-export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+export function resolveSiteUrl(): string {
+  const site = process.env["SITE_URL"];
+  const published = process.env["NEXT_PUBLIC_SITE_URL"];
+  const configured = typeof site === "string" && site.trim() ? site : published;
+  if (typeof configured === "string" && configured.trim()) {
+    return configured.trim().replace(/\/$/, "");
+  }
+  return "http://localhost:3000";
+}
 export const textDirection = "rtl";
 
 export const sections = [
@@ -12,6 +20,7 @@ export const sections = [
     description: "الكلمات، المعاني، الجذور، والمشتقات في موضع واحد.",
     href: null,
     status: "قريبًا",
+    action: null,
   },
   {
     id: "grammar",
@@ -19,6 +28,7 @@ export const sections = [
     description: "قواعد التركيب والإعراب، موثّقة بمصادرها.",
     href: "/grammar",
     status: "متاح",
+    action: "مرجع النحو",
   },
   {
     id: "morphology",
@@ -26,6 +36,7 @@ export const sections = [
     description: "بنية الكلمة، الاشتقاق، وتصريف الأفعال.",
     href: "/tools/morphology",
     status: "متاح",
+    action: "المحلل الصرفي",
   },
   {
     id: "spelling",
@@ -33,6 +44,7 @@ export const sections = [
     description: "قواعد الكتابة العربية والهمزة والوصل.",
     href: "/spelling",
     status: "متاح",
+    action: "مرجع الإملاء",
   },
   {
     id: "rhetoric",
@@ -40,6 +52,7 @@ export const sections = [
     description: "البيان، المعاني، والبديع بأمثلة مضبوطة.",
     href: "/rhetoric",
     status: "متاح",
+    action: "مرجع البلاغة",
   },
   {
     id: "literature",
@@ -47,6 +60,7 @@ export const sections = [
     description: "نصوص وسياقات من الأدب العربي.",
     href: "/literature",
     status: "متاح",
+    action: "مرجع الأدب",
   },
   {
     id: "articles",
@@ -54,6 +68,7 @@ export const sections = [
     description: "مقالات معرفية موثّقة عن العربية.",
     href: "/articles",
     status: "متاح",
+    action: "المقالات",
   },
   {
     id: "sources",
@@ -61,12 +76,14 @@ export const sections = [
     description: "الأصول، الطبعات، والاستشهاد الذي تقوم عليه المعلومة.",
     href: null,
     status: "قريبًا",
+    action: null,
   },
   {
     id: "tools",
     title: "الأدوات اللغوية",
-    description: "التحليل، التشكيل، والتدقيق عندما تكتمل المحركات.",
-    href: null,
-    status: "قريبًا",
+    description: "أدوات تقرأ المعرفة المنشورة: الجذر، الصرف، المقارنة، والتحقق المرجعي.",
+    href: "/tools",
+    status: "متاح",
+    action: "مركز الأدوات",
   },
 ] as const;

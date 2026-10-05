@@ -232,6 +232,37 @@ public class MorphologyService {
     }
 
     @Transactional(readOnly = true)
+    public List<PatternView> activePatterns() {
+        return patterns.findAllByOrderByCodeAsc(PageRequest.of(0, 80)).stream()
+                .filter(pattern -> "ACTIVE".equals(pattern.getStatus()))
+                .map(this::patternView)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<RecordedPattern> examplesForPattern(UUID patternId, int cap) {
+        List<RecordedPattern> examples = new ArrayList<>();
+        for (MorphologyAnalysisEntity analysis : analyses.findPublishedByPattern(patternId)) {
+            if (examples.size() >= cap) {
+                break;
+            }
+            PublishedLemma entry = dictionary.lemma(analysis.getLexicalEntryId()).orElse(null);
+            if (entry == null) {
+                continue;
+            }
+            RecordedPattern recorded = recordedPattern(analysis, entry);
+            if (recorded.code() != null) {
+                examples.add(recorded);
+            }
+        }
+        return examples;
+    }
+
+    public long ruleGeneration() {
+        return generation();
+    }
+
+    @Transactional(readOnly = true)
     @PreAuthorize("@authz.has('" + PermissionCatalog.MORPHOLOGY_VIEW + "')")
     public PageResult<PatternView> patterns(int page, int size) {
         page(page, size);

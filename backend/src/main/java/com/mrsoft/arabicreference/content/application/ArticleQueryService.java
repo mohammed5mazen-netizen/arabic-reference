@@ -2,12 +2,15 @@ package com.mrsoft.arabicreference.content.application;
 
 import com.mrsoft.arabicreference.content.application.ArticleViews.PublicArticle;
 import com.mrsoft.arabicreference.content.application.ArticleViews.PublicArticleLink;
+import com.mrsoft.arabicreference.content.domain.KnowledgeTargetType;
 import com.mrsoft.arabicreference.content.infrastructure.persistence.ArticleRepository;
+import com.mrsoft.arabicreference.content.infrastructure.persistence.KnowledgeRelationRepository;
 import com.mrsoft.arabicreference.linguistics.domain.editorial.PublicationStatus;
 import com.mrsoft.arabicreference.shared.kernel.exception.ResourceNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,9 +18,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class ArticleQueryService {
 
     private final ArticleRepository articles;
+    private final KnowledgeRelationRepository relations;
 
-    public ArticleQueryService(ArticleRepository articles) {
+    public ArticleQueryService(ArticleRepository articles, KnowledgeRelationRepository relations) {
         this.articles = articles;
+        this.relations = relations;
     }
 
     @Transactional(readOnly = true)
@@ -45,6 +50,23 @@ public class ArticleQueryService {
                 strings(snapshot.get("tags")),
                 maps(snapshot.get("relations")),
                 maps(snapshot.get("sources")));
+    }
+
+    @Transactional(readOnly = true)
+    public List<PublicArticleLink> relatedTo(KnowledgeTargetType type, UUID targetId) {
+        List<PublicArticleLink> links = new ArrayList<>();
+        for (var relation : relations.findByTargetTypeAndTargetId(type, targetId)) {
+            if (links.size() >= 8) {
+                break;
+            }
+            var article = articles.findById(relation.getOwnerId()).orElse(null);
+            if (article == null || !article.visibleToPublic()) {
+                continue;
+            }
+            Map<String, Object> snapshot = article.getPublishedSnapshot();
+            links.add(new PublicArticleLink(text(snapshot.get("title")), text(snapshot.get("slug")), text(snapshot.get("excerpt")), text(snapshot.get("articleType")), text(snapshot.get("coverLabel"))));
+        }
+        return links;
     }
 
     private static String text(Object value) {
