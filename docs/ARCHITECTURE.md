@@ -40,7 +40,7 @@ Base package: `com.mrsoft.arabicreference`
 | --- | --- |
 | `shared` | Errors, time, ids, trace id, security filter, public foundation endpoint |
 | `linguistics` | `ArabicTextNormalizer` |
-| `search` | `LinguisticSearchPort` with no adapter |
+| `search` | Unified published search: `LinguisticSearchPort`, `SearchIndex`, PostgreSQL adapter |
 | `admin` | Staff HTTP API. It calls identity services and does not own accounts. |
 | `identity` | Editorial accounts, roles, permissions, tokens, audit, owner bootstrap |
 | `dictionary` | Lexical entries, senses, forms, relations, roots, public lookup |

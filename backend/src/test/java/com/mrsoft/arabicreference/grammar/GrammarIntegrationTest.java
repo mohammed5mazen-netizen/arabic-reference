@@ -349,6 +349,25 @@ class GrammarIntegrationTest {
         assertThat(editRejected.get()).isEqualTo(1);
     }
 
+    @Test
+    void savedGrammarVersionMatchesTheDatabase() throws Exception {
+        Staff staff = staff();
+        int mark = SEQUENCE.incrementAndGet();
+        String topic = createTopic(staff.editor, "نسخة" + arabicMark(mark), "ملخص يثبت رقم النسخة", "OTHER", null);
+        Long stored = jdbc.queryForObject("select version from grammar_topic where id = ?::uuid", Long.class, id(topic));
+        assertThat(version(topic)).isEqualTo(stored);
+        String updated = body(mockMvc.perform(patch("/api/v1/admin/grammar/topics/" + id(topic))
+                        .header("Authorization", bearer(staff.editor))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {"version":%d,"title":"نسخة معدلة%s","summary":"ملخص بعد الحفظ","category":"OTHER","displayOrder":2}
+                                """.formatted(version(topic), arabicMark(mark))))
+                .andExpect(status().isOk())
+                .andReturn());
+        Long storedAgain = jdbc.queryForObject("select version from grammar_topic where id = ?::uuid", Long.class, id(topic));
+        assertThat(version(updated)).isEqualTo(storedAgain);
+    }
+
     private static String arabicMark(int mark) {
         String letters = "ابتثجحخدذرزسشصضطظعغفقكلمنهوي";
         StringBuilder builder = new StringBuilder();

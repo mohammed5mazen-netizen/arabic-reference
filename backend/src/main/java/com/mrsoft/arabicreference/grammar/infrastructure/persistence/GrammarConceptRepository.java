@@ -1,6 +1,8 @@
 package com.mrsoft.arabicreference.grammar.infrastructure.persistence;
 
+import com.mrsoft.arabicreference.linguistics.domain.editorial.PublicationStatus;
 import jakarta.persistence.LockModeType;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
@@ -19,4 +21,11 @@ public interface GrammarConceptRepository extends JpaRepository<GrammarConceptEn
     Optional<GrammarConceptEntity> findBySlug(String slug);
 
     Page<GrammarConceptEntity> findAllByOrderByUpdatedAtDesc(Pageable pageable);
+
+    @Query("""
+            select concept from GrammarConceptEntity concept
+            where concept.publishedSnapshot is not null
+              and concept.status <> :archived
+            """)
+    List<GrammarConceptEntity> visibleToPublic(@Param("archived") PublicationStatus archived);
 }

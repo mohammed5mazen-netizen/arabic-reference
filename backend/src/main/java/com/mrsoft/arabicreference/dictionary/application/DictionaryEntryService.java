@@ -94,6 +94,7 @@ public class DictionaryEntryService {
     private final AuditRecorder audit;
     private final ContentRevisionRecorder revisions;
     private final TimeProvider timeProvider;
+    private final DictionarySearchIndexer searchIndexer;
 
     public DictionaryEntryService(
             LexicalEntryRepository entries,
@@ -110,7 +111,8 @@ public class DictionaryEntryService {
             AuthorizationService authorization,
             AuditRecorder audit,
             ContentRevisionRecorder revisions,
-            TimeProvider timeProvider) {
+            TimeProvider timeProvider,
+            DictionarySearchIndexer searchIndexer) {
         this.entries = entries;
         this.senses = senses;
         this.forms = forms;
@@ -126,6 +128,7 @@ public class DictionaryEntryService {
         this.audit = audit;
         this.revisions = revisions;
         this.timeProvider = timeProvider;
+        this.searchIndexer = searchIndexer;
     }
 
     @Transactional(readOnly = true)
@@ -366,6 +369,7 @@ public class DictionaryEntryService {
 
     @Transactional
     public AdminEntry publish(UUID id, long version) {
+        searchIndexer.lock();
         AuthenticatedAccess actor = authorization.requireAccess();
         if (!authorization.has(PermissionCatalog.ENTRY_PUBLISH)) {
             throw new ForbiddenOperationException("You do not have permission to perform this operation.");
@@ -380,12 +384,14 @@ public class DictionaryEntryService {
         entry.setPublishedSnapshot(publicSnapshot(entry));
         touch(entry, actor.userId());
         entries.saveAndFlush(entry);
+        searchIndexer.onEntryPublished(entry);
         audit.record(actor.userId(), AuditEventType.CONTENT_PUBLISHED, "lexical_entry", entry.getId().toString(), Map.of("status", entry.getStatus().name()));
         return assemble(entry, true);
     }
 
     @Transactional
     public AdminEntry archive(UUID id, long version) {
+        searchIndexer.lock();
         return move(id, version, PermissionCatalog.ENTRY_ARCHIVE, EditorialWorkflow::archive, AuditEventType.CONTENT_ARCHIVED, false, null);
     }
 
@@ -472,6 +478,9 @@ public class DictionaryEntryService {
         entry.setChangeReason(reason);
         touch(entry, actor.userId());
         entries.saveAndFlush(entry);
+        if (next == PublicationStatus.ARCHIVED) {
+            searchIndexer.onEntryArchived(entry);
+        }
         audit.record(actor.userId(), event, "lexical_entry", entry.getId().toString(), Map.of("status", next.name()));
         return assemble(entry, true);
     }

@@ -29,3 +29,5 @@ S2 dictionary lookup uses this same normalized form against `published_lemma_nor
 ## Tests
 
 `ArabicTextNormalizerTest` covers diacritics, tatweel, alef folding, preserved letters, whitespace, bidi marks, NFC, idempotence, empty input, and null rejection.
+
+Search uses a second step, `ArabicSearchNormalizer`, described in `docs/ARABIC_SEARCH_NORMALIZATION.md`. It does not change the S0 profile. Display text stays on `originalText`.

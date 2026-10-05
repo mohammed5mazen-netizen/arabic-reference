@@ -19,7 +19,7 @@ Arabic text handling, editorial lifecycle types, content slugs, and content revi
 
 ## search
 
-`LinguisticSearchPort` is the future read port. No Elasticsearch or OpenSearch client is on the classpath. The first adapter can use PostgreSQL. A later adapter can replace it.
+`LinguisticSearchPort` is the read port. `SearchIndex` is the write port. PostgreSQL is the first adapter (`PostgresLinguisticSearchAdapter`). No Elasticsearch or OpenSearch client is on the classpath. Dictionary and grammar publish into the index through those ports. Search does not read their repositories. See `docs/SEARCH_ARCHITECTURE.md`.
 
 ## admin
 

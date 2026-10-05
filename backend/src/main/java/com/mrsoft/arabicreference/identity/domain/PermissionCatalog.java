@@ -61,6 +61,8 @@ public final class PermissionCatalog {
     public static final String GRAMMAR_CONCEPT_MANAGE = "grammar.concept.manage";
     public static final String GRAMMAR_EXAMPLE_MANAGE = "grammar.example.manage";
     public static final String GRAMMAR_ANNOTATION_MANAGE = "grammar.annotation.manage";
+    public static final String SEARCH_ADMIN_VIEW = "search.admin.view";
+    public static final String SEARCH_REINDEX = "search.reindex";
 
     private static final List<String> ALL = List.of(
             USER_VIEW,
@@ -118,7 +120,9 @@ public final class PermissionCatalog {
             GRAMMAR_CONCEPT_VIEW,
             GRAMMAR_CONCEPT_MANAGE,
             GRAMMAR_EXAMPLE_MANAGE,
-            GRAMMAR_ANNOTATION_MANAGE);
+            GRAMMAR_ANNOTATION_MANAGE,
+            SEARCH_ADMIN_VIEW,
+            SEARCH_REINDEX);
 
     private PermissionCatalog() {
     }

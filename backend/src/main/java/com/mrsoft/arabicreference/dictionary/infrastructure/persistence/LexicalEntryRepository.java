@@ -48,4 +48,11 @@ public interface LexicalEntryRepository extends JpaRepository<LexicalEntryEntity
     List<LexicalEntryEntity> findPublishedByRoot(
             @Param("rootId") UUID rootId,
             @Param("archived") PublicationStatus archived);
+
+    @Query("""
+            select entry from LexicalEntryEntity entry
+            where entry.publishedSnapshot is not null
+              and entry.status <> :archived
+            """)
+    List<LexicalEntryEntity> visibleToPublic(@Param("archived") PublicationStatus archived);
 }

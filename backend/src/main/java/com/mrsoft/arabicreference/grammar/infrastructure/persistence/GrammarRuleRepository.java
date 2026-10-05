@@ -32,4 +32,11 @@ public interface GrammarRuleRepository extends JpaRepository<GrammarRuleEntity, 
             order by rule.publishedDisplayOrder asc, rule.publishedTitle asc
             """)
     List<GrammarRuleEntity> publishedForTopic(@Param("topicId") UUID topicId, @Param("archived") PublicationStatus archived);
+
+    @Query("""
+            select rule from GrammarRuleEntity rule
+            where rule.publishedSnapshot is not null
+              and rule.status <> :archived
+            """)
+    List<GrammarRuleEntity> visibleToPublic(@Param("archived") PublicationStatus archived);
 }

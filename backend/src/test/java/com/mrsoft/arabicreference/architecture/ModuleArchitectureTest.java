@@ -113,4 +113,17 @@ class ModuleArchitectureTest {
     static final ArchRule morphology_root_stays_a_marker = classes()
             .that().resideInAPackage("com.mrsoft.arabicreference.morphology")
             .should().haveSimpleName("package-info");
+
+    @ArchTest
+    static final ArchRule search_domain_does_not_depend_on_other_infrastructure = noClasses()
+            .that().resideInAPackage("com.mrsoft.arabicreference.search.domain..")
+            .should().dependOnClassesThat().resideInAnyPackage(
+                    "com.mrsoft.arabicreference.dictionary.infrastructure..",
+                    "com.mrsoft.arabicreference.grammar.infrastructure..",
+                    "com.mrsoft.arabicreference.morphology.infrastructure..");
+
+    @ArchTest
+    static final ArchRule modules_do_not_depend_on_search_infrastructure = noClasses()
+            .that().resideOutsideOfPackage("com.mrsoft.arabicreference.search..")
+            .should().dependOnClassesThat().resideInAPackage("com.mrsoft.arabicreference.search.infrastructure..");
 }

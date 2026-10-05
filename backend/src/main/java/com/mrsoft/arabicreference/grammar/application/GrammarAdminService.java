@@ -147,6 +147,7 @@ public class GrammarAdminService {
     private final TimeProvider timeProvider;
     private final EntityManager entityManager;
     private final JdbcTemplate jdbc;
+    private final GrammarSearchIndexer searchIndexer;
     private final ArabicTextNormalizer normalizer = new ArabicTextNormalizer();
 
     public GrammarAdminService(
@@ -174,7 +175,8 @@ public class GrammarAdminService {
             AuthorizationService authorization,
             TimeProvider timeProvider,
             EntityManager entityManager,
-            JdbcTemplate jdbc) {
+            JdbcTemplate jdbc,
+            GrammarSearchIndexer searchIndexer) {
         this.topics = topics;
         this.rules = rules;
         this.concepts = concepts;
@@ -200,6 +202,7 @@ public class GrammarAdminService {
         this.timeProvider = timeProvider;
         this.entityManager = entityManager;
         this.jdbc = jdbc;
+        this.searchIndexer = searchIndexer;
     }
 
     @Transactional(readOnly = true)
@@ -313,6 +316,7 @@ public class GrammarAdminService {
     @Transactional
     @PreAuthorize("@authz.has('" + PermissionCatalog.GRAMMAR_RULE_PUBLISH + "')")
     public TopicAdmin publishTopic(UUID id, long version) {
+        searchIndexer.lock();
         GrammarTopicEntity topic = lockedTopic(id, version);
         UUID actor = authorization.requireAccess().userId();
         separatePublisher(topic, actor);
@@ -330,12 +334,14 @@ public class GrammarAdminService {
         topic.setPublishedCategory(topic.getCategory());
         topic.setPublishedSnapshot(topicSnapshot(topic, citationIds));
         finish(topics, topic, actor, AuditEventType.GRAMMAR_CONTENT_PUBLISHED, TOPIC);
+        searchIndexer.onTopicPublished(topic);
         return topicAdmin(topic);
     }
 
     @Transactional
     @PreAuthorize("@authz.has('" + PermissionCatalog.GRAMMAR_RULE_ARCHIVE + "')")
     public TopicAdmin archiveTopic(UUID id, long version) {
+        searchIndexer.lock();
         GrammarTopicEntity topic = lockedTopic(id, version);
         topic.setStatus(EditorialWorkflow.archive(topic.getStatus()));
         topic.setPublishedSnapshot(null);
@@ -346,6 +352,7 @@ public class GrammarAdminService {
         topic.setPublishedDisplayOrder(null);
         topic.setPublishedCategory(null);
         finish(topics, topic, authorization.requireAccess().userId(), AuditEventType.GRAMMAR_CONTENT_ARCHIVED, TOPIC);
+        searchIndexer.onTopicArchived(topic.getId());
         return topicAdmin(topic);
     }
 
@@ -531,6 +538,7 @@ public class GrammarAdminService {
     @Transactional
     @PreAuthorize("@authz.has('" + PermissionCatalog.GRAMMAR_RULE_PUBLISH + "')")
     public RuleAdmin publishRule(UUID id, long version) {
+        searchIndexer.lock();
         GrammarRuleEntity rule = lockedRule(id, version);
         UUID actor = authorization.requireAccess().userId();
         separatePublisher(rule, actor);
@@ -562,16 +570,19 @@ public class GrammarAdminService {
         rule.setPublishedDisplayOrder(rule.getDisplayOrder());
         rule.setPublishedSnapshot(ruleSnapshot(rule, parts, ruleExamples));
         finish(rules, rule, actor, AuditEventType.GRAMMAR_CONTENT_PUBLISHED, RULE);
+        searchIndexer.onRulePublished(rule);
         return ruleAdmin(rule);
     }
 
     @Transactional
     @PreAuthorize("@authz.has('" + PermissionCatalog.GRAMMAR_RULE_ARCHIVE + "')")
     public RuleAdmin archiveRule(UUID id, long version) {
+        searchIndexer.lock();
         GrammarRuleEntity rule = lockedRule(id, version);
         rule.setStatus(EditorialWorkflow.archive(rule.getStatus()));
         clearRulePublication(rule);
         finish(rules, rule, authorization.requireAccess().userId(), AuditEventType.GRAMMAR_CONTENT_ARCHIVED, RULE);
+        searchIndexer.onRuleArchived(rule.getId());
         return ruleAdmin(rule);
     }
 
@@ -696,6 +707,7 @@ public class GrammarAdminService {
     @Transactional
     @PreAuthorize("@authz.has('" + PermissionCatalog.GRAMMAR_RULE_PUBLISH + "')")
     public ConceptAdmin publishConcept(UUID id, long version) {
+        searchIndexer.lock();
         GrammarConceptEntity concept = lockedConcept(id, version);
         UUID actor = authorization.requireAccess().userId();
         separatePublisher(concept, actor);
@@ -716,12 +728,14 @@ public class GrammarAdminService {
         }
         concept.setPublishedSnapshot(conceptSnapshot(concept, citationIds));
         finish(concepts, concept, actor, AuditEventType.GRAMMAR_CONTENT_PUBLISHED, CONCEPT);
+        searchIndexer.onConceptPublished(concept);
         return conceptAdmin(concept);
     }
 
     @Transactional
     @PreAuthorize("@authz.has('" + PermissionCatalog.GRAMMAR_RULE_ARCHIVE + "')")
     public ConceptAdmin archiveConcept(UUID id, long version) {
+        searchIndexer.lock();
         GrammarConceptEntity concept = lockedConcept(id, version);
         concept.setStatus(EditorialWorkflow.archive(concept.getStatus()));
         concept.setPublishedSnapshot(null);
@@ -732,6 +746,7 @@ public class GrammarAdminService {
             alias.setPublishedNormalized(null);
         }
         finish(concepts, concept, authorization.requireAccess().userId(), AuditEventType.GRAMMAR_CONTENT_ARCHIVED, CONCEPT);
+        searchIndexer.onConceptArchived(concept.getId());
         return conceptAdmin(concept);
     }
 

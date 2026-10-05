@@ -30,4 +30,11 @@ public interface LinguisticRootRepository extends JpaRepository<LinguisticRootEn
               and root.status <> :archived
             """)
     Optional<LinguisticRootEntity> findPublished(@Param("key") String key, @Param("archived") PublicationStatus archived);
+
+    @Query("""
+            select root from LinguisticRootEntity root
+            where root.publishedSnapshot is not null
+              and root.status <> :archived
+            """)
+    java.util.List<LinguisticRootEntity> visibleToPublic(@Param("archived") PublicationStatus archived);
 }

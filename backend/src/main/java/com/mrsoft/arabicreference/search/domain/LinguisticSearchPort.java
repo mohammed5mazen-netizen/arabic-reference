@@ -1,10 +1,23 @@
 package com.mrsoft.arabicreference.search.domain;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 /**
- * Port for a future Arabic linguistic search adapter.
- * S0 registers no implementation. PostgreSQL can back the first adapter, and a dedicated
- * search engine can replace that adapter without rewriting the linguistic domain.
- * This port must stay read-only. It is not a source of linguistic truth.
+ * Read port for linguistic search. PostgreSQL backs the first adapter.
+ * A later engine can replace the adapter without rewriting this contract.
+ * The port stays read-only. It is not a source of linguistic truth.
  */
 public interface LinguisticSearchPort {
+
+    List<SearchCandidate> collect(String displayQuery, String searchKey, String foldedKey);
+
+    List<SearchCandidate> fuzzy(String searchKey, double threshold, int limit);
+
+    List<SearchCandidate> dictionaryWithRoot(String rootKey, int limit);
+
+    Optional<SearchCandidate> dictionaryEntry(UUID entityId);
+
+    List<SearchSuggestion> suggest(String searchKey, int limit);
 }

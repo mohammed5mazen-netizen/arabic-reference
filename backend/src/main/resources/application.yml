@@ -69,6 +69,8 @@ app:
       email: ${BOOTSTRAP_OWNER_EMAIL:}
       display-name: ${BOOTSTRAP_OWNER_DISPLAY_NAME:}
       password: ${BOOTSTRAP_OWNER_PASSWORD:}
+  search:
+    rate-limit-per-minute: ${SEARCH_RATE_LIMIT:600}
   morphology:
     max-candidates: ${MORPHOLOGY_MAX_CANDIDATES:8}
     max-input-length: ${MORPHOLOGY_MAX_INPUT_LENGTH:80}

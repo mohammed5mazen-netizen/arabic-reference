@@ -15,6 +15,7 @@ export const adminNav: AdminNavItem[] = [
   { href: "/admin/review", label: "المراجعات", permission: "dictionary.entry.review" },
   { href: "/admin/morphology", label: "الصرف", permission: "morphology.view" },
   { href: "/admin/grammar", label: "النحو", permission: "grammar.topic.view" },
+  { href: "/admin/search", label: "البحث", permission: "search.admin.view" },
 ];
 
 export function visibleAdminNav(permissions: readonly string[]): AdminNavItem[] {

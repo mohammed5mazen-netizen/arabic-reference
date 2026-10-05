@@ -11,7 +11,7 @@ Public knowledge pages must be reachable by crawlers. Authentication middleware 
 - semantic landmarks: header, main, sections, footer
 - one `h1`
 
-No large generated sitemap is produced. Exact dictionary lookup exists at `/search`. Word and root pages are server-rendered from published records. A meaning is used as the description only when one is published.
+No large generated sitemap is produced. `/search?q=` is the unified published search and is marked `noindex`. Word, root, and grammar pages stay server-rendered from published records. A dynamic sitemap remains S12 work.
 
 Grammar pages at `/grammar`, `/grammar/{slug}`, `/grammar/rules/{slug}`, and `/grammar/concepts/{slug}` are indexable when the record is published. Each sets a specific title, such as `الفاعل - القاعدة والأمثلة`, a canonical URL, and a breadcrumb list taken from published ancestors. The sitemap remains the homepage until S12.
 

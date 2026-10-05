@@ -38,4 +38,11 @@ public interface GrammarTopicRepository extends JpaRepository<GrammarTopicEntity
             order by topic.publishedDisplayOrder asc, topic.publishedTitle asc
             """)
     List<GrammarTopicEntity> publishedChildren(@Param("parentId") UUID parentId, @Param("archived") PublicationStatus archived);
+
+    @Query("""
+            select topic from GrammarTopicEntity topic
+            where topic.publishedSnapshot is not null
+              and topic.status <> :archived
+            """)
+    List<GrammarTopicEntity> visibleToPublic(@Param("archived") PublicationStatus archived);
 }

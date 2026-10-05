@@ -48,6 +48,7 @@ public class RootAdminService {
     private final AuditRecorder audit;
     private final ContentRevisionRecorder revisions;
     private final TimeProvider timeProvider;
+    private final DictionarySearchIndexer searchIndexer;
 
     public RootAdminService(
             LinguisticRootRepository roots,
@@ -57,7 +58,8 @@ public class RootAdminService {
             AuthorizationService authorization,
             AuditRecorder audit,
             ContentRevisionRecorder revisions,
-            TimeProvider timeProvider) {
+            TimeProvider timeProvider,
+            DictionarySearchIndexer searchIndexer) {
         this.roots = roots;
         this.citations = citations;
         this.sources = sources;
@@ -66,6 +68,7 @@ public class RootAdminService {
         this.audit = audit;
         this.revisions = revisions;
         this.timeProvider = timeProvider;
+        this.searchIndexer = searchIndexer;
     }
 
     @Transactional(readOnly = true)
@@ -151,6 +154,7 @@ public class RootAdminService {
 
     @Transactional
     public AdminRoot publish(UUID id, long version) {
+        searchIndexer.lock();
         if (!authorization.has(PermissionCatalog.ENTRY_PUBLISH)) {
             throw new ForbiddenOperationException("You do not have permission to perform this operation.");
         }
@@ -168,12 +172,14 @@ public class RootAdminService {
         root.setPublishedSnapshot(snapshot);
         touch(root, actor.userId());
         roots.saveAndFlush(root);
+        searchIndexer.onRootPublished(root);
         audit.record(actor.userId(), AuditEventType.CONTENT_PUBLISHED, "linguistic_root", root.getId().toString(), Map.of("status", root.getStatus().name()));
         return view(root);
     }
 
     @Transactional
     public AdminRoot archive(UUID id, long version) {
+        searchIndexer.lock();
         return move(id, version, PermissionCatalog.ENTRY_ARCHIVE, EditorialWorkflow::archive, AuditEventType.CONTENT_ARCHIVED, false);
     }
 
@@ -190,6 +196,9 @@ public class RootAdminService {
         root.setStatus(transition.apply(root.getStatus()));
         touch(root, actor.userId());
         roots.saveAndFlush(root);
+        if (root.getStatus() == PublicationStatus.ARCHIVED) {
+            searchIndexer.onRootArchived(root.getId());
+        }
         audit.record(actor.userId(), event, "linguistic_root", root.getId().toString(), Map.of("status", root.getStatus().name()));
         return view(root);
     }
