@@ -63,6 +63,29 @@ public final class PermissionCatalog {
     public static final String GRAMMAR_ANNOTATION_MANAGE = "grammar.annotation.manage";
     public static final String SEARCH_ADMIN_VIEW = "search.admin.view";
     public static final String SEARCH_REINDEX = "search.reindex";
+    public static final String SPELLING_TOPIC_VIEW = "spelling.topic.view";
+    public static final String SPELLING_TOPIC_MANAGE = "spelling.topic.manage";
+    public static final String SPELLING_RULE_CREATE = "spelling.rule.create";
+    public static final String SPELLING_RULE_EDIT = "spelling.rule.edit";
+    public static final String SPELLING_RULE_REVIEW = "spelling.rule.review";
+    public static final String SPELLING_RULE_PUBLISH = "spelling.rule.publish";
+    public static final String RHETORIC_TOPIC_VIEW = "rhetoric.topic.view";
+    public static final String RHETORIC_TOPIC_MANAGE = "rhetoric.topic.manage";
+    public static final String RHETORIC_DEVICE_CREATE = "rhetoric.device.create";
+    public static final String RHETORIC_DEVICE_EDIT = "rhetoric.device.edit";
+    public static final String RHETORIC_DEVICE_REVIEW = "rhetoric.device.review";
+    public static final String RHETORIC_DEVICE_PUBLISH = "rhetoric.device.publish";
+    public static final String LITERATURE_VIEW = "literature.view";
+    public static final String LITERATURE_FIGURE_MANAGE = "literature.figure.manage";
+    public static final String LITERATURE_WORK_MANAGE = "literature.work.manage";
+    public static final String LITERATURE_RIGHTS_MANAGE = "literature.rights.manage";
+    public static final String LITERATURE_REVIEW = "literature.review";
+    public static final String LITERATURE_PUBLISH = "literature.publish";
+    public static final String ARTICLE_VIEW = "content.article.view";
+    public static final String ARTICLE_CREATE = "content.article.create";
+    public static final String ARTICLE_EDIT = "content.article.edit";
+    public static final String ARTICLE_REVIEW = "content.article.review";
+    public static final String ARTICLE_PUBLISH = "content.article.publish";
 
     private static final List<String> ALL = List.of(
             USER_VIEW,
@@ -122,7 +145,30 @@ public final class PermissionCatalog {
             GRAMMAR_EXAMPLE_MANAGE,
             GRAMMAR_ANNOTATION_MANAGE,
             SEARCH_ADMIN_VIEW,
-            SEARCH_REINDEX);
+            SEARCH_REINDEX,
+            SPELLING_TOPIC_VIEW,
+            SPELLING_TOPIC_MANAGE,
+            SPELLING_RULE_CREATE,
+            SPELLING_RULE_EDIT,
+            SPELLING_RULE_REVIEW,
+            SPELLING_RULE_PUBLISH,
+            RHETORIC_TOPIC_VIEW,
+            RHETORIC_TOPIC_MANAGE,
+            RHETORIC_DEVICE_CREATE,
+            RHETORIC_DEVICE_EDIT,
+            RHETORIC_DEVICE_REVIEW,
+            RHETORIC_DEVICE_PUBLISH,
+            LITERATURE_VIEW,
+            LITERATURE_FIGURE_MANAGE,
+            LITERATURE_WORK_MANAGE,
+            LITERATURE_RIGHTS_MANAGE,
+            LITERATURE_REVIEW,
+            LITERATURE_PUBLISH,
+            ARTICLE_VIEW,
+            ARTICLE_CREATE,
+            ARTICLE_EDIT,
+            ARTICLE_REVIEW,
+            ARTICLE_PUBLISH);
 
     private PermissionCatalog() {
     }

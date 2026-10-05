@@ -38,6 +38,12 @@ public class SourceCitationEntity {
     @Column(name = "source_locator", length = 200)
     private String sourceLocator;
 
+    @Column(length = 120)
+    private String poem;
+
+    @Column(length = 40)
+    private String verse;
+
     @Column(name = "quoted_text", length = 2000)
     private String quotedText;
 
@@ -68,6 +74,10 @@ public class SourceCitationEntity {
     public void setEntryLabel(String entryLabel) { this.entryLabel = entryLabel; }
     public String getSourceLocator() { return sourceLocator; }
     public void setSourceLocator(String sourceLocator) { this.sourceLocator = sourceLocator; }
+    public String getPoem() { return poem; }
+    public void setPoem(String poem) { this.poem = poem; }
+    public String getVerse() { return verse; }
+    public void setVerse(String verse) { this.verse = verse; }
     public String getQuotedText() { return quotedText; }
     public void setQuotedText(String quotedText) { this.quotedText = quotedText; }
     public String getNotes() { return notes; }

@@ -57,7 +57,9 @@ public final class SourceViews {
             String entryLabel,
             String sourceLocator,
             String quotedText,
-            String notes) {
+            String notes,
+            String poem,
+            String verse) {
     }
 
     public record CitationView(
@@ -75,6 +77,8 @@ public final class SourceViews {
             String entryLabel,
             String sourceLocator,
             String quotedText,
+            String poem,
+            String verse,
             String attributionText,
             String licenseType,
             String sourceStatus,

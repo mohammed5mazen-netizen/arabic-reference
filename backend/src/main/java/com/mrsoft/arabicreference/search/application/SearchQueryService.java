@@ -193,7 +193,8 @@ public class SearchQueryService {
         long dictionary = hits.stream().filter(hit -> hit.type() == SearchEntityType.DICTIONARY_ENTRY).count();
         long roots = hits.stream().filter(hit -> hit.type() == SearchEntityType.ROOT).count();
         long grammar = hits.stream().filter(hit -> hit.type() == SearchEntityType.GRAMMAR_TOPIC || hit.type() == SearchEntityType.GRAMMAR_RULE || hit.type() == SearchEntityType.GRAMMAR_CONCEPT).count();
-        return new FacetView(dictionary, roots, grammar);
+        long content = hits.stream().filter(hit -> SearchFilters.accepts(SearchFilters.TypeGroup.CONTENT, hit.type())).count();
+        return new FacetView(dictionary, roots, grammar, content);
     }
 
     private static SearchHitView present(Ranked hit, PreparedQuery prepared) {

@@ -12,7 +12,12 @@ public final class SearchFilters {
         ALL,
         DICTIONARY,
         ROOT,
-        GRAMMAR
+        GRAMMAR,
+        SPELLING,
+        RHETORIC,
+        LITERATURE,
+        ARTICLES,
+        CONTENT
     }
 
     private static final Set<String> PARTS_OF_SPEECH = Set.of(
@@ -39,7 +44,12 @@ public final class SearchFilters {
             case "dictionary" -> TypeGroup.DICTIONARY;
             case "root" -> TypeGroup.ROOT;
             case "grammar" -> TypeGroup.GRAMMAR;
-            default -> throw invalid("type", "Choose dictionary, root, or grammar.");
+            case "spelling" -> TypeGroup.SPELLING;
+            case "rhetoric" -> TypeGroup.RHETORIC;
+            case "literature" -> TypeGroup.LITERATURE;
+            case "articles" -> TypeGroup.ARTICLES;
+            case "content" -> TypeGroup.CONTENT;
+            default -> throw invalid("type", "Choose dictionary, root, grammar, spelling, rhetoric, literature, articles, or content.");
         };
     }
 
@@ -62,6 +72,16 @@ public final class SearchFilters {
             case GRAMMAR -> type == SearchEntityType.GRAMMAR_TOPIC
                     || type == SearchEntityType.GRAMMAR_RULE
                     || type == SearchEntityType.GRAMMAR_CONCEPT;
+            case SPELLING -> type == SearchEntityType.SPELLING_RULE || type == SearchEntityType.SPELLING_TOPIC;
+            case RHETORIC -> type == SearchEntityType.RHETORIC_DEVICE || type == SearchEntityType.RHETORIC_TOPIC;
+            case LITERATURE -> type == SearchEntityType.LITERARY_FIGURE
+                    || type == SearchEntityType.LITERARY_WORK
+                    || type == SearchEntityType.LITERARY_ERA;
+            case ARTICLES -> type == SearchEntityType.ARTICLE;
+            case CONTENT -> accepts(TypeGroup.SPELLING, type)
+                    || accepts(TypeGroup.RHETORIC, type)
+                    || accepts(TypeGroup.LITERATURE, type)
+                    || accepts(TypeGroup.ARTICLES, type);
         };
     }
 

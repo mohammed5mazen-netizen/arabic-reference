@@ -54,6 +54,22 @@ Patterns, manual morphological readings, clitic segmentation, and a dictionary-f
 
 Topics, rules, typed components, concepts, aliases, examples, and manual sentence annotations. Public reads use published snapshots. The domain calls dictionary and morphology only through `GrammarCrossLinks`. It does not depend on their infrastructure, and morphology does not depend on grammar. See [GRAMMAR_KNOWLEDGE_MODEL.md](GRAMMAR_KNOWLEDGE_MODEL.md).
 
-## content, learning, ai
+## spelling
 
-Package placeholders. Architecture tests fail if these packages gain implementation classes.
+Topics, rules, clauses, and examples for Arabic orthography. Public pages read published snapshots. See [SPELLING_KNOWLEDGE_MODEL.md](SPELLING_KNOWLEDGE_MODEL.md).
+
+## rhetoric
+
+Topics, devices, components, examples, interpretations, and relations. See [RHETORIC_KNOWLEDGE_MODEL.md](RHETORIC_KNOWLEDGE_MODEL.md).
+
+## literature
+
+Eras, figures, aliases, roles, works, genres, schools, and rights. Dates use `HistoricalDate`. Excerpts follow [LITERATURE_RIGHTS_POLICY.md](LITERATURE_RIGHTS_POLICY.md). See [LITERATURE_KNOWLEDGE_MODEL.md](LITERATURE_KNOWLEDGE_MODEL.md).
+
+## content
+
+Articles, sections, tags, and cross-domain relations. The root `content` package stays a package marker; article code lives in the subpackages. See [ARTICLE_CONTENT_MODEL.md](ARTICLE_CONTENT_MODEL.md).
+
+## learning, ai
+
+Package placeholders. Architecture tests fail if these root packages gain implementation classes.

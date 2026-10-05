@@ -17,7 +17,7 @@ export type SearchHit = {
   highlights: SearchHighlight[];
   metadata?: Record<string, string>;
 };
-export type SearchFacets = { dictionary: number; roots: number; grammar: number };
+export type SearchFacets = { dictionary: number; roots: number; grammar: number; content?: number };
 export type SearchPage = {
   query: string;
   items: SearchHit[];
@@ -57,6 +57,22 @@ export function resultTypeLabel(type: string): string {
       return "موضوع";
     case "GRAMMAR_CONCEPT":
       return "مصطلح";
+    case "SPELLING_RULE":
+      return "قاعدة إملائية";
+    case "SPELLING_TOPIC":
+      return "موضوع إملائي";
+    case "RHETORIC_DEVICE":
+      return "فن بلاغي";
+    case "RHETORIC_TOPIC":
+      return "موضوع بلاغي";
+    case "LITERARY_FIGURE":
+      return "أديب";
+    case "LITERARY_WORK":
+      return "عمل أدبي";
+    case "LITERARY_ERA":
+      return "حقبة أدبية";
+    case "ARTICLE":
+      return "مقالة";
     default:
       return type;
   }

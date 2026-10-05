@@ -4,7 +4,7 @@ PostgreSQL is the only database. Schema changes go through Flyway. Hibernate `dd
 
 ## Migration names
 
-`V1__foundation_schema.sql`, `V2__admin_identity.sql`, `V3__dictionary_core.sql`, `V4__morphology_core.sql`, `V5__grammar_knowledge_core.sql`, then `V6__linguistic_search.sql`. Do not edit a migration after it has been applied to a shared database.
+`V1__foundation_schema.sql`, `V2__admin_identity.sql`, `V3__dictionary_core.sql`, `V4__morphology_core.sql`, `V5__grammar_knowledge_core.sql`, `V6__linguistic_search.sql`, then `V7__spelling_knowledge.sql`, `V8__rhetoric_knowledge.sql`, `V9__literature_knowledge.sql`, `V10__content_articles.sql`, and `V11__search_s6_extension.sql`. Do not edit a migration after it has been applied to a shared database.
 
 ## S0 schema
 
@@ -52,6 +52,8 @@ The compose service initializes PostgreSQL with UTF-8. Timestamps use `timestamp
 `V5__grammar_knowledge_core.sql` adds topics, prerequisites, rules, components, concepts, aliases, relations, examples, roles, annotations, tokens, and dependency edges. It also adds the grammar permissions and extends the audit check. `V1` through `V4` are unchanged. No production grammar text is seeded. The role catalog is reference data.
 
 `V6__linguistic_search.sql` enables `pg_trgm` and adds `search_document`, `search_document_token`, and the singleton `search_index_state`. Equality and prefix use the btree index on `search_key`. Similarity and contains use GIN trigram indexes. The migration also adds `search.admin.view` and `search.reindex`, grants them to staff roles, and extends the audit check with `SEARCH_INDEX_REBUILT` and `SEARCH_INDEX_REPAIR`. No linguistic seed is inserted.
+
+`V7` through `V10` add the spelling, rhetoric, literature, and article tables, including aliases, roles, historical-date columns, rights, excerpts, sections, tags, and `knowledge_relation` without a cross-module foreign key. `V9` adds optional `poem` and `verse` columns on the existing citation. `V11` extends the search-document and audit checks for the new types and sets `search_index_state.index_version` to 2. None of these migrations insert linguistic or literary text.
 
 ## What is postponed
 

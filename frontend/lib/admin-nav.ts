@@ -2,6 +2,7 @@ export type AdminNavItem = {
   href: string;
   label: string;
   permission?: string;
+  anyOf?: string[];
 };
 
 export const adminNav: AdminNavItem[] = [
@@ -16,10 +17,18 @@ export const adminNav: AdminNavItem[] = [
   { href: "/admin/morphology", label: "الصرف", permission: "morphology.view" },
   { href: "/admin/grammar", label: "النحو", permission: "grammar.topic.view" },
   { href: "/admin/search", label: "البحث", permission: "search.admin.view" },
+  { href: "/admin/spelling", label: "الإملاء", anyOf: ["spelling.topic.view", "spelling.rule.review", "spelling.rule.publish"] },
+  { href: "/admin/rhetoric", label: "البلاغة", anyOf: ["rhetoric.topic.view", "rhetoric.device.review", "rhetoric.device.publish"] },
+  { href: "/admin/literature", label: "الأدب", anyOf: ["literature.view", "literature.review", "literature.publish"] },
+  { href: "/admin/articles", label: "المقالات", anyOf: ["content.article.view", "content.article.review", "content.article.publish"] },
 ];
 
 export function visibleAdminNav(permissions: readonly string[]): AdminNavItem[] {
-  return adminNav.filter((item) => item.permission == null || permissions.includes(item.permission));
+  return adminNav.filter((item) => {
+    if (item.permission == null && (item.anyOf == null || item.anyOf.length === 0)) return true;
+    if (item.permission != null && permissions.includes(item.permission)) return true;
+    return item.anyOf?.some((code) => permissions.includes(code)) ?? false;
+  });
 }
 
 export function can(permissions: readonly string[], permission: string): boolean {

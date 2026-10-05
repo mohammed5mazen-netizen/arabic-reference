@@ -39,10 +39,11 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
       {query ? (
         <section className="mt-8 space-y-4" aria-live="polite">
           <nav aria-label="تصفية النتائج" className={`flex gap-2 overflow-x-auto pb-1 ${searchFilterLayout}`}>
-            <Filter href={searchHref(query, "all")} current={type === "all"} label={`الكل${facets ? ` (${facets.dictionary + facets.roots + facets.grammar})` : ""}`} />
+            <Filter href={searchHref(query, "all")} current={type === "all"} label={`الكل${facets ? ` (${facets.dictionary + facets.roots + facets.grammar + (facets.content ?? 0)})` : ""}`} />
             <Filter href={searchHref(query, "dictionary")} current={type === "dictionary"} label={`المعجم${facets ? ` (${facets.dictionary})` : ""}`} />
             <Filter href={searchHref(query, "root")} current={type === "root"} label={`الجذور${facets ? ` (${facets.roots})` : ""}`} />
             <Filter href={searchHref(query, "grammar")} current={type === "grammar"} label={`النحو${facets ? ` (${facets.grammar})` : ""}`} />
+            <Filter href={searchHref(query, "content")} current={type === "content"} label={`المحتوى${facets ? ` (${facets.content ?? 0})` : ""}`} />
           </nav>
           {!results || results.items.length === 0 ? (
             <div className="rounded-[1.5rem] border border-line bg-raised p-6">

@@ -81,6 +81,10 @@ Public traffic is anonymous by design. Later capacity controls attach to the edg
 
 Redis is present so those controls have a place to land. S1 uses Redis for admin login rate limits and access-token revocation. S3 adds a fail-open cache and a generous limiter for public morphology analysis. Other public reads are not rate limited.
 
+## S6 knowledge
+
+Spelling, rhetoric, literature, and articles are separate modules. They reuse the editorial statuses, the source citation, and the search ports. Literature rights and historical dates are described in ADR-063 and ADR-064. Articles link to other published records through `KnowledgeTargetSource` (ADR-069).
+
 ## SEO
 
 Public knowledge pages are server-rendered and indexable. There is no authentication middleware in the frontend. `/admin` is `noindex` and disallowed in `robots.txt`. Canonical metadata and a one-entry sitemap stay on the homepage. The scaling strategy is in [SEO.md](SEO.md).

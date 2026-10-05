@@ -120,6 +120,8 @@ public class SourceAdminService {
         citation.setEntryLabel(blankToNull(draft.entryLabel()));
         citation.setSourceLocator(blankToNull(draft.sourceLocator()));
         citation.setQuotedText(blankToNull(draft.quotedText()));
+        citation.setPoem(blankToNull(draft.poem()));
+        citation.setVerse(blankToNull(draft.verse()));
         citation.setNotes(blankToNull(draft.notes()));
         citation.setCreatedAt(timeProvider.now());
         citation.setCreatedBy(actor.userId());
@@ -313,6 +315,8 @@ public class SourceAdminService {
                 citation.getEntryLabel(),
                 citation.getSourceLocator(),
                 citation.getQuotedText(),
+                citation.getPoem(),
+                citation.getVerse(),
                 source.getAttributionText(),
                 source.getLicenseType().name(),
                 source.getStatus().name(),

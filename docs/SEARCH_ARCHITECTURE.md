@@ -37,7 +37,9 @@ Candidate retrieval is capped at 200 rows. Fuzzy is capped at 5 and runs only wh
 
 `POST /api/v1/admin/search/reindex` rebuilds from published snapshots. It is idempotent. `POST /api/v1/admin/search/repair` rebuilds only when the consistency check finds a published record without a document, a document whose record is no longer public, or a document on an older `indexVersion`. Both require `search.reindex`. Status requires `search.admin.view`.
 
-`indexVersion` is 1. Changing normalization or the document shape requires a bump and a rebuild.
+`indexVersion` is 2 after S6 added spelling, rhetoric, literature, and article documents. Changing normalization or the document shape requires a bump and a rebuild.
+
+S6 types keep the old tie-break order and then follow it: spelling rule, rhetoric device, literary figure, literary work, article, spelling topic, rhetoric topic, literary era. An exact dictionary title still ranks above an equal-score title of a later type, and above an article body match. Suggestions may offer a spelling rule, a rhetoric device, or a literary figure, including a published alias. They do not read article bodies. The public filter `content` groups those four areas. Rebuild and repair include every published S6 snapshot.
 
 ## Privacy, metrics, cache
 

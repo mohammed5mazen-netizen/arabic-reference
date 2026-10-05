@@ -138,7 +138,7 @@ public class PostgresLinguisticSearchAdapter implements LinguisticSearchPort, Se
         return jdbc.query("""
                 select entity_type, title_original, url_path
                 from search_document
-                where entity_type in ('DICTIONARY_ENTRY', 'ROOT', 'GRAMMAR_CONCEPT', 'GRAMMAR_TOPIC')
+                where entity_type in ('DICTIONARY_ENTRY', 'ROOT', 'GRAMMAR_CONCEPT', 'GRAMMAR_TOPIC', 'SPELLING_RULE', 'RHETORIC_DEVICE', 'LITERARY_FIGURE')
                   and (search_key = ? or search_key like ? escape '\\')
                 order by case when search_key = ? then 0 else 1 end, char_length(search_key), title_normalized, id
                 limit ?

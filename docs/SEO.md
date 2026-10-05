@@ -15,6 +15,8 @@ No large generated sitemap is produced. `/search?q=` is the unified published se
 
 Grammar pages at `/grammar`, `/grammar/{slug}`, `/grammar/rules/{slug}`, and `/grammar/concepts/{slug}` are indexable when the record is published. Each sets a specific title, such as `الفاعل - القاعدة والأمثلة`, a canonical URL, and a breadcrumb list taken from published ancestors. The sitemap remains the homepage until S12.
 
+S6 adds the same treatment for `/spelling`, `/spelling/{slug}`, `/spelling/rules/{slug}`, `/rhetoric`, `/rhetoric/{slug}`, `/rhetoric/devices/{slug}`, `/literature`, `/literature/eras/{slug}`, `/literature/figures/{slug}`, `/literature/works/{slug}`, `/articles`, and `/articles/{slug}`. Each published page sets a title, a description, a canonical URL, and Open Graph fields. `/search` stays `noindex`. A dynamic sitemap of these URLs remains S12 work.
+
 ## Canonical strategy
 
 Each future knowledge URL has one canonical absolute URL based on `NEXT_PUBLIC_SITE_URL`. Variants that differ only by diacritics or tracking parameters canonicalize to the stable slug. The normalized text is a search key, not a second public URL, unless an explicit alias redirect is added later.

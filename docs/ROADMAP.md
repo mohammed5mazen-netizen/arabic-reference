@@ -1,6 +1,6 @@
 # Roadmap
 
-S5 is the current stage. Later stages are sequencing, not a commitment to build them now. Public reading stays anonymous. Staff authentication is for internal administration only.
+S6 is the current stage. Later stages are sequencing, not a commitment to build them now. Public reading stays anonymous. Staff authentication is for internal administration only.
 
 | Stage | Name | Intent |
 | --- | --- | --- |
@@ -9,8 +9,8 @@ S5 is the current stage. Later stages are sequencing, not a commitment to build 
 | S2 | Dictionary & Linguistic Knowledge Core | Lemmas, senses, roots, forms, relations, examples, sources, citations |
 | S3 | Morphology Engine | Done: bounded patterns, ambiguity-aware analysis, and sound triliteral فَعَلَ conjugation |
 | S4 | Grammar Knowledge Base | Done: structured topics, rules, concepts, and manual syntax annotations |
-| S5 | Arabic Search Engine | **Current:** one published search across dictionary, roots, and grammar |
-| S6 | Content / Spelling / Rhetoric / Literature | The remaining knowledge sections |
+| S5 | Arabic Search Engine | Done: one published search across dictionary, roots, and grammar |
+| S6 | Content / Spelling / Rhetoric / Literature | **Current:** spelling, rhetoric, literature metadata, and articles in the same editorial and search model |
 | S7 | Arabic Linguistic Tools | Analysis, diacritics, proofing |
 | S8 | AI Linguistic Assistant + RAG | Assistant grounded in reviewed sources |
 | S9 | Learning Platform | Lessons without closing public reading |
