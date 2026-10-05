@@ -3,7 +3,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { adminFetch } from "@/lib/admin-api";
 import { can } from "@/lib/admin-nav";
-import { morphologyLabel } from "@/lib/morphology";
+import { morphologyLabel, morphologyTransitionActions } from "@/lib/morphology";
 
 type Pattern = { id: string; code: string; patternOriginal: string; category: string; radicalCount: number; description?: string | null; status: string; version: number };
 type Analysis = { id: string; lemma?: string | null; patternOriginal?: string | null; status: string; verbClass?: string | null; version: number };
@@ -86,6 +86,14 @@ export default function AdminMorphologyPage() {
     await load();
   }
 
+  async function transitionAnalysis(analysis: Analysis, action: "submit" | "verify" | "publish") {
+    await adminFetch(`/api/v1/admin/morphology/analyses/${analysis.id}/${action}`, {
+      method: "POST",
+      body: JSON.stringify({ version: analysis.version }),
+    });
+    await load();
+  }
+
   async function toggleRule(rule: Rule) {
     await adminFetch(`/api/v1/admin/morphology/rules/${rule.code}`, {
       method: "POST",
@@ -137,6 +145,13 @@ export default function AdminMorphologyPage() {
             <article key={analysis.id} className="rounded-[1.5rem] border border-line bg-raised p-4">
               <p className="text-lg">{analysis.lemma}</p>
               <p className="text-sm text-muted">{[analysis.patternOriginal, morphologyLabel(analysis.verbClass), morphologyLabel(analysis.status)].filter(Boolean).join(" · ")}</p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {morphologyTransitionActions(analysis.status, permissions).map((action) => (
+                  <button key={action} type="button" className="min-h-11 rounded-2xl border border-line px-4" onClick={() => void transitionAnalysis(analysis, action)}>
+                    {action === "submit" ? "إرسال للمراجعة" : action === "verify" ? "اعتماد" : "نشر"}
+                  </button>
+                ))}
+              </div>
             </article>
           ))}
         </div>

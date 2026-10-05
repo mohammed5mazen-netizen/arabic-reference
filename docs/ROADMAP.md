@@ -1,14 +1,14 @@
 # Roadmap
 
-S3 is the current stage. Later stages are sequencing, not a commitment to build them now. Public reading stays anonymous. Staff authentication is for internal administration only.
+S4 is the current stage. Later stages are sequencing, not a commitment to build them now. Public reading stays anonymous. Staff authentication is for internal administration only.
 
 | Stage | Name | Intent |
 | --- | --- | --- |
 | S0 | Foundation & Architecture | This repository baseline |
 | S1 | Admin Identity / RBAC / Editorial Administration | **S1 authentication is for internal administration only, not public visitors.** |
 | S2 | Dictionary & Linguistic Knowledge Core | Lemmas, senses, roots, forms, relations, examples, sources, citations |
-| S3 | Morphology Engine | **Current:** bounded patterns, ambiguity-aware analysis, and sound triliteral فَعَلَ conjugation |
-| S4 | Grammar Knowledge Base | Syntax and i'rab |
+| S3 | Morphology Engine | Done: bounded patterns, ambiguity-aware analysis, and sound triliteral فَعَلَ conjugation |
+| S4 | Grammar Knowledge Base | **Current:** structured topics, rules, concepts, and manual syntax annotations |
 | S5 | Arabic Search Engine | Search behind `LinguisticSearchPort` |
 | S6 | Content / Spelling / Rhetoric / Literature | The remaining knowledge sections |
 | S7 | Arabic Linguistic Tools | Analysis, diacritics, proofing |

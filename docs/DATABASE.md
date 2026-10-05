@@ -4,7 +4,7 @@ PostgreSQL is the only database. Schema changes go through Flyway. Hibernate `dd
 
 ## Migration names
 
-`V1__foundation_schema.sql`, `V2__admin_identity.sql`, `V3__dictionary_core.sql`, then `V4__morphology_core.sql`. Do not edit a migration after it has been applied to a shared database.
+`V1__foundation_schema.sql`, `V2__admin_identity.sql`, `V3__dictionary_core.sql`, `V4__morphology_core.sql`, then `V5__grammar_knowledge_core.sql`. Do not edit a migration after it has been applied to a shared database.
 
 ## S0 schema
 
@@ -46,6 +46,10 @@ There is still no search-engine index.
 ## Unicode and time
 
 The compose service initializes PostgreSQL with UTF-8. Timestamps use `timestamptz`. Application clocks use `Instant` and Hibernate's JDBC time zone is UTC.
+
+## S4 schema
+
+`V5__grammar_knowledge_core.sql` adds topics, prerequisites, rules, components, concepts, aliases, relations, examples, roles, annotations, tokens, and dependency edges. It also adds the grammar permissions and extends the audit check. `V1` through `V4` are unchanged. No production grammar text is seeded. The role catalog is reference data.
 
 ## What is postponed
 

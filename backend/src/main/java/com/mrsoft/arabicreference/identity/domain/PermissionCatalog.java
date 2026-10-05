@@ -48,6 +48,19 @@ public final class PermissionCatalog {
     public static final String MORPHOLOGY_ANALYSIS_PUBLISH = "morphology.analysis.publish";
     public static final String MORPHOLOGY_RULE_VIEW = "morphology.rule.view";
     public static final String MORPHOLOGY_RULE_MANAGE = "morphology.rule.manage";
+    public static final String GRAMMAR_TOPIC_VIEW = "grammar.topic.view";
+    public static final String GRAMMAR_TOPIC_MANAGE = "grammar.topic.manage";
+    public static final String GRAMMAR_RULE_VIEW = "grammar.rule.view";
+    public static final String GRAMMAR_RULE_CREATE = "grammar.rule.create";
+    public static final String GRAMMAR_RULE_EDIT = "grammar.rule.edit";
+    public static final String GRAMMAR_RULE_SUBMIT = "grammar.rule.submit";
+    public static final String GRAMMAR_RULE_REVIEW = "grammar.rule.review";
+    public static final String GRAMMAR_RULE_PUBLISH = "grammar.rule.publish";
+    public static final String GRAMMAR_RULE_ARCHIVE = "grammar.rule.archive";
+    public static final String GRAMMAR_CONCEPT_VIEW = "grammar.concept.view";
+    public static final String GRAMMAR_CONCEPT_MANAGE = "grammar.concept.manage";
+    public static final String GRAMMAR_EXAMPLE_MANAGE = "grammar.example.manage";
+    public static final String GRAMMAR_ANNOTATION_MANAGE = "grammar.annotation.manage";
 
     private static final List<String> ALL = List.of(
             USER_VIEW,
@@ -92,7 +105,20 @@ public final class PermissionCatalog {
             MORPHOLOGY_ANALYSIS_REVIEW,
             MORPHOLOGY_ANALYSIS_PUBLISH,
             MORPHOLOGY_RULE_VIEW,
-            MORPHOLOGY_RULE_MANAGE);
+            MORPHOLOGY_RULE_MANAGE,
+            GRAMMAR_TOPIC_VIEW,
+            GRAMMAR_TOPIC_MANAGE,
+            GRAMMAR_RULE_VIEW,
+            GRAMMAR_RULE_CREATE,
+            GRAMMAR_RULE_EDIT,
+            GRAMMAR_RULE_SUBMIT,
+            GRAMMAR_RULE_REVIEW,
+            GRAMMAR_RULE_PUBLISH,
+            GRAMMAR_RULE_ARCHIVE,
+            GRAMMAR_CONCEPT_VIEW,
+            GRAMMAR_CONCEPT_MANAGE,
+            GRAMMAR_EXAMPLE_MANAGE,
+            GRAMMAR_ANNOTATION_MANAGE);
 
     private PermissionCatalog() {
     }

@@ -141,6 +141,20 @@ export function featureLines(features: MorphFeatures | null | undefined): string
   return rows.filter((row) => row[1]).map(([name, value]) => `${name}: ${morphologyLabel(value)}`);
 }
 
+export function morphologyTransitionActions(status: string, permissions: readonly string[]): Array<"submit" | "verify" | "publish"> {
+  const actions: Array<"submit" | "verify" | "publish"> = [];
+  if ((status === "DRAFT" || status === "CHANGES_REQUESTED") && permissions.includes("morphology.analysis.edit")) {
+    actions.push("submit");
+  }
+  if (status === "IN_REVIEW" && permissions.includes("morphology.analysis.review")) {
+    actions.push("verify");
+  }
+  if (status === "VERIFIED" && permissions.includes("morphology.analysis.publish")) {
+    actions.push("publish");
+  }
+  return actions;
+}
+
 export function segmentationLine(candidate: MorphCandidate): string {
   const parts = [
     ...(candidate.segmentation?.clitics ?? []),

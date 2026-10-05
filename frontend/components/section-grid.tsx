@@ -19,14 +19,14 @@ export function SectionGrid() {
               <div className="mb-6 flex items-center justify-between">
                 <span className="font-display text-2xl text-library">{String(index + 1).padStart(2, "0")}</span>
                 <span className="rounded-full bg-library-soft px-3 py-1 text-xs font-medium text-library">
-                  {section.id === "morphology" ? "متاح" : "قريبًا"}
+                  {section.status}
                 </span>
               </div>
               <h3 className="font-display text-3xl">{section.title}</h3>
               <p className="mt-3 text-sm leading-7 text-muted">{section.description}</p>
-              {section.id === "morphology" ? (
-                <Link href="/tools/morphology" className="mt-4 text-library">
-                  المحلل الصرفي
+              {section.href ? (
+                <Link href={section.href} className="mt-4 text-library">
+                  {section.id === "grammar" ? "مرجع النحو" : "المحلل الصرفي"}
                 </Link>
               ) : null}
             </article>

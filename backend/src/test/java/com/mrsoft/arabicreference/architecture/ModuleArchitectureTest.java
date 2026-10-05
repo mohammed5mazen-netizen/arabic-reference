@@ -71,7 +71,6 @@ class ModuleArchitectureTest {
     @ArchTest
     static final ArchRule future_modules_have_no_implementation = classes()
             .that().resideInAnyPackage(
-                    "com.mrsoft.arabicreference.grammar",
                     "com.mrsoft.arabicreference.content",
                     "com.mrsoft.arabicreference.learning",
                     "com.mrsoft.arabicreference.ai")
@@ -92,6 +91,23 @@ class ModuleArchitectureTest {
     static final ArchRule morphology_domain_does_not_depend_on_dictionary = noClasses()
             .that().resideInAPackage("com.mrsoft.arabicreference.morphology.domain..")
             .should().dependOnClassesThat().resideInAnyPackage("com.mrsoft.arabicreference.dictionary..");
+
+    @ArchTest
+    static final ArchRule grammar_domain_stays_inside_its_boundary = noClasses()
+            .that().resideInAPackage("com.mrsoft.arabicreference.grammar.domain..")
+            .should().dependOnClassesThat().resideInAnyPackage(
+                    "com.mrsoft.arabicreference.dictionary..",
+                    "com.mrsoft.arabicreference.morphology..");
+
+    @ArchTest
+    static final ArchRule morphology_does_not_depend_on_grammar = noClasses()
+            .that().resideInAPackage("com.mrsoft.arabicreference.morphology..")
+            .should().dependOnClassesThat().resideInAPackage("com.mrsoft.arabicreference.grammar..");
+
+    @ArchTest
+    static final ArchRule grammar_root_stays_a_marker = classes()
+            .that().resideInAPackage("com.mrsoft.arabicreference.grammar")
+            .should().haveSimpleName("package-info");
 
     @ArchTest
     static final ArchRule morphology_root_stays_a_marker = classes()

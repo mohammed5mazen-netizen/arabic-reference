@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Amiri, IBM_Plex_Sans_Arabic } from "next/font/google";
-import { siteName, siteTagline, siteUrl } from "@/lib/site";
+import { siteName, siteTagline, siteUrl, textDirection } from "@/lib/site";
 import "./globals.css";
 
 const amiri = Amiri({
@@ -65,7 +65,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
   };
 
   return (
-    <html lang="ar" dir="rtl" className={`${amiri.variable} ${plex.variable}`} suppressHydrationWarning>
+    <html lang="ar" dir={textDirection} className={`${amiri.variable} ${plex.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>

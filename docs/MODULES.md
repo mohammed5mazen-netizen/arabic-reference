@@ -50,6 +50,10 @@ Reference works, licenses, and citations. It does not depend on the dictionary m
 
 Patterns, manual morphological readings, clitic segmentation, and a dictionary-first analyzer. It reads published dictionary data through `PublishedDictionaryQuery` and does not let dictionary code depend on it. Conjugation covers a sound triliteral فَعَلَ only when the class and, for the imperfect, the stem vowel are recorded. See [MORPHOLOGY_ENGINE.md](MORPHOLOGY_ENGINE.md).
 
-## grammar, content, learning, ai
+## grammar
 
-Package placeholders. Architecture tests fail if these packages gain implementation classes. Sentence syntax waits for a later stage.
+Topics, rules, typed components, concepts, aliases, examples, and manual sentence annotations. Public reads use published snapshots. The domain calls dictionary and morphology only through `GrammarCrossLinks`. It does not depend on their infrastructure, and morphology does not depend on grammar. See [GRAMMAR_KNOWLEDGE_MODEL.md](GRAMMAR_KNOWLEDGE_MODEL.md).
+
+## content, learning, ai
+
+Package placeholders. Architecture tests fail if these packages gain implementation classes.

@@ -47,7 +47,8 @@ Base package: `com.mrsoft.arabicreference`
 | `source` | Works, licenses, citations |
 | `linguistics` | Normalization, editorial states, slugs, content revisions |
 | `morphology` | Patterns, manual readings, a bounded rule analyzer, and limited sound-verb conjugation |
-| `grammar`, `content`, `learning`, `ai` | Package boundaries only |
+| `grammar` | Topics, rules, concepts, examples, and manual syntax annotations |
+| `content`, `learning`, `ai` | Package boundaries only |
 
 Domain code does not depend on web or persistence. Controllers do not call repositories.
 
@@ -57,7 +58,7 @@ The core is a knowledge model, not a generic CMS. S2 implements:
 
 `Surface form → Lexical entry / lemma → optional root → senses → forms → relations → examples → sources → citations`
 
-S3 adds a bounded morphology engine beside that model. It is documented in [MORPHOLOGY_ENGINE.md](MORPHOLOGY_ENGINE.md). Grammar is still a later stage. The dictionary model is described in [DICTIONARY_MODEL.md](DICTIONARY_MODEL.md).
+S3 adds a bounded morphology engine beside that model. It is documented in [MORPHOLOGY_ENGINE.md](MORPHOLOGY_ENGINE.md). S4 adds structured grammar, documented in [GRAMMAR_KNOWLEDGE_MODEL.md](GRAMMAR_KNOWLEDGE_MODEL.md) and [SYNTAX_ANNOTATION_MODEL.md](SYNTAX_ANNOTATION_MODEL.md). The dictionary model is described in [DICTIONARY_MODEL.md](DICTIONARY_MODEL.md).
 
 Every published sense points at a citation. Entries also carry contributor, reviewer, verification state, revision, and publication state. See ADR-004, ADR-020, and ADR-025.
 
