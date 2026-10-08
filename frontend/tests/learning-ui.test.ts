@@ -37,7 +37,7 @@ test("learning pages keep answers off the server render and stay readable", () =
   const lesson = readFileSync(new URL("../app/(public)/learn/[pathSlug]/[lessonSlug]/page.tsx", import.meta.url), "utf8");
   const quiz = readFileSync(new URL("../components/lesson-quiz.tsx", import.meta.url), "utf8");
   const admin = readFileSync(new URL("../app/admin/(desk)/learning/page.tsx", import.meta.url), "utf8");
-  const header = readFileSync(new URL("../components/site-header.tsx", import.meta.url), "utf8");
+  const header = readFileSync(new URL("../lib/navigation.ts", import.meta.url), "utf8");
   assert.match(home, /canonical/);
   assert.match(home, /index: true/);
   assert.match(path, /learningSlug/);
@@ -58,7 +58,7 @@ test("learning pages keep answers off the server render and stay readable", () =
   assert.match(admin, /الأسئلة/);
   assert.match(admin, /learning.lesson.publish/);
   assert.match(admin, /معاينة/);
-  assert.match(header, /href="\/learn"/);
+  assert.match(header, /href: "\/learn"/);
   assert.equal(visibleAdminNav(["learning.lesson.view"]).some((item) => item.href === "/admin/learning"), true);
   assert.equal(visibleAdminNav(["admin.audit.view"]).some((item) => item.href === "/admin/learning"), false);
 });

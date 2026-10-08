@@ -36,7 +36,8 @@ export function ThemeToggle() {
       type="button"
       onClick={toggle}
       aria-pressed={isDark}
-      className="rounded-full border border-line bg-raised px-4 py-2 text-sm text-ink shadow-sm"
+      aria-label={isDark ? "التبديل إلى الوضع الفاتح" : "التبديل إلى الوضع الداكن"}
+      className="min-h-11 rounded-full border border-line bg-raised px-4 py-2 text-sm text-ink shadow-sm"
     >
       {isDark ? "الوضع الفاتح" : "الوضع الداكن"}
     </button>

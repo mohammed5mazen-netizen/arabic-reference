@@ -1,6 +1,6 @@
 # Modules
 
-The backend is one process with explicit package boundaries. A module may depend on `shared` and on its own domain. It must not reach into another module's infrastructure, and domain packages must not depend on API or infrastructure packages.
+The backend is one process with explicit package boundaries. S10 does not add a module: navigation, tokens, and shared states live in the frontend. A module may depend on `shared` and on its own domain. It must not reach into another module's infrastructure, and domain packages must not depend on API or infrastructure packages.
 
 ## shared
 

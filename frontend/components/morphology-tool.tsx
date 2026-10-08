@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState, type FormEvent } from "react";
+import { ProvenanceBadge } from "@/components/ui/badge";
 import { apiBase } from "@/lib/dictionary";
 import {
   featureLines,
@@ -122,6 +123,7 @@ function AnalysisCard({ candidate }: { candidate: MorphCandidate }) {
       <p className="text-sm">
         مصدر التحليل: <strong>{morphologyLabel(candidate.provenance)}</strong>
       </p>
+      <p className="mt-2"><ProvenanceBadge kind={morphologyLabel(candidate.provenance) === "تحليل محتمل" ? "possible" : "documented"} /></p>
       <dl className="mt-4 grid gap-3 sm:grid-cols-2">
         <Fact term="الكلمة" value={candidate.surfaceForm} />
         <Fact term="الصيغة المعجمية" value={candidate.lemma} />

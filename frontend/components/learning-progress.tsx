@@ -1,6 +1,7 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
+import { formatNumber } from "@/lib/format";
 import { completeLesson, emptyProgress, progressPercent, readProgress, rememberLesson } from "@/lib/learning-progress";
 
 function subscribe(listener: () => void) {
@@ -20,8 +21,8 @@ export function LearnStatus({ pathSlug, lessonSlug, title, lessonSlugs }: { path
       <p className="mt-2 text-sm leading-7 text-muted">يُحفظ هنا فقط، ولا يُرسل إلى الخادم. فتح الصفحة لا يعني إكمال الدرس.</p>
       {lessonSlugs.length ? (
         <p className="mt-3">
-          <progress className="h-3 w-full" value={percent} max={100}>{percent}٪</progress>
-          <span className="mt-1 block text-sm">{percent}٪ من دروس هذا المسار</span>
+          <progress className="h-3 w-full" value={percent} max={100}>{formatNumber(percent)}٪</progress>
+          <span className="mt-1 block text-sm">{formatNumber(progress.completedLessonSlugs.filter((slug) => lessonSlugs.includes(slug)).length)} من {formatNumber(lessonSlugs.length)} دروس · {formatNumber(percent)}٪</span>
         </p>
       ) : null}
       {progress.lastLesson ? <p className="mt-2 text-sm">آخر درس: {progress.lastLesson.title}</p> : null}

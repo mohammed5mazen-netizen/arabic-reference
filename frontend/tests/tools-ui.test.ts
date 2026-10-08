@@ -33,10 +33,10 @@ test("tool pages keep a base canonical and an accessible structure", () => {
   }
 
   const screen = readFileSync(path.join(root, "components", "tool-screen.tsx"), "utf8");
-  const header = readFileSync(path.join(root, "components", "site-header.tsx"), "utf8");
+  const header = readFileSync(path.join(root, "lib", "navigation.ts"), "utf8");
   const grid = readFileSync(path.join(root, "components", "section-grid.tsx"), "utf8");
   const compare = readFileSync(path.join(root, "app", "(public)", "tools", "compare", "page.tsx"), "utf8");
-  assert.match(header, /href="\/tools"/);
+  assert.match(header, /href: "\/tools"/);
   assert.match(screen, /htmlFor=/);
   assert.match(screen, /aria-describedby=/);
   assert.match(screen, /role="alert"/);

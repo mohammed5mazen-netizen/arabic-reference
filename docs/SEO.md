@@ -21,7 +21,7 @@ Tool landing pages (`/tools` and each `/tools/...` page without a query) are ind
 
 `/assistant` is one indexable landing page. A question is not placed in the URL as a document, and `/assistant?q=` is only a prefilled question. The sitemap remains the homepage until S12.
 
-`/learn`, `/learn/{pathSlug}`, and `/learn/{pathSlug}/{lessonSlug}` are indexable when the path is published. Each sets a title, a description, a canonical URL, and breadcrumbs. A quiz attempt is not a URL, so there is no token page for a crawler to index. A dynamic sitemap of learning URLs remains S12 work.
+`publicMetadata` builds title, description, canonical, and Open Graph from `resolveSiteUrl()`. Search queries, tool result queries, assistant questions, and quiz attempts stay out of the index. `/learn`, `/learn/{pathSlug}`, and `/learn/{pathSlug}/{lessonSlug}` are indexable when the path is published. Each sets a title, a description, a canonical URL, and breadcrumbs. A quiz attempt is not a URL, so there is no token page for a crawler to index. A dynamic sitemap of learning URLs remains S12 work.
 
 ## Canonical strategy
 

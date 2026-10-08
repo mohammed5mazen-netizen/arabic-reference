@@ -121,9 +121,12 @@ export function apiBase(): string {
 }
 
 export async function publicJson<T>(path: string): Promise<T | null> {
-  const response = await fetch(`${apiBase()}${path}`, { cache: "no-store" });
-  if (response.status === 404) return null;
-  if (!response.ok) return null;
-  const body = (await response.json()) as { data?: T };
-  return body.data ?? null;
+  try {
+    const response = await fetch(`${apiBase()}${path}`, { cache: "no-store" });
+    if (response.status === 404 || !response.ok) return null;
+    const body = (await response.json()) as { data?: T };
+    return body.data ?? null;
+  } catch {
+    return null;
+  }
 }

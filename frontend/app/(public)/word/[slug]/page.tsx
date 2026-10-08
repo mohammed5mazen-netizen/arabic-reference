@@ -7,12 +7,16 @@ import {
   partOfSpeechLabel,
   publicJson,
   relationLabel,
+  searchPath,
   wordDescription,
   wordTitle,
   type PublicEntry,
 } from "@/lib/dictionary";
 import { featureLines, morphologyLabel, type EntryMorphology } from "@/lib/morphology";
 import { resolveSiteUrl } from "@/lib/site";
+import { ProvenanceBadge } from "@/components/ui/badge";
+import { SourceCard } from "@/components/ui/source-card";
+import { RelatedContent } from "@/components/ui/related-content";
 
 export const dynamic = "force-dynamic";
 
@@ -71,9 +75,9 @@ export default async function WordPage({ params }: { params: Promise<{ slug: str
                 </ul>
               ) : null}
               {sense.sources.length > 0 ? (
-                <ul className="mt-4 space-y-1 text-sm">
+                <ul className="mt-4 space-y-2">
                   {sense.sources.map((source) => (
-                    <li key={attributionLine(source)}>المصدر: {attributionLine(source)}</li>
+                    <li key={attributionLine(source)}><SourceCard title={attributionLine(source)} /></li>
                   ))}
                 </ul>
               ) : null}
@@ -88,6 +92,7 @@ export default async function WordPage({ params }: { params: Promise<{ slug: str
             {readings.map((reading, index) => (
               <article key={`${reading.patternOriginal ?? "reading"}-${index}`} className="rounded-[1.5rem] border border-line bg-raised p-5">
                 <p>{[reading.patternOriginal, morphologyLabel(reading.patternCategory), morphologyLabel(reading.derivation)].filter(Boolean).join(" · ")}</p>
+                <p className="mt-2"><ProvenanceBadge kind="documented" /></p>
                 {reading.verbClass ? <p className="mt-2 text-sm text-muted">الصنف: {morphologyLabel(reading.verbClass)}</p> : null}
                 {reading.imperfectVowel ? <p className="text-sm text-muted">حركة العين في المضارع: {morphologyLabel(reading.imperfectVowel)}</p> : null}
                 {reading.notes ? <p className="mt-2">{reading.notes}</p> : null}
@@ -112,7 +117,7 @@ export default async function WordPage({ params }: { params: Promise<{ slug: str
           <ul className="mt-4 space-y-2">
             {entry.forms.map((form) => (
               <li key={`${form.formType}-${form.originalForm}`}>
-                {form.originalForm} <span className="text-muted">{form.formType}</span>
+                {form.originalForm} <bdi dir="ltr" className="text-muted">{form.formType}</bdi>
               </li>
             ))}
           </ul>
@@ -130,6 +135,13 @@ export default async function WordPage({ params }: { params: Promise<{ slug: str
           </ul>
         </section>
       ) : null}
+      <RelatedContent
+        links={[
+          ...(entry.root ? [{ href: `/root/${entry.root.slug}`, label: `اقرأ جذر ${entry.root.original}` }] : []),
+          { href: `/tools/morphology?word=${encodeURIComponent(entry.lemmaOriginal)}`, label: `حلّل ${entry.lemmaOriginal} صرفيًا` },
+          { href: searchPath(entry.lemmaOriginal), label: `ابحث عن ${entry.lemmaOriginal}` },
+        ]}
+      />
     </main>
   );
 }

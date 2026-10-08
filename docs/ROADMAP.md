@@ -1,6 +1,6 @@
 # Roadmap
 
-S9 is the current stage. Later stages are sequencing, not a commitment to build them now. Public reading stays anonymous. Staff authentication is for internal administration only. S10 is not started.
+S10 is the current stage. Later stages are sequencing, not a commitment to build them now. Public reading stays anonymous. Staff authentication is for internal administration only. S11 is not started.
 
 | Stage | Name | Intent |
 | --- | --- | --- |
@@ -13,9 +13,9 @@ S9 is the current stage. Later stages are sequencing, not a commitment to build 
 | S6 | Content / Spelling / Rhetoric / Literature | Done: spelling, rhetoric, literature metadata, and articles in the same editorial and search model |
 | S7 | Arabic Linguistic Tools | Done: anonymous tools over published knowledge. No automatic sentence parser and no automatic spelling corrector |
 | S8 | AI Linguistic Assistant + RAG | Done: retrieval-first assistant over published knowledge. No vector index and no automatic publishing |
-| S9 | Learning Platform | **Current:** anonymous paths, lessons, and quizzes over published knowledge. No learner accounts |
-| S10 | Public Experience & Design System | Not started. One public experience across the reference |
-| S11 | Editorial / Review / Verification | The full review lifecycle |
+| S9 | Learning Platform | Done: anonymous paths, lessons, and quizzes over published knowledge. No learner accounts |
+| S10 | Public Experience & Design System | **Current:** one public experience, tokens, navigation, and shared states. No new linguistic domain |
+| S11 | Editorial / Review / Verification | Not started |
 | S12 | SEO / Public Knowledge Platform | Scale indexable knowledge pages |
 | S13 | Production Hardening | Operational maturity |
 

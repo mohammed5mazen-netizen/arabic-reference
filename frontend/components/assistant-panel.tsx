@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import Link from "next/link";
+import { ProvenanceBadge } from "@/components/ui/badge";
 import { assistantApiBase, assistantDisabled, assistantPlaceholder, type AssistantAnswer, type AssistantStatus } from "@/lib/assistant";
 
 export function AssistantPanel({ initialQuestion = "" }: { initialQuestion?: string }) {
@@ -106,7 +107,7 @@ export function AssistantPanel({ initialQuestion = "" }: { initialQuestion?: str
         <article ref={answerRef} tabIndex={-1} className="mt-8 space-y-6 outline-none" aria-labelledby="assistant-answer">
           <div>
             <p className="text-sm text-library">{answer.groundingLabel}</p>
-            {answer.uncertain ? <p className="text-sm">يتضمن تحليلًا احتماليًا</p> : null}
+            {answer.uncertain ? <p className="mt-2"><ProvenanceBadge kind="possible" /></p> : null}
             <h2 id="assistant-answer" className="mt-2 font-display text-4xl">الإجابة</h2>
             <p className="mt-4 whitespace-pre-wrap leading-8">{answer.answer}</p>
           </div>
@@ -119,7 +120,7 @@ export function AssistantPanel({ initialQuestion = "" }: { initialQuestion?: str
                     <p className="text-sm text-muted">{item.typeLabel}</p>
                     <h4 className="mt-1 font-display text-2xl">{item.title}</h4>
                     <p className="mt-2 leading-7">{item.excerpt}</p>
-                    {item.sourceLabel ? <p className="mt-2 text-sm">المصدر: {item.sourceLabel}</p> : null}
+                    {item.sourceLabel ? <p className="mt-2 text-sm">المصدر: <bdi>{item.sourceLabel}</bdi></p> : null}
                     <p className="mt-2 text-sm">{item.provenanceLabel}</p>
                     <Link href={item.href}>اقرأ المزيد: {item.title}</Link>
                   </li>

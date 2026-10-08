@@ -141,6 +141,13 @@ export const linguisticTools: ToolDefinition[] = [
 
 export const featuredTools = ["ROOT", "WORD_ANALYSIS", "COMPARE", "SPELLING_CHECK"].map((code) => toolByCode(code));
 
+export const toolGroups: { title: string; codes: string[] }[] = [
+  { title: "تحليل", codes: ["MORPHOLOGY", "WORD_ANALYSIS", "ROOT"] },
+  { title: "استكشاف", codes: ["DERIVATIONS", "PATTERNS", "EXPLORE"] },
+  { title: "مقارنة", codes: ["COMPARE", "RELATIONS"] },
+  { title: "كتابة", codes: ["SPELLING_CHECK", "GRAMMAR"] },
+];
+
 export function toolByCode(code: string): ToolDefinition {
   const tool = linguisticTools.find((item) => item.code === code);
   if (!tool) {

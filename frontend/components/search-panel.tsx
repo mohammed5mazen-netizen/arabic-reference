@@ -6,7 +6,7 @@ import { searchPath } from "@/lib/dictionary";
 import { searchDebounceMs, suggestionIndex, suggestionUrl, type SearchSuggestion } from "@/lib/search";
 import { searchPlaceholder } from "@/lib/site";
 
-export function SearchPanel({ initialQuery = "" }: { initialQuery?: string }) {
+export function SearchPanel({ initialQuery = "", variant = "page" }: { initialQuery?: string; variant?: "page" | "header" }) {
   const inputId = useId();
   const listId = useId();
   const router = useRouter();
@@ -76,9 +76,11 @@ export function SearchPanel({ initialQuery = "" }: { initialQuery?: string }) {
 
   const open = suggestions.length > 0;
 
+  const header = variant === "header";
+
   return (
-    <form role="search" className="mt-8" onSubmit={onSubmit}>
-      <label htmlFor={inputId} className="mb-3 block text-sm font-medium text-muted">
+    <form role="search" className={header ? "" : "mt-8"} onSubmit={onSubmit}>
+      <label htmlFor={inputId} className={header ? "sr-only" : "mb-3 block text-sm font-medium text-muted"}>
         البحث في المرجع
       </label>
       <div className="flex flex-col gap-3 rounded-[1.75rem] border border-line bg-raised p-3 shadow-[var(--shadow)] sm:flex-row sm:items-center">
@@ -119,7 +121,7 @@ export function SearchPanel({ initialQuery = "" }: { initialQuery?: string }) {
           </li>
         ))}
       </ul>
-      <p className="mt-4 min-h-6 text-sm text-muted">مربع واحد للمعجم والجذور والنحو. النتائج من المحتوى المنشور.</p>
+      {header ? null : <p className="mt-4 min-h-6 text-sm text-muted">مربع واحد للمعجم والجذور والنحو والمحتوى المنشور. النتائج من المحتوى المنشور.</p>}
     </form>
   );
 }

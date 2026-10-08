@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { SearchPanel } from "@/components/search-panel";
+import { EmptyState } from "@/components/ui/empty-state";
+import { ProvenanceBadge } from "@/components/ui/badge";
+import { LinkButton } from "@/components/ui/button";
+import { formatNumber } from "@/lib/format";
 import { publicJson } from "@/lib/dictionary";
 import {
   dictionaryCard,
@@ -39,17 +43,19 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
       {query ? (
         <section className="mt-8 space-y-4" aria-live="polite">
           <nav aria-label="تصفية النتائج" className={`flex gap-2 overflow-x-auto pb-1 ${searchFilterLayout}`}>
-            <Filter href={searchHref(query, "all")} current={type === "all"} label={`الكل${facets ? ` (${facets.dictionary + facets.roots + facets.grammar + (facets.content ?? 0)})` : ""}`} />
-            <Filter href={searchHref(query, "dictionary")} current={type === "dictionary"} label={`المعجم${facets ? ` (${facets.dictionary})` : ""}`} />
-            <Filter href={searchHref(query, "root")} current={type === "root"} label={`الجذور${facets ? ` (${facets.roots})` : ""}`} />
-            <Filter href={searchHref(query, "grammar")} current={type === "grammar"} label={`النحو${facets ? ` (${facets.grammar})` : ""}`} />
-            <Filter href={searchHref(query, "content")} current={type === "content"} label={`المحتوى${facets ? ` (${facets.content ?? 0})` : ""}`} />
+            <Filter href={searchHref(query, "all")} current={type === "all"} label={`الكل${facets ? ` (${formatNumber(facets.dictionary + facets.roots + facets.grammar + (facets.content ?? 0))})` : ""}`} />
+            <Filter href={searchHref(query, "dictionary")} current={type === "dictionary"} label={`المعجم${facets ? ` (${formatNumber(facets.dictionary)})` : ""}`} />
+            <Filter href={searchHref(query, "root")} current={type === "root"} label={`الجذور${facets ? ` (${formatNumber(facets.roots)})` : ""}`} />
+            <Filter href={searchHref(query, "grammar")} current={type === "grammar"} label={`النحو${facets ? ` (${formatNumber(facets.grammar)})` : ""}`} />
+            <Filter href={searchHref(query, "content")} current={type === "content"} label={`المحتوى${facets ? ` (${formatNumber(facets.content ?? 0)})` : ""}`} />
+            <Filter href={searchHref(query, "learning")} current={type === "learning"} label="التعلّم" />
           </nav>
           {!results || results.items.length === 0 ? (
-            <div className="rounded-[1.5rem] border border-line bg-raised p-6">
-              <p className="text-lg">{emptySearchMessage}</p>
-              <p className="mt-3 text-sm text-muted">جرّب كلمة أقصر، أو أزل التشكيل، أو ابحث عن الجذر.</p>
-            </div>
+            <EmptyState
+              title={emptySearchMessage}
+              description="جرّب صيغة أقصر، أو أزل التشكيل، أو افتح أداة ذات صلة."
+              action={<LinkButton href="/tools" variant="secondary">الأدوات اللغوية</LinkButton>}
+            />
           ) : (
             <ul className="space-y-3">
               {results.items.map((item) => (
@@ -73,7 +79,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
 
 function Filter({ href, current, label }: { href: string; current: boolean; label: string }) {
   return (
-    <Link href={href} aria-current={current ? "page" : undefined} className="shrink-0 rounded-full border border-line px-4 py-2">
+    <Link href={href} aria-current={current ? "page" : undefined} className="inline-flex min-h-11 shrink-0 items-center rounded-full border border-line px-4">
       {label}
     </Link>
   );
@@ -96,7 +102,8 @@ function ResultCard({ hit }: { hit: SearchHit }) {
       {hit.type === "ROOT" && hit.metadata?.relatedCount ? <p className="mt-2 text-sm text-muted">{hit.metadata.relatedCount} مدخلًا منشورًا</p> : null}
       {hit.type === "ROOT" && hit.subtitle ? <p className="mt-2 leading-8">{hit.subtitle}</p> : null}
       {hit.snippet ? <p className="mt-3 leading-8"><Highlighted text={hit.snippet} ranges={snippetRanges} /></p> : null}
-      {reason ? <p className="mt-3 text-sm text-muted">{reason}</p> : null}
+      {hit.matchReason === "FUZZY" ? <p className="mt-3"><ProvenanceBadge kind="near" /></p> : null}
+      {reason && hit.matchReason !== "FUZZY" ? <p className="mt-3 text-sm text-muted">{reason}</p> : null}
     </article>
   );
 }

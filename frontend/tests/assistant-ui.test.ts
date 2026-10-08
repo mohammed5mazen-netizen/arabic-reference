@@ -19,9 +19,9 @@ test("assistant copy stays reference-bound and disabled-safe", () => {
   assert.match(panel, /whitespace-pre-wrap/);
   assert.match(page, /canonical/);
   assert.match(page, /index: true/);
-  const header = readFileSync(new URL("../components/site-header.tsx", import.meta.url), "utf8");
+  const header = readFileSync(new URL("../lib/navigation.ts", import.meta.url), "utf8");
   const home = readFileSync(new URL("../app/(public)/page.tsx", import.meta.url), "utf8");
-  assert.match(header, /href="\/assistant"/);
+  assert.match(header, /href: "\/assistant"/);
   assert.match(home, /href="\/assistant"/);
   assert.equal(adminNav.some((item) => item.href === "/admin/ai" && item.permission === "ai.admin.view"), true);
 });

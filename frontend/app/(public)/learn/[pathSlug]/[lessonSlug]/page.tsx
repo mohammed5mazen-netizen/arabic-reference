@@ -5,6 +5,7 @@ import { connection } from "next/server";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { LearnStatus } from "@/components/learning-progress";
 import { LessonQuiz } from "@/components/lesson-quiz";
+import { ProvenanceBadge } from "@/components/ui/badge";
 import { publicJson } from "@/lib/dictionary";
 import { assistantLessonQuestion, durationLabel, learningSlug, lessonHref, type LearningLesson, type LearningPath } from "@/lib/learning";
 import { resolveSiteUrl } from "@/lib/site";
@@ -62,7 +63,7 @@ export default async function LessonPage({ params }: { params: Promise<{ pathSlu
               <section key={`${section.typeLabel}-${section.heading}`} className="leading-9">
                 <p className="text-sm text-library">{section.typeLabel}</p>
                 <h2 className="font-display text-3xl">{section.heading}</h2>
-                {section.exampleLabel ? <p className="mt-2 text-sm">{section.exampleLabel}</p> : null}
+                {section.exampleLabel ? <p className="mt-2"><ProvenanceBadge kind="example" /></p> : null}
                 <p className="mt-2 whitespace-pre-wrap">{section.body}</p>
               </section>
             ))}

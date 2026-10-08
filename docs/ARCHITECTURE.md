@@ -10,7 +10,7 @@ The visitor journey is:
 
 It is not `Domain → Login → Application`.
 
-Ordinary reading and search of public linguistic knowledge must never require an account. Authentication, when it arrives, is for internal editorial administration or for optional personal features. Local preferences such as theme stay in `localStorage`.
+Ordinary reading and search of public linguistic knowledge must never require an account. Authentication, when it arrives, is for internal editorial administration or for optional personal features. Local preferences such as theme stay in `localStorage`. S10 keeps that split: the public experience, tokens, and navigation live in the frontend and do not add a backend module.
 
 Permanent rule:
 

@@ -24,7 +24,7 @@ S0 does not implement:
 
 A valid token without the required permission receives `403`. That is different from `401`. A method the route does not support, such as writing to the audit log, receives `405` with `METHOD_NOT_ALLOWED`. The response does not include a stack trace.
 
-The staff UI is `/admin/login` and `/admin`. The public homepage does not link to it and does not require it.
+The staff UI is `/admin/login` and `/admin`. The public header and footer do not link to it. A visual pass must not reveal quiz answers, draft records, or provider keys. The backend remains the authority.
 
 Content mutations on `/api/v1/public/**` stay closed. The public dictionary API is read-only and returns published snapshots only. Admin dictionary and source routes require a staff token and a matching permission. A creator cannot verify their own content, and the reviewer cannot publish it.
 
