@@ -13,7 +13,9 @@ public enum SearchEntityType {
     ARTICLE(9),
     SPELLING_TOPIC(10),
     RHETORIC_TOPIC(11),
-    LITERARY_ERA(12);
+    LITERARY_ERA(12),
+    LEARNING_PATH(13),
+    LESSON(14);
 
     private final int priority;
 
@@ -40,6 +42,8 @@ public enum SearchEntityType {
             case LITERARY_WORK -> "literary_work";
             case LITERARY_ERA -> "literary_era";
             case ARTICLE -> "article";
+            case LEARNING_PATH -> "learning_path";
+            case LESSON -> "lesson";
         };
     }
 }

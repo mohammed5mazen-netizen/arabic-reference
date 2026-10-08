@@ -17,6 +17,14 @@ import org.junit.jupiter.api.Test;
 class EvidencePolicyTest {
 
     @Test
+    void learningParaphraseStaysBelowReferenceEvidenceUnlessTheQuestionIsAboutTheLesson() {
+        assertThat(EvidenceScores.capLearning(false, EvidenceScores.EXACT)).isEqualTo(EvidenceScores.SEARCH);
+        assertThat(EvidenceScores.capLearning(false, EvidenceScores.SEARCH)).isLessThan(EvidenceScores.DOMAIN);
+        assertThat(EvidenceScores.capLearning(true, EvidenceScores.EXACT)).isEqualTo(EvidenceScores.DOMAIN);
+        assertThat(EvidenceScores.DOMAIN).isLessThan(EvidenceScores.EXACT);
+    }
+
+    @Test
     void ranksDedupesAndDropsFuzzyFromTheGroundingSet() {
         RetrievedEvidence exact = evidence("DICTIONARY_ENTRY", "1", "كتاب", "تعريف", EvidenceScores.EXACT, "EXACT_DICTIONARY");
         RetrievedEvidence weaker = evidence("DICTIONARY_ENTRY", "1", "كتاب", "نسخة أضعف", EvidenceScores.SEARCH, "PUBLISHED_REFERENCE");

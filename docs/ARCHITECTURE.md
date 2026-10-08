@@ -48,7 +48,8 @@ Base package: `com.mrsoft.arabicreference`
 | `linguistics` | Normalization, editorial states, slugs, content revisions |
 | `morphology` | Patterns, manual readings, a bounded rule analyzer, and limited sound-verb conjugation |
 | `grammar` | Topics, rules, concepts, examples, and manual syntax annotations |
-| `content`, `learning` | Package boundaries only |
+| `content` | Articles. The root package stays a marker |
+| `learning` | Paths, lessons, and quizzes over published knowledge. The root package stays a marker |
 | `ai` | Retrieval-first assistant over published knowledge |
 
 Domain code does not depend on web or persistence. Controllers do not call repositories.

@@ -12,4 +12,8 @@ public final class EvidenceScores {
 
     private EvidenceScores() {
     }
+
+    public static int capLearning(boolean lessonQuestion, int score) {
+        return Math.min(score, lessonQuestion ? DOMAIN : SEARCH);
+    }
 }

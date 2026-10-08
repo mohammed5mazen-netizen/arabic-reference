@@ -50,6 +50,14 @@ public class PublishedDictionaryQuery {
     }
 
     @Transactional(readOnly = true)
+    public Optional<PublishedLemma> lemmaBySlug(String slug) {
+        if (slug == null || slug.isBlank()) {
+            return Optional.empty();
+        }
+        return entries.findBySlug(slug).filter(this::published).map(this::lemma);
+    }
+
+    @Transactional(readOnly = true)
     public List<PublishedLemma> lemmas(String normalizedLemma) {
         return entries.findPublishedByLemma(normalizedLemma, PublicationStatus.ARCHIVED, PageRequest.of(0, 20))
                 .map(this::lemma)

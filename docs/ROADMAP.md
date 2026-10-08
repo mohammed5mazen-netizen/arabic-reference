@@ -1,6 +1,6 @@
 # Roadmap
 
-S8 is the current stage. Later stages are sequencing, not a commitment to build them now. Public reading stays anonymous. Staff authentication is for internal administration only. S9 is not started.
+S9 is the current stage. Later stages are sequencing, not a commitment to build them now. Public reading stays anonymous. Staff authentication is for internal administration only. S10 is not started.
 
 | Stage | Name | Intent |
 | --- | --- | --- |
@@ -12,9 +12,9 @@ S8 is the current stage. Later stages are sequencing, not a commitment to build 
 | S5 | Arabic Search Engine | Done: one published search across dictionary, roots, and grammar |
 | S6 | Content / Spelling / Rhetoric / Literature | Done: spelling, rhetoric, literature metadata, and articles in the same editorial and search model |
 | S7 | Arabic Linguistic Tools | Done: anonymous tools over published knowledge. No automatic sentence parser and no automatic spelling corrector |
-| S8 | AI Linguistic Assistant + RAG | **Current:** retrieval-first assistant over published knowledge. No vector index, no visitor accounts, and no automatic publishing |
-| S9 | Learning Platform | Not started. Lessons without closing public reading |
-| S10 | Advanced Public UX | Deeper public experience on the open reference |
+| S8 | AI Linguistic Assistant + RAG | Done: retrieval-first assistant over published knowledge. No vector index and no automatic publishing |
+| S9 | Learning Platform | **Current:** anonymous paths, lessons, and quizzes over published knowledge. No learner accounts |
+| S10 | Public Experience & Design System | Not started. One public experience across the reference |
 | S11 | Editorial / Review / Verification | The full review lifecycle |
 | S12 | SEO / Public Knowledge Platform | Scale indexable knowledge pages |
 | S13 | Production Hardening | Operational maturity |

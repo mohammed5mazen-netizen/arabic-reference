@@ -73,7 +73,7 @@ class SearchIntegrationTest {
         mockMvc.perform(post("/api/v1/admin/search/reindex").header("Authorization", bearer(staff.auditor))).andExpect(status().isForbidden());
         mockMvc.perform(get("/api/v1/admin/search/status").header("Authorization", bearer(staff.owner)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.indexVersion").value(2));
+                .andExpect(jsonPath("$.data.indexVersion").value(3));
 
         int mark = SEQUENCE.incrementAndGet();
         String exact = word("كتب", mark);

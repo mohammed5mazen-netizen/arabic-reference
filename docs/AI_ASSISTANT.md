@@ -27,7 +27,9 @@ A question is optional prior turns (at most two). The server does not store the 
 6. Otherwise call the model with the evidence block only.
 7. Accept only evidence ids that were retrieved. The backend attaches the real URLs.
 
-Intents: `WORD_MEANING`, `ROOT`, `MORPHOLOGY`, `GRAMMAR`, `SPELLING`, `RHETORIC`, `LITERATURE`, `COMPARISON`, and `GENERAL_LINGUISTIC`. An unclear question uses unified search. The backend chooses the route. There is no tool-calling loop.
+Intents: `WORD_MEANING`, `ROOT`, `MORPHOLOGY`, `GRAMMAR`, `SPELLING`, `RHETORIC`, `LITERATURE`, `COMPARISON`, `LESSON_HELP`, and `GENERAL_LINGUISTIC`. An unclear question uses unified search. The backend chooses the route. There is no tool-calling loop.
+
+A lesson or learning path found in search is capped at the search score for a reference question, below an exact dictionary hit and below a grammar-domain hit. `LESSON_HELP` (a question that names a درس) searches only published lessons and paths and may use that lesson as the main evidence, still without calling a second model pipeline. The assistant does not score quizzes.
 
 ## Configuration
 

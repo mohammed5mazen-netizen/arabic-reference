@@ -40,6 +40,11 @@ class SearchRankingTest {
         assertThat(hits).containsExactlyElementsOf(reversed);
         assertThat(hits.get(0).type()).isEqualTo(SearchEntityType.DICTIONARY_ENTRY);
         assertThat(hits.get(1).type()).isEqualTo(SearchEntityType.ROOT);
+        List<Hit> tied = new ArrayList<>(List.of(
+                hit(second, SearchEntityType.LESSON, "كتاب", MatchReason.EXACT.score()),
+                hit(first, SearchEntityType.DICTIONARY_ENTRY, "كتاب", MatchReason.EXACT.score())));
+        tied.sort(SearchRanking.order());
+        assertThat(tied.get(0).type()).isEqualTo(SearchEntityType.DICTIONARY_ENTRY);
     }
 
     @Test

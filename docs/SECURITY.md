@@ -48,6 +48,8 @@ Logs include method, path, status, duration, and trace id. They do not include q
 
 Accounts are not the abuse-control mechanism for public reading. Admin login and refresh are rate limited in Redis. Search and the linguistic tools have their own limiters. `POST /api/v1/public/ai/ask` is anonymous and rate limited. The assistant does not log the question or the API key. See [AI_PRIVACY.md](AI_PRIVACY.md).
 
+Quiz start and submit are anonymous and rate limited. The attempt token is random and only its SHA-256 is stored. The public start response does not include which option is correct. Attempt rows are operational data, not admin audit events. See [QUIZ_ENGINE.md](QUIZ_ENGINE.md).
+
 ## Optional personal accounts
 
-A future optional account must not be required to read the reference or run basic search.
+A future optional account must not be required to read the reference, run basic search, or read a published lesson. Learner accounts are not part of S9.

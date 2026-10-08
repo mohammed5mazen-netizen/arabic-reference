@@ -9,5 +9,6 @@ public enum AssistantIntent {
     RHETORIC,
     LITERATURE,
     COMPARISON,
+    LESSON_HELP,
     GENERAL_LINGUISTIC
 }

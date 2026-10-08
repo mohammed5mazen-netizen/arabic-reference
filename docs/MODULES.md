@@ -80,4 +80,4 @@ Retrieval-first linguistic assistant. `ai.domain` holds intents, evidence, and t
 
 ## learning
 
-Package placeholder. Architecture tests fail if this root package gains implementation classes.
+Paths, units, lessons, activities, and quizzes. The root `learning` package stays a package marker. Domain code does not use Spring or JPA. References to dictionary, grammar, spelling, rhetoric, articles, and the morphology tool go through `PublishedReferencePort`. Learning does not depend on `ai` or on another module's infrastructure. See [LEARNING_PLATFORM.md](LEARNING_PLATFORM.md).

@@ -17,7 +17,8 @@ public final class SearchFilters {
         RHETORIC,
         LITERATURE,
         ARTICLES,
-        CONTENT
+        CONTENT,
+        LEARNING
     }
 
     private static final Set<String> PARTS_OF_SPEECH = Set.of(
@@ -49,7 +50,8 @@ public final class SearchFilters {
             case "literature" -> TypeGroup.LITERATURE;
             case "articles" -> TypeGroup.ARTICLES;
             case "content" -> TypeGroup.CONTENT;
-            default -> throw invalid("type", "Choose dictionary, root, grammar, spelling, rhetoric, literature, articles, or content.");
+            case "learning" -> TypeGroup.LEARNING;
+            default -> throw invalid("type", "Choose dictionary, root, grammar, spelling, rhetoric, literature, articles, content, or learning.");
         };
     }
 
@@ -82,6 +84,7 @@ public final class SearchFilters {
                     || accepts(TypeGroup.RHETORIC, type)
                     || accepts(TypeGroup.LITERATURE, type)
                     || accepts(TypeGroup.ARTICLES, type);
+            case LEARNING -> type == SearchEntityType.LEARNING_PATH || type == SearchEntityType.LESSON;
         };
     }
 

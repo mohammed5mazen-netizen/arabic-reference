@@ -173,6 +173,7 @@ public class AssistantService {
             case COMPARISON -> new ToolHint("مقارنة الكلمات", "/tools/compare");
             case RHETORIC -> new ToolHint("البلاغة", "/rhetoric");
             case LITERATURE -> new ToolHint("الأدب", "/literature");
+            case LESSON_HELP -> new ToolHint("التعلم", "/learn");
             case GENERAL_LINGUISTIC -> new ToolHint("الأدوات اللغوية", "/tools");
         });
         hints.add(new ToolHint("البحث في المرجع", "/search" + query));

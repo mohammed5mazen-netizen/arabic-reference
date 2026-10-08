@@ -86,6 +86,8 @@ public final class CitationGuard {
             case "RHETORIC_DEVICE", "RHETORIC_TOPIC" -> "بلاغة";
             case "LITERARY_WORK", "LITERARY_FIGURE", "LITERARY_ERA" -> "أدب";
             case "ARTICLE" -> "مقال";
+            case "LESSON" -> "درس";
+            case "LEARNING_PATH" -> "مسار تعليمي";
             case "MORPHOLOGY" -> "صرف";
             default -> "معرفة منشورة";
         };

@@ -59,6 +59,8 @@ The compose service initializes PostgreSQL with UTF-8. Timestamps use `timestamp
 
 `V13__ai_assistant.sql` adds `ai_usage` for aggregate assistant requests: time, provider, model identifier, status, latency, optional token counts, and evidence count. It does not store the question or the answer. It also adds `ai.admin.view` and grants it to the owner, admin, and auditor roles. `V1` through `V12` are unchanged. No conversation table is created.
 
+`V14__learning_platform.sql` adds the learning tables: path, unit, lesson, objective, section, reference, activity, quiz, question, option, attempt, and revision. It extends the audit and search type checks, sets `index_version` to 3, and grants the `learning.*` permissions. There is no progress table and no production lesson seed. `V1` through `V13` are unchanged.
+
 ## What is postponed
 
 Staff and public identifiers are UUIDs. Sequential keys may exist inside the database but are not the public id. Grammar tables wait for a later stage.

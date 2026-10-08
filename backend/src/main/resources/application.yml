@@ -97,6 +97,9 @@ app:
     rate-limit-per-minute: ${AI_RATE_LIMIT:12}
     cache-enabled: ${AI_CACHE_ENABLED:true}
     cache-ttl: ${AI_CACHE_TTL:10m}
+  learning:
+    attempt-ttl: ${LEARNING_ATTEMPT_TTL:60m}
+    rate-limit-per-minute: ${LEARNING_RATE_LIMIT:20}
 
 logging:
   level:

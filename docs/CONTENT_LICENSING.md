@@ -23,3 +23,5 @@ S4 uses the same policy for grammar. A published rule or concept needs a citatio
 S6 uses the same citation record for spelling, rhetoric, literature, and articles. A published spelling rule, rhetoric device, and article each need a publishable citation. Quoted spelling examples and common mistakes need one too. Literary excerpts are stricter: they exist only when the work is `PUBLIC_DOMAIN` or `LICENSED`, and never when rights are `UNKNOWN` or `RESTRICTED`. See [LITERATURE_RIGHTS_POLICY.md](LITERATURE_RIGHTS_POLICY.md).
 
 S8 does not add a new license. The assistant may quote only a short published excerpt already allowed by that policy. It does not send a full literary work to a model, and it does not publish model output into the reference. See [AI_GROUNDING_POLICY.md](AI_GROUNDING_POLICY.md).
+
+S9 lessons do not copy the knowledge base. A constructed example is labeled **مثال تعليمي**. A section marked as a quotation cannot be published unless the lesson also points at a published reference. The editor writes quiz answers. The assistant does not invent a citation or a correct option.

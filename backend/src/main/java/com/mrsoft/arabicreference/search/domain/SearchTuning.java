@@ -2,7 +2,7 @@ package com.mrsoft.arabicreference.search.domain;
 
 public final class SearchTuning {
 
-    public static final int INDEX_VERSION = 2;
+    public static final int INDEX_VERSION = 3;
     public static final int MIN_CODE_POINTS = 2;
     public static final int MAX_CODE_POINTS = 120;
     public static final int DEFAULT_PAGE_SIZE = 20;

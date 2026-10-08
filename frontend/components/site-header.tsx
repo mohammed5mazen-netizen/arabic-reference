@@ -14,8 +14,9 @@ export function SiteHeader() {
         </span>
         <span className="font-display text-2xl">{siteName}</span>
       </a>
-      <nav aria-label="التنقل" className="flex items-center gap-4 text-sm">
+      <nav aria-label="التنقل" className="flex flex-wrap items-center justify-end gap-x-4 gap-y-2 text-sm">
         <Link href="/">الرئيسية</Link>
+        <Link href="/learn">التعلّم</Link>
         <Link href="/tools">الأدوات</Link>
         <Link href="/assistant">المساعد</Link>
         <Link href="/search">البحث</Link>

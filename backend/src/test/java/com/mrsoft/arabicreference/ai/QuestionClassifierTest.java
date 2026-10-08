@@ -23,6 +23,9 @@ class QuestionClassifierTest {
         assertThat(classify("ما الفرق بين كتاب و كاتب؟").intent()).isEqualTo(AssistantIntent.COMPARISON);
         assertThat(classify("ما الفرق بين كتاب و كاتب؟").terms()).containsExactly("كتاب", "كاتب");
         assertThat(classify("أخبرني عن العربية").intent()).isEqualTo(AssistantIntent.GENERAL_LINGUISTIC);
+        assertThat(classify("اشرح لي هذا الدرس").intent()).isEqualTo(AssistantIntent.LESSON_HELP);
+        assertThat(classify("اشرح لي درس الفاعل").terms()).contains("فاعل");
+        assertThat(classify("ما هو الفاعل؟").intent()).isEqualTo(AssistantIntent.GRAMMAR);
     }
 
     @Test

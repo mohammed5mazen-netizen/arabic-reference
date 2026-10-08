@@ -79,6 +79,14 @@ export const sections = [
     action: null,
   },
   {
+    id: "learning",
+    title: "التعلّم",
+    description: "مسارات ودروس واختبارات مبنية على المعرفة المنشورة.",
+    href: "/learn",
+    status: "متاح",
+    action: "ابدأ التعلّم",
+  },
+  {
     id: "tools",
     title: "الأدوات اللغوية",
     description: "أدوات تقرأ المعرفة المنشورة: الجذر، الصرف، المقارنة، والتحقق المرجعي.",

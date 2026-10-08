@@ -4,12 +4,12 @@ import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import Link from "next/link";
 import { assistantApiBase, assistantDisabled, assistantPlaceholder, type AssistantAnswer, type AssistantStatus } from "@/lib/assistant";
 
-export function AssistantPanel() {
+export function AssistantPanel({ initialQuestion = "" }: { initialQuestion?: string }) {
   const inputId = useId();
   const errorId = useId();
   const answerRef = useRef<HTMLElement>(null);
   const [status, setStatus] = useState<AssistantStatus | null>(null);
-  const [question, setQuestion] = useState("");
+  const [question, setQuestion] = useState(initialQuestion);
   const [answer, setAnswer] = useState<AssistantAnswer | null>(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);

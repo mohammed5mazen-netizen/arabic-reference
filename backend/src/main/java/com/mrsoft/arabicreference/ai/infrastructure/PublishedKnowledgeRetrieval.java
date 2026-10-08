@@ -97,7 +97,7 @@ public class PublishedKnowledgeRetrieval implements KnowledgeRetrievalPort {
                 continue;
             }
             relation |= route(request.intent(), term, evidence, client);
-            search(term, evidence, typesFor(request.intent()));
+            search(term, evidence, typesFor(request.intent()), request.intent());
         }
         return new RetrievalBatch(evidence, relation);
     }
@@ -122,7 +122,7 @@ public class PublishedKnowledgeRetrieval implements KnowledgeRetrievalPort {
                 spelling(term, evidence);
                 yield dictionary(term, evidence);
             }
-            case RHETORIC, LITERATURE -> false;
+            case RHETORIC, LITERATURE, LESSON_HELP -> false;
         };
     }
 
@@ -211,7 +211,7 @@ public class PublishedKnowledgeRetrieval implements KnowledgeRetrievalPort {
         }
     }
 
-    private void search(String term, List<RetrievedEvidence> evidence, Set<SearchEntityType> types) {
+    private void search(String term, List<RetrievedEvidence> evidence, Set<SearchEntityType> types, AssistantIntent intent) {
         if (term.codePointCount(0, term.length()) < 2) {
             return;
         }
@@ -231,6 +231,9 @@ public class PublishedKnowledgeRetrieval implements KnowledgeRetrievalPort {
                 }
                 boolean fuzzy = candidate.reason() == MatchReason.FUZZY || candidate.fuzzyBody();
                 int score = fuzzy ? EvidenceScores.FUZZY : searchScore(candidate.reason());
+                if (candidate.type() == SearchEntityType.LESSON || candidate.type() == SearchEntityType.LEARNING_PATH) {
+                    score = EvidenceScores.capLearning(intent == AssistantIntent.LESSON_HELP, score);
+                }
                 evidence.add(item(candidate.type().name(), candidate.entityId().toString(), candidate.titleOriginal(), candidate.snippet(), candidate.urlPath(), candidate.subtitle(), candidate.reason().name(), fuzzy ? "SEARCH_SUGGESTION" : "PUBLISHED_REFERENCE", "published", score));
                 added++;
             }
@@ -257,6 +260,7 @@ public class PublishedKnowledgeRetrieval implements KnowledgeRetrievalPort {
             case SPELLING -> EnumSet.of(SearchEntityType.SPELLING_TOPIC, SearchEntityType.SPELLING_RULE);
             case RHETORIC -> EnumSet.of(SearchEntityType.RHETORIC_TOPIC, SearchEntityType.RHETORIC_DEVICE);
             case LITERATURE -> EnumSet.of(SearchEntityType.LITERARY_ERA, SearchEntityType.LITERARY_FIGURE, SearchEntityType.LITERARY_WORK);
+            case LESSON_HELP -> EnumSet.of(SearchEntityType.LESSON, SearchEntityType.LEARNING_PATH);
             case GENERAL_LINGUISTIC -> null;
         };
     }

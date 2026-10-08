@@ -21,7 +21,9 @@ public final class QuestionClassifier {
     public static Resolution classify(String normalized) {
         boolean parsing = normalized.contains("اعراب");
         AssistantIntent intent = intentOf(normalized);
-        List<String> terms = intent == AssistantIntent.COMPARISON ? comparisonTerms(normalized) : contentTerms(normalized);
+        List<String> terms = intent == AssistantIntent.COMPARISON
+                ? comparisonTerms(normalized)
+                : intent == AssistantIntent.LESSON_HELP ? lessonTerms(normalized) : contentTerms(normalized);
         return new Resolution(intent, terms, parsing, intent == AssistantIntent.COMPARISON);
     }
 
@@ -43,6 +45,9 @@ public final class QuestionClassifier {
         }
         if (hasToken(normalized, "شاعر", "قصيدة", "قصيده", "ادب", "اديب")) {
             return AssistantIntent.LITERATURE;
+        }
+        if (hasToken(normalized, "درس")) {
+            return AssistantIntent.LESSON_HELP;
         }
         if (hasToken(normalized, "فاعل", "مفعول", "مبتدا", "خبر", "نحو", "قاعدة", "قاعده", "اعراب")) {
             return AssistantIntent.GRAMMAR;
@@ -83,6 +88,26 @@ public final class QuestionClassifier {
             }
         }
         return false;
+    }
+
+    private static List<String> lessonTerms(String normalized) {
+        List<String> terms = new ArrayList<>();
+        for (String token : normalized.split(" ")) {
+            String cleaned = token.replaceAll("[^\\p{IsArabic}]", "");
+            if (cleaned.startsWith("ال") && cleaned.length() > 2) {
+                cleaned = cleaned.substring(2);
+            }
+            if (cleaned.length() < 2 || cleaned.equals("درس") || cleaned.equals("اشرح") || cleaned.equals("شرح") || cleaned.equals("لي") || cleaned.equals("هذا") || cleaned.equals("هذه")) {
+                continue;
+            }
+            if (!terms.contains(cleaned)) {
+                terms.add(cleaned);
+            }
+            if (terms.size() == 3) {
+                break;
+            }
+        }
+        return terms;
     }
 
     static List<String> contentTerms(String normalized) {

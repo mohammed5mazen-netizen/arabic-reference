@@ -88,6 +88,17 @@ public final class PermissionCatalog {
     public static final String ARTICLE_PUBLISH = "content.article.publish";
     public static final String TOOLS_VIEW = "tools.view";
     public static final String AI_ADMIN_VIEW = "ai.admin.view";
+    public static final String LEARNING_PATH_VIEW = "learning.path.view";
+    public static final String LEARNING_PATH_MANAGE = "learning.path.manage";
+    public static final String LEARNING_LESSON_VIEW = "learning.lesson.view";
+    public static final String LEARNING_LESSON_CREATE = "learning.lesson.create";
+    public static final String LEARNING_LESSON_EDIT = "learning.lesson.edit";
+    public static final String LEARNING_LESSON_SUBMIT = "learning.lesson.submit";
+    public static final String LEARNING_LESSON_REVIEW = "learning.lesson.review";
+    public static final String LEARNING_LESSON_PUBLISH = "learning.lesson.publish";
+    public static final String LEARNING_LESSON_ARCHIVE = "learning.lesson.archive";
+    public static final String LEARNING_QUIZ_MANAGE = "learning.quiz.manage";
+    public static final String LEARNING_QUESTION_MANAGE = "learning.question.manage";
 
     private static final List<String> ALL = List.of(
             USER_VIEW,
@@ -172,7 +183,18 @@ public final class PermissionCatalog {
             ARTICLE_REVIEW,
             ARTICLE_PUBLISH,
             TOOLS_VIEW,
-            AI_ADMIN_VIEW);
+            AI_ADMIN_VIEW,
+            LEARNING_PATH_VIEW,
+            LEARNING_PATH_MANAGE,
+            LEARNING_LESSON_VIEW,
+            LEARNING_LESSON_CREATE,
+            LEARNING_LESSON_EDIT,
+            LEARNING_LESSON_SUBMIT,
+            LEARNING_LESSON_REVIEW,
+            LEARNING_LESSON_PUBLISH,
+            LEARNING_LESSON_ARCHIVE,
+            LEARNING_QUIZ_MANAGE,
+            LEARNING_QUESTION_MANAGE);
 
     private PermissionCatalog() {
     }

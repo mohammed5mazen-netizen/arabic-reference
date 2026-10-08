@@ -73,6 +73,10 @@ export function resultTypeLabel(type: string): string {
       return "حقبة أدبية";
     case "ARTICLE":
       return "مقالة";
+    case "LEARNING_PATH":
+      return "مسار تعليمي";
+    case "LESSON":
+      return "درس";
     default:
       return type;
   }
