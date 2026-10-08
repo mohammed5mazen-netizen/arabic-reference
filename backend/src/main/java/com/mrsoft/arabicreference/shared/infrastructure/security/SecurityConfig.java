@@ -62,6 +62,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/public/**").permitAll()
                         .requestMatchers(HttpMethod.HEAD, "/api/v1/public/**").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/api/v1/public/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/public/ai/ask").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/admin/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/admin/auth/refresh").permitAll()
                         .requestMatchers("/api/v1/admin/**").authenticated()

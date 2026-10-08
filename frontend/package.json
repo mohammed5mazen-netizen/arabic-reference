@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "node --test tests/public-access.test.mjs && node --experimental-strip-types --test tests/admin-nav.test.ts tests/dictionary-ui.test.ts tests/morphology-ui.test.ts tests/grammar-ui.test.ts tests/search-ui.test.ts tests/knowledge-ui.test.ts tests/tools-ui.test.ts"
+    "test": "node --test tests/public-access.test.mjs && node --experimental-strip-types --test tests/admin-nav.test.ts tests/dictionary-ui.test.ts tests/morphology-ui.test.ts tests/grammar-ui.test.ts tests/search-ui.test.ts tests/knowledge-ui.test.ts tests/tools-ui.test.ts tests/assistant-ui.test.ts"
   },
   "dependencies": {
     "next": "16.3.8",

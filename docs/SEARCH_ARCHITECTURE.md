@@ -48,3 +48,7 @@ Public searches are anonymous and are not written to the audit log. Micrometer r
 The result cache is process-local, at most 64 entries, for 20 seconds. The key includes the in-process generation, `indexVersion`, the display query, the normalized key, filters, page, and size. The display query stays in the key because an exact original match is not the same as a normalized match. Every index write bumps the generation. Redis remains available for a later shared cache; S5 correctness does not depend on it.
 
 Anonymous search is rate-limited in memory, default 600 requests per minute per client address. It does not require a login.
+
+## Assistant retrieval
+
+The linguistic assistant uses this index as its general fallback and as the snippet source for rhetoric, literature, and articles. Direct dictionary, grammar, spelling, and morphology ports still run first for those intents. Fuzzy hits are nearby links, not evidence for a definite answer. See [RAG_ARCHITECTURE.md](RAG_ARCHITECTURE.md).

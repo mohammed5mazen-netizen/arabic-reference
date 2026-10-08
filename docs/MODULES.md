@@ -74,6 +74,10 @@ Articles, sections, tags, and cross-domain relations. The root `content` package
 
 Orchestration for the public linguistic tools. The root `tools` package stays a package marker. Application services call published query ports and `LinguisticSearchPort`. They do not call foreign repositories or controllers. See [LINGUISTIC_TOOLS.md](LINGUISTIC_TOOLS.md).
 
-## learning, ai
+## ai
 
-Package placeholders. Architecture tests fail if these root packages gain implementation classes.
+Retrieval-first linguistic assistant. `ai.domain` holds intents, evidence, and the prompt version. Application ports are `AiModelPort`, `KnowledgeRetrievalPort`, `AiUsagePort`, `AiRateLimitPort`, and `AiAnswerCachePort`. Infrastructure implements them. There is no embedding adapter. The root `ai` package stays a package marker. See [RAG_ARCHITECTURE.md](RAG_ARCHITECTURE.md).
+
+## learning
+
+Package placeholder. Architecture tests fail if this root package gains implementation classes.

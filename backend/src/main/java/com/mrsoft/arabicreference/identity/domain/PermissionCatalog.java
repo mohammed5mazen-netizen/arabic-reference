@@ -87,6 +87,7 @@ public final class PermissionCatalog {
     public static final String ARTICLE_REVIEW = "content.article.review";
     public static final String ARTICLE_PUBLISH = "content.article.publish";
     public static final String TOOLS_VIEW = "tools.view";
+    public static final String AI_ADMIN_VIEW = "ai.admin.view";
 
     private static final List<String> ALL = List.of(
             USER_VIEW,
@@ -170,7 +171,8 @@ public final class PermissionCatalog {
             ARTICLE_EDIT,
             ARTICLE_REVIEW,
             ARTICLE_PUBLISH,
-            TOOLS_VIEW);
+            TOOLS_VIEW,
+            AI_ADMIN_VIEW);
 
     private PermissionCatalog() {
     }

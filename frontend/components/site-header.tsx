@@ -17,6 +17,7 @@ export function SiteHeader() {
       <nav aria-label="التنقل" className="flex items-center gap-4 text-sm">
         <Link href="/">الرئيسية</Link>
         <Link href="/tools">الأدوات</Link>
+        <Link href="/assistant">المساعد</Link>
         <Link href="/search">البحث</Link>
         <ThemeToggle />
       </nav>

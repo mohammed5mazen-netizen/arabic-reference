@@ -21,3 +21,5 @@ S2 enforces the license before publication. `PUBLIC_DOMAIN`, `CC0`, `CC_BY`, `CC
 S4 uses the same policy for grammar. A published rule or concept needs a citation whose source is published and whose license allows public attribution. A quoted, Quranic, poetry, or prose example needs a citation when it is created. A constructed example may omit one and is labeled as an editorial example. Restricted quotations are not published. See ADR-044.
 
 S6 uses the same citation record for spelling, rhetoric, literature, and articles. A published spelling rule, rhetoric device, and article each need a publishable citation. Quoted spelling examples and common mistakes need one too. Literary excerpts are stricter: they exist only when the work is `PUBLIC_DOMAIN` or `LICENSED`, and never when rights are `UNKNOWN` or `RESTRICTED`. See [LITERATURE_RIGHTS_POLICY.md](LITERATURE_RIGHTS_POLICY.md).
+
+S8 does not add a new license. The assistant may quote only a short published excerpt already allowed by that policy. It does not send a full literary work to a model, and it does not publish model output into the reference. See [AI_GROUNDING_POLICY.md](AI_GROUNDING_POLICY.md).

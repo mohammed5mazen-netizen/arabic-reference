@@ -1,5 +1,5 @@
 /**
- * Future linguistic assistant. AI may assist editors and readers.
- * It is not the source of linguistic truth.
+ * Source-grounded linguistic assistant. Retrieval of published knowledge comes first.
+ * The model is not a source of linguistic truth, and it does not publish records.
  */
 package com.mrsoft.arabicreference.ai;

@@ -82,6 +82,21 @@ app:
     graph-depth: ${TOOLS_GRAPH_DEPTH:2}
     graph-nodes: ${TOOLS_GRAPH_NODES:50}
     candidate-cap: ${TOOLS_CANDIDATE_CAP:8}
+  ai:
+    enabled: ${AI_ENABLED:false}
+    provider: ${AI_PROVIDER:none}
+    model: ${AI_MODEL:}
+    api-key: ${AI_API_KEY:}
+    base-url: ${AI_BASE_URL:https://api.openai.com/v1/chat/completions}
+    timeout: ${AI_TIMEOUT:20s}
+    max-output-tokens: ${AI_MAX_OUTPUT_TOKENS:400}
+    max-context-items: ${AI_MAX_CONTEXT_ITEMS:6}
+    max-excerpt-chars: ${AI_MAX_EXCERPT_CHARS:280}
+    max-question-code-points: ${AI_MAX_QUESTION_CODE_POINTS:400}
+    max-question-lines: ${AI_MAX_QUESTION_LINES:8}
+    rate-limit-per-minute: ${AI_RATE_LIMIT:12}
+    cache-enabled: ${AI_CACHE_ENABLED:true}
+    cache-ttl: ${AI_CACHE_TTL:10m}
 
 logging:
   level:

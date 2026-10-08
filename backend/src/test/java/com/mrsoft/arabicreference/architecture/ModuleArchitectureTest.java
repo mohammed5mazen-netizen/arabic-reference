@@ -72,8 +72,7 @@ class ModuleArchitectureTest {
     static final ArchRule future_modules_have_no_implementation = classes()
             .that().resideInAnyPackage(
                     "com.mrsoft.arabicreference.content",
-                    "com.mrsoft.arabicreference.learning",
-                    "com.mrsoft.arabicreference.ai")
+                    "com.mrsoft.arabicreference.learning")
             .should().haveSimpleName("package-info");
 
     @ArchTest
@@ -225,4 +224,55 @@ class ModuleArchitectureTest {
     static final ArchRule modules_do_not_depend_on_search_infrastructure = noClasses()
             .that().resideOutsideOfPackage("com.mrsoft.arabicreference.search..")
             .should().dependOnClassesThat().resideInAPackage("com.mrsoft.arabicreference.search.infrastructure..");
+
+    @ArchTest
+    static final ArchRule ai_root_stays_a_marker = classes()
+            .that().resideInAPackage("com.mrsoft.arabicreference.ai")
+            .should().haveSimpleName("package-info");
+
+    @ArchTest
+    static final ArchRule ai_domain_stays_free_of_providers = noClasses()
+            .that().resideInAPackage("com.mrsoft.arabicreference.ai.domain..")
+            .should().dependOnClassesThat().resideInAnyPackage(
+                    "org.springframework..",
+                    "jakarta.persistence..",
+                    "com.mrsoft.arabicreference.dictionary..",
+                    "com.mrsoft.arabicreference.morphology..",
+                    "com.mrsoft.arabicreference.grammar..",
+                    "com.mrsoft.arabicreference.search..",
+                    "com.mrsoft.arabicreference.tools..",
+                    "java.net.http..");
+
+    @ArchTest
+    static final ArchRule ai_application_does_not_call_a_provider_sdk = noClasses()
+            .that().resideInAPackage("com.mrsoft.arabicreference.ai.application..")
+            .should().dependOnClassesThat().resideInAnyPackage("java.net.http..", "com.openai..");
+
+    @ArchTest
+    static final ArchRule ai_does_not_depend_on_foreign_infrastructure = noClasses()
+            .that().resideInAPackage("com.mrsoft.arabicreference.ai..")
+            .should().dependOnClassesThat().resideInAnyPackage(
+                    "com.mrsoft.arabicreference.dictionary.infrastructure..",
+                    "com.mrsoft.arabicreference.morphology.infrastructure..",
+                    "com.mrsoft.arabicreference.grammar.infrastructure..",
+                    "com.mrsoft.arabicreference.search.infrastructure..",
+                    "com.mrsoft.arabicreference.spelling.infrastructure..",
+                    "com.mrsoft.arabicreference.rhetoric.infrastructure..",
+                    "com.mrsoft.arabicreference.literature.infrastructure..",
+                    "com.mrsoft.arabicreference.content.infrastructure..",
+                    "com.mrsoft.arabicreference.tools.infrastructure..");
+
+    @ArchTest
+    static final ArchRule knowledge_modules_do_not_depend_on_ai = noClasses()
+            .that().resideInAnyPackage(
+                    "com.mrsoft.arabicreference.dictionary..",
+                    "com.mrsoft.arabicreference.morphology..",
+                    "com.mrsoft.arabicreference.grammar..",
+                    "com.mrsoft.arabicreference.search..",
+                    "com.mrsoft.arabicreference.spelling..",
+                    "com.mrsoft.arabicreference.rhetoric..",
+                    "com.mrsoft.arabicreference.literature..",
+                    "com.mrsoft.arabicreference.content..",
+                    "com.mrsoft.arabicreference.tools..")
+            .should().dependOnClassesThat().resideInAPackage("com.mrsoft.arabicreference.ai..");
 }

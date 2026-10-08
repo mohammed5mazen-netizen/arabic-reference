@@ -46,7 +46,7 @@ Logs include method, path, status, duration, and trace id. They do not include q
 
 ## Anonymous abuse
 
-Accounts are not the abuse-control mechanism for public reading. Admin login and refresh are rate limited in Redis. Public reads are not rate limited yet.
+Accounts are not the abuse-control mechanism for public reading. Admin login and refresh are rate limited in Redis. Search and the linguistic tools have their own limiters. `POST /api/v1/public/ai/ask` is anonymous and rate limited. The assistant does not log the question or the API key. See [AI_PRIVACY.md](AI_PRIVACY.md).
 
 ## Optional personal accounts
 

@@ -55,6 +55,10 @@ The compose service initializes PostgreSQL with UTF-8. Timestamps use `timestamp
 
 `V7` through `V10` add the spelling, rhetoric, literature, and article tables, including aliases, roles, historical-date columns, rights, excerpts, sections, tags, and `knowledge_relation` without a cross-module foreign key. `V9` adds optional `poem` and `verse` columns on the existing citation. `V11` extends the search-document and audit checks for the new types and sets `search_index_state.index_version` to 2. None of these migrations insert linguistic or literary text.
 
+## S8 schema
+
+`V13__ai_assistant.sql` adds `ai_usage` for aggregate assistant requests: time, provider, model identifier, status, latency, optional token counts, and evidence count. It does not store the question or the answer. It also adds `ai.admin.view` and grants it to the owner, admin, and auditor roles. `V1` through `V12` are unchanged. No conversation table is created.
+
 ## What is postponed
 
 Staff and public identifiers are UUIDs. Sequential keys may exist inside the database but are not the public id. Grammar tables wait for a later stage.

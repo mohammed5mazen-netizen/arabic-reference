@@ -48,7 +48,8 @@ Base package: `com.mrsoft.arabicreference`
 | `linguistics` | Normalization, editorial states, slugs, content revisions |
 | `morphology` | Patterns, manual readings, a bounded rule analyzer, and limited sound-verb conjugation |
 | `grammar` | Topics, rules, concepts, examples, and manual syntax annotations |
-| `content`, `learning`, `ai` | Package boundaries only |
+| `content`, `learning` | Package boundaries only |
+| `ai` | Retrieval-first assistant over published knowledge |
 
 Domain code does not depend on web or persistence. Controllers do not call repositories.
 
@@ -88,6 +89,10 @@ Spelling, rhetoric, literature, and articles are separate modules. They reuse th
 ## S7 tools
 
 `tools` orchestrates published dictionary, morphology, grammar, search, spelling, and article ports. It does not own the morphology engine and knowledge modules do not depend on it. The public center is `/tools`. See [LINGUISTIC_TOOLS.md](LINGUISTIC_TOOLS.md) and ADR-070.
+
+## S8 assistant
+
+`ai` retrieves published knowledge, then asks `AiModelPort` to phrase an answer from that evidence. Knowledge modules do not depend on `ai`. The assistant is off unless `AI_ENABLED` is true and a configured provider has a key. See [AI_ASSISTANT.md](AI_ASSISTANT.md) and ADR-080.
 
 ## SEO
 

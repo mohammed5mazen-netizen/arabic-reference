@@ -35,6 +35,11 @@ export default function HomePage() {
             ))}
           </ul>
         </section>
+        <section aria-labelledby="assistant-home" className="mt-12 max-w-3xl rounded-3xl border border-line bg-raised p-6">
+          <h2 id="assistant-home" className="font-display text-4xl">اسأل المساعد اللغوي</h2>
+          <p className="mt-3 leading-8 text-muted">سؤال واحد عن كلمة أو قاعدة أو جذر، والإجابة تعتمد على المحتوى المنشور في المرجع.</p>
+          <Link href="/assistant" className="mt-4 inline-block text-library">افتح المساعد اللغوي</Link>
+        </section>
       </section>
       <SectionGrid />
     </main>
