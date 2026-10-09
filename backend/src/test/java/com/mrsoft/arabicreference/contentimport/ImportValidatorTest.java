@@ -50,6 +50,28 @@ class ImportValidatorTest {
         assertThat(result.issues()).extracting("code").contains("root");
     }
 
+    @Test
+    void validatesNestedSensesAndFormsAgainstDomainEnumsAndNormalizer() {
+        var validRecord = new ImportedLexicalRecord(
+                "nested-1", "urn:test:nested-1", "كِتاب", null, "NOUN", null, null, null, null,
+                null, null, null, null, null, null,
+                java.util.List.of(new ImportedLexicalRecord.ImportedSense("مادة موثقة.", null, null, "GENERAL", 1)),
+                java.util.List.of(new ImportedLexicalRecord.ImportedForm("PLURAL", "كُتُب", "كتب")));
+        var valid = validator.validate(validRecord, 1);
+        assertThat(valid.valid()).isTrue();
+        assertThat(valid.record().senses()).hasSize(1);
+        assertThat(valid.record().forms().getFirst().normalized()).isEqualTo("كتب");
+
+        var invalidRecord = new ImportedLexicalRecord(
+                "nested-2", "urn:test:nested-2", "كتاب", null, "NOUN", null, null, null, null,
+                null, null, null, null, null, null,
+                java.util.List.of(new ImportedLexicalRecord.ImportedSense(" ", null, null, "NOT_A_DOMAIN", 1)),
+                java.util.List.of(new ImportedLexicalRecord.ImportedForm("NOT_A_FORM", "كتب", "كتاب")));
+        var invalid = validator.validate(invalidRecord, 2);
+        assertThat(invalid.issues()).extracting("code")
+                .contains("senses[0].definition", "senses[0].semanticDomain", "forms[0].type", "forms[0].normalized");
+    }
+
     private static ImportedLexicalRecord record(String lemma, String root, String plural, String definition) {
         return new ImportedLexicalRecord(
                 "source-entry-1",

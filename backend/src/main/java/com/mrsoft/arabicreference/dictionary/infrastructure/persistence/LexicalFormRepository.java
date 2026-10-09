@@ -1,6 +1,8 @@
 package com.mrsoft.arabicreference.dictionary.infrastructure.persistence;
 
+import com.mrsoft.arabicreference.dictionary.domain.FormType;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -9,6 +11,9 @@ import org.springframework.data.repository.query.Param;
 public interface LexicalFormRepository extends JpaRepository<LexicalFormEntity, UUID> {
 
     List<LexicalFormEntity> findByLexicalEntryIdOrderByDisplayOrderAsc(UUID lexicalEntryId);
+
+    Optional<LexicalFormEntity> findFirstByLexicalEntryIdAndFormTypeAndNormalizedForm(
+            UUID lexicalEntryId, FormType formType, String normalizedForm);
 
     @Query("""
             select form from LexicalFormEntity form

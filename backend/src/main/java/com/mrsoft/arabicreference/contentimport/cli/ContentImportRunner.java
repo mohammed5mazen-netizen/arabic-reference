@@ -55,7 +55,7 @@ public class ContentImportRunner implements ApplicationRunner {
     }
 
     private static boolean booleanOption(ApplicationArguments arguments, String name) {
-        if (!arguments.containsOption(name)) return false;
+        if (!arguments.containsOption(name)) return true;
         List<String> values = arguments.getOptionValues(name);
         if (values == null || values.isEmpty()) return true;
         if (values.size() != 1 || (!"true".equalsIgnoreCase(values.getFirst()) && !"false".equalsIgnoreCase(values.getFirst()))) {

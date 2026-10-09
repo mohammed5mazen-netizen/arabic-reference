@@ -25,6 +25,23 @@ class JsonContentPackAdapterTest {
     }
 
     @Test
+    void readsNestedSensesAndTypedForms() {
+        var record = adapter.read("""
+                {"schemaVersion":1,"domain":"dictionary","records":[
+                  {"recordKey":"ar-2","sourceLocator":"urn:test:2","lemma":"كتاب","partOfSpeech":"NOUN",
+                   "senses":[{"definition":"معنى أول","domain":"GENERAL","displayOrder":1},
+                             {"definition":"معنى ثان","domain":"LANGUAGE","displayOrder":2}],
+                   "forms":[{"type":"PLURAL","original":"كتب","normalized":"كتب"},
+                            {"type":"FEMININE","original":"كتابة","normalized":"كتابة"}]}
+                ]}
+                """).getFirst();
+
+        assertThat(record.senses()).hasSize(2);
+        assertThat(record.senses().get(1).definition()).isEqualTo("معنى ثان");
+        assertThat(record.forms()).extracting("type").containsExactly("PLURAL", "FEMININE");
+    }
+
+    @Test
     void rejectsMalformedOrWrongSchemaPacks() {
         assertThatThrownBy(() -> adapter.read("{"))
                 .isInstanceOf(ContentPackFormatException.class)
