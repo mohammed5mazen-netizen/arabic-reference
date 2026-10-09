@@ -12,6 +12,8 @@ import org.springframework.data.repository.query.Param;
 
 public interface ReferenceSourceRepository extends JpaRepository<ReferenceSourceEntity, UUID> {
 
+    Optional<ReferenceSourceEntity> findBySlug(String slug);
+
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select source from ReferenceSourceEntity source where source.id = :id")
     Optional<ReferenceSourceEntity> lockById(@Param("id") UUID id);

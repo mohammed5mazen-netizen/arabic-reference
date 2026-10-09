@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "packId": "arabic-wordnet-v2-lexical-seed-500",
+  "version": "1.0.0",
+  "domain": "dictionary",
+  "sourceSlug": "arabic-wordnet-awn-v2",
+  "source": {
+    "title": "Arabic WordNet data (AWN v2)",
+    "version": "AWN v2; OMW commit 406bf83b3c507a3d1f26e88252d5d66893fd36bf",
+    "sourceUrl": "https://github.com/omwn/omw-data/blob/406bf83b3c507a3d1f26e88252d5d66893fd36bf/wns/arb/wn-data-arb.tab",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "licenseDecision": "APPROVED",
+    "commercialReuse": true,
+    "attributionRequired": true,
+    "shareAlikeRequired": true,
+    "attribution": "Abouenour Lahsen, Karim Bouzoubaa, Paolo Rosso (c) 2015, Mohammed V Rabat University, Morocco and Universitat Polit?cnica de Val?ncia, Spain; Musa Alkhalifa and Sabri Elkateb (c) 2007, UPC and the University of Manchester. Arabic WordNet data, CC BY-SA 3.0."
+  },
+  "selection": {
+    "method": "Deterministic SHA-256 ordering of unique, unambiguous source lemma+part-of-speech rows with a source-declared valid Arabic root or broken plural; includes ten source-verified sample records.",
+    "recordCount": 500,
+    "uniqueLemmas": 497,
+    "sourceDeclaredRoots": 493,
+    "uniqueRoots": 417,
+    "sourceDeclaredPlurals": 72,
+    "meanings": 0,
+    "examples": 0
+  },
+  "publication": {
+    "status": "DRAFT",
+    "published": 0,
+    "reviewRequired": 500
+  },
+  "contentPolicy": "No Arabic definitions, examples, morphology, or semantic facts are synthesized. Original source lemma and source-declared root/plural are retained; normalized lemma is computed by the existing project normalizer. Derived dataset and modifications remain CC BY-SA 3.0."
+}

@@ -1,6 +1,7 @@
 package com.mrsoft.arabicreference.dictionary.infrastructure.persistence;
 
 import com.mrsoft.arabicreference.linguistics.domain.editorial.PublicationStatus;
+import com.mrsoft.arabicreference.dictionary.domain.PartOfSpeech;
 import jakarta.persistence.LockModeType;
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +20,8 @@ public interface LexicalEntryRepository extends JpaRepository<LexicalEntryEntity
     Optional<LexicalEntryEntity> lockById(@Param("id") UUID id);
 
     Optional<LexicalEntryEntity> findBySlug(String slug);
+
+    Optional<LexicalEntryEntity> findByLemmaNormalizedAndPartOfSpeech(String lemmaNormalized, PartOfSpeech partOfSpeech);
 
     @Query("""
             select entry from LexicalEntryEntity entry

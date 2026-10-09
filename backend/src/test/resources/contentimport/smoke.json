@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "domain": "dictionary",
+  "records": [
+    {
+      "recordKey": "test-book-1",
+      "sourceLocator": "https://example.test/source/test-book-1",
+      "lemma": "كِتاب",
+      "vocalizedForm": "كِتَاب",
+      "partOfSpeech": "NOUN",
+      "root": "كتب",
+      "pluralForm": "كُتُب",
+      "definition": "A test-only cited meaning."
+    }
+  ]
+}
