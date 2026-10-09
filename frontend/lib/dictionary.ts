@@ -99,7 +99,7 @@ export function relationLabel(code: string): string {
 }
 
 export function wordTitle(lemma: string): string {
-  return `${lemma} - المعنى والجذر`;
+  return `${lemma} — المعنى والجذر`;
 }
 
 export function wordDescription(shortDefinition: string | null | undefined): string | undefined {

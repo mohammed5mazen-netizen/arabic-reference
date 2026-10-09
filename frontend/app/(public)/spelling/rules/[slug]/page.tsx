@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { canonicalSlug, publicJson } from "@/lib/dictionary";
 import { knowledgeCrumbs, poetryClass, spellingTopicPath } from "@/lib/knowledge";
-import { resolveSiteUrl } from "@/lib/site";
+import { publicMetadata } from "@/lib/metadata";
 
 export const dynamic = "force-dynamic";
 
@@ -27,13 +27,8 @@ const clauseLabel: Record<string, string> = { DEFINITION: "التعريف", COND
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const rule = await publicJson<Rule>(`/api/v1/public/spelling/rules/${encodeURIComponent(canonicalSlug(slug))}`);
-  const title = rule?.title ?? "قاعدة إملائية";
-  return {
-    title,
-    description: rule?.summary || rule?.coreRule || title,
-    alternates: { canonical: `${resolveSiteUrl()}/spelling/rules/${slug}` },
-    openGraph: { title: `${title} | المرجع العربي`, description: rule?.summary || title, url: `${resolveSiteUrl()}/spelling/rules/${slug}` },
-  };
+  if (!rule) return publicMetadata({ title: "قاعدة إملائية غير منشورة", description: "هذه القاعدة غير منشورة.", path: "/spelling", index: false });
+  return publicMetadata({ title: rule.title, description: rule.summary || rule.coreRule, path: `/spelling/rules/${rule.slug}` });
 }
 
 export default async function SpellingRulePage({ params }: { params: Promise<{ slug: string }> }) {

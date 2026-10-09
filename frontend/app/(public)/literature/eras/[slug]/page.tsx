@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { canonicalSlug, publicJson } from "@/lib/dictionary";
 import { knowledgeCrumbs } from "@/lib/knowledge";
-import { resolveSiteUrl } from "@/lib/site";
+import { publicMetadata } from "@/lib/metadata";
 
 export const dynamic = "force-dynamic";
 type Era = { name: string; slug: string; startDescription?: string | null; endDescription?: string | null; summary?: string | null; historicalContext?: string | null; sources: { title?: string }[] };
@@ -11,8 +11,8 @@ type Era = { name: string; slug: string; startDescription?: string | null; endDe
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const era = await publicJson<Era>(`/api/v1/public/literature/eras/${encodeURIComponent(canonicalSlug(slug))}`);
-  const title = era?.name ?? "حقبة أدبية";
-  return { title, description: era?.summary || title, alternates: { canonical: `${resolveSiteUrl()}/literature/eras/${slug}` }, openGraph: { title, description: era?.summary || title, url: `${resolveSiteUrl()}/literature/eras/${slug}` } };
+  if (!era) return publicMetadata({ title: "حقبة غير منشورة", description: "هذه الحقبة غير منشورة.", path: "/literature", index: false });
+  return publicMetadata({ title: era.name, description: era.summary || era.name, path: `/literature/eras/${era.slug}` });
 }
 
 export default async function EraPage({ params }: { params: Promise<{ slug: string }> }) {

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { resolveSiteUrl } from "./site.ts";
+import { publicMetadata } from "./metadata.ts";
 
 export type ToolStatus = "AVAILABLE" | "LIMITED";
 
@@ -157,13 +157,12 @@ export function toolByCode(code: string): ToolDefinition {
 }
 
 export function toolMetadata(tool: ToolDefinition, queried: boolean): Metadata {
-  const canonical = `${resolveSiteUrl()}${tool.route}`;
-  return {
+  return publicMetadata({
     title: tool.name,
     description: tool.description,
-    alternates: { canonical },
-    robots: queried ? { index: false, follow: true } : { index: true, follow: true },
-  };
+    path: tool.route,
+    index: !queried,
+  });
 }
 
 export type ProvenanceNote = { kind: string; label: string };

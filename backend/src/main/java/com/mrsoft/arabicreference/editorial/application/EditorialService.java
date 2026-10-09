@@ -238,7 +238,7 @@ public class EditorialService implements PublicationBarrier {
         UUID scanId = Ids.random();
         if ("PUBLISHED".equals(normalized)) {
             probes.add(new QualityProbe(ContentType.SEARCH_INDEX, SEARCH_FINDING_ID, "فهرس البحث", null, "PUBLISHED", false, false, true, missingSearchDocuments() == 0,
-                    0, 0, false, false, 0, 0, 0, false, 0, 0, 0, null, 0, 0, 0, 0, 0, 0));
+                    0, 0, false, false, 0, 0, 0, false, 0, 0, 0, null, 0, 0, 0, 0, 0, 0, false, false));
         }
         database.replaceFindings(scanId, authorization.requireAccess().userId(), time.now(), normalized, type, id, probes, findings);
         audit.record(authorization.requireAccess().userId(), AuditEventType.QUALITY_SCAN_RUN, "quality_scan", scanId.toString(),

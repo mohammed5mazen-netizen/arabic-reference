@@ -3,18 +3,19 @@ import Link from "next/link";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { publicJson } from "@/lib/dictionary";
 import { emptySpellingMessage, knowledgeCrumbs, spellingTopicPath } from "@/lib/knowledge";
-import { resolveSiteUrl } from "@/lib/site";
+import { publicMetadata } from "@/lib/metadata";
 
 export const dynamic = "force-dynamic";
 
 type LinkItem = { title: string; slug: string; summary?: string | null };
 
-export const metadata: Metadata = {
-  title: "الإملاء",
-  description: "قواعد الكتابة العربية: الهمزة، والألف اللينة، والتاء، موثّقة بمصادرها.",
-  alternates: { canonical: `${resolveSiteUrl()}/spelling` },
-  openGraph: { title: "الإملاء | المرجع العربي", description: "قواعد الكتابة العربية موثّقة بمصادرها.", url: `${resolveSiteUrl()}/spelling` },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return publicMetadata({
+    title: "الإملاء",
+    description: "قواعد الكتابة العربية: الهمزة، والألف اللينة، والتاء، موثّقة بمصادرها.",
+    path: "/spelling",
+  });
+}
 
 export default async function SpellingHomePage() {
   const topics = await publicJson<LinkItem[]>("/api/v1/public/spelling/topics");

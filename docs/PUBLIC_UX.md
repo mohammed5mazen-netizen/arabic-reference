@@ -12,7 +12,7 @@ The header groups existing public routes:
 
 Search stays in the header and on the homepage. The mobile menu is a native dialog with an explicit close control. Desktop groups use `details`.
 
-There is no public dictionary index. المعجم opens `/search`. المصادر stays unpublished until that section exists, so the footer does not link to it.
+There is no public dictionary index. المعجم opens `/search`. المصادر stays unpublished until that section exists, so the footer does not link to it. S12 does not add a public sources route for the sitemap. Canonicals, breadcrumbs, and the sitemap follow [PUBLIC_URL_POLICY.md](PUBLIC_URL_POLICY.md). The manual visual checklist stays open until S13.
 
 ## Homepage
 

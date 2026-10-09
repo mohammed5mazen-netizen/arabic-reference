@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { attributionLine, publicJson } from "@/lib/dictionary";
 import { grammarCrumbs, grammarSlug, grammarTitle, type GrammarCrumb } from "@/lib/grammar";
-import { resolveSiteUrl } from "@/lib/site";
+import { publicMetadata } from "@/lib/metadata";
 
 export const dynamic = "force-dynamic";
 
@@ -25,12 +25,12 @@ type Topic = {
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const topic = await load(params);
-  if (!topic) return { title: "موضوع غير منشور", robots: { index: false, follow: false } };
-  return {
+  if (!topic) return publicMetadata({ title: "موضوع غير منشور", description: "هذا الموضوع غير منشور.", path: "/grammar", index: false });
+  return publicMetadata({
     title: grammarTitle("topic", topic.title),
-    description: topic.summary ?? undefined,
-    alternates: { canonical: `${resolveSiteUrl()}/grammar/${topic.slug}` },
-  };
+    description: topic.summary ?? topic.title,
+    path: `/grammar/${topic.slug}`,
+  });
 }
 
 export default async function GrammarTopicPage({ params }: { params: Promise<{ slug: string }> }) {

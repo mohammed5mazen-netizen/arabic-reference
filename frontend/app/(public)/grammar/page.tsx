@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { grammarLabel, type GrammarCrumb } from "@/lib/grammar";
 import { publicJson } from "@/lib/dictionary";
+import { publicMetadata } from "@/lib/metadata";
 import { Breadcrumbs } from "@/components/breadcrumbs";
-import { resolveSiteUrl } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
@@ -16,11 +16,15 @@ type Index = {
 };
 type SearchPage = { items: { kind: string; title: string; slug: string; summary?: string | null }[]; total: number };
 
-export const metadata: Metadata = {
-  title: "النحو",
-  description: "مرجع منظّم في النحو العربي: موضوعات، قواعد، ومصطلحات موثّقة.",
-  alternates: { canonical: `${resolveSiteUrl()}/grammar` },
-};
+export async function generateMetadata({ searchParams }: { searchParams: Promise<{ q?: string }> }): Promise<Metadata> {
+  const { q } = await searchParams;
+  return publicMetadata({
+    title: "النحو",
+    description: "مرجع منظّم في النحو العربي: موضوعات، قواعد، ومصطلحات موثّقة.",
+    path: "/grammar",
+    index: !q?.trim(),
+  });
+}
 
 export default async function GrammarHomePage({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
   const { q } = await searchParams;

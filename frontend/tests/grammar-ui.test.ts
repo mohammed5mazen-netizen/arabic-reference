@@ -24,8 +24,8 @@ test("grammar pages stay Arabic and right to left", () => {
   assert.equal(grammarLabel("MARFUAT"), "المرفوعات");
   assert.equal(grammarLabel("CONDITION"), "الشرط");
   assert.equal(grammarLabel("COUNTEREXAMPLE"), "مثال مقابل");
-  assert.equal(grammarTitle("rule", "الفاعل"), "الفاعل - القاعدة والأمثلة");
-  assert.equal(grammarTitle("concept", "الإعراب"), "الإعراب - المصطلح النحوي");
+  assert.equal(grammarTitle("rule", "الفاعل"), "الفاعل — القاعدة والأمثلة");
+  assert.equal(grammarTitle("concept", "الإعراب"), "الإعراب — المصطلح النحوي");
 });
 
 test("grammar section is available and searchable", () => {

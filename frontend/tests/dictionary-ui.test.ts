@@ -22,7 +22,7 @@ test("homepage search builds a dictionary query", () => {
 });
 
 test("word metadata uses a published meaning and does not invent one", () => {
-  assert.equal(wordTitle("كتاب"), "كتاب - المعنى والجذر");
+  assert.equal(wordTitle("كتاب"), "كتاب — المعنى والجذر");
   assert.equal(wordDescription("صحيفة مجموعة"), "صحيفة مجموعة");
   assert.equal(wordDescription("  "), undefined);
   assert.equal(wordDescription(null), undefined);

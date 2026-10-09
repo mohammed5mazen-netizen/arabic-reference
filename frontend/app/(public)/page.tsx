@@ -1,14 +1,22 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { SearchPanel } from "@/components/search-panel";
 import { LinkButton } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { publicJson } from "@/lib/dictionary";
 import { durationLabel, type LearningPathCard } from "@/lib/learning";
+import { publicMetadata } from "@/lib/metadata";
 import { knowledgeAreas } from "@/lib/navigation";
-import { siteName, siteTagline } from "@/lib/site";
+import { jsonLd, websiteJsonLd } from "@/lib/seo";
+import { resolveSiteUrl, siteName, siteTagline } from "@/lib/site";
 import { featuredTools } from "@/lib/tools";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const page = publicMetadata({ title: siteName, description: siteTagline, path: "/" });
+  return { ...page, title: { absolute: siteName } };
+}
 
 const areaCopy: Record<string, string> = {
   "/search": "ابحث عن الكلمة، المعنى، والجذر في المعرفة المنشورة.",
@@ -107,6 +115,7 @@ export default async function HomePage() {
           <li>المساعد لا ينشر محتوى، ولا يصحّح الاختبارات.</li>
         </ul>
       </section>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(websiteJsonLd(resolveSiteUrl())) }} />
     </main>
   );
 }

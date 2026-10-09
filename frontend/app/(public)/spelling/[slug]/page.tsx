@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { canonicalSlug, publicJson } from "@/lib/dictionary";
 import { knowledgeCrumbs, spellingRulePath } from "@/lib/knowledge";
-import { resolveSiteUrl } from "@/lib/site";
+import { publicMetadata } from "@/lib/metadata";
 
 export const dynamic = "force-dynamic";
 
@@ -14,13 +14,8 @@ type Topic = { title: string; slug: string; summary?: string | null; rules: { ti
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const topic = await publicJson<Topic>(`/api/v1/public/spelling/topics/${encodeURIComponent(canonicalSlug(slug))}`);
-  const title = topic?.title ?? "موضوع إملائي";
-  return {
-    title,
-    description: topic?.summary || title,
-    alternates: { canonical: `${resolveSiteUrl()}/spelling/${slug}` },
-    openGraph: { title: `${title} | المرجع العربي`, description: topic?.summary || title, url: `${resolveSiteUrl()}/spelling/${slug}` },
-  };
+  if (!topic) return publicMetadata({ title: "موضوع إملائي غير منشور", description: "هذا الموضوع غير منشور.", path: "/spelling", index: false });
+  return publicMetadata({ title: topic.title, description: topic.summary || topic.title, path: `/spelling/${topic.slug}` });
 }
 
 export default async function SpellingTopicPage({ params }: { params: Promise<{ slug: string }> }) {

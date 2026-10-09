@@ -109,9 +109,9 @@ export function grammarLabel(code: string | null | undefined): string {
 }
 
 export function grammarTitle(kind: "topic" | "rule" | "concept", name: string): string {
-  if (kind === "rule") return `${name} - القاعدة والأمثلة`;
-  if (kind === "concept") return `${name} - المصطلح النحوي`;
-  return `${name} - النحو`;
+  if (kind === "rule") return `${name} — القاعدة والأمثلة`;
+  if (kind === "concept") return `${name} — المصطلح النحوي`;
+  return `${name} — النحو`;
 }
 
 export function grammarSearchPath(query: string): string {

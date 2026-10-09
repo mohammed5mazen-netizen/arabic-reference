@@ -48,6 +48,12 @@ public final class QualityRules {
         if (probe.type().searchable() && "PUBLISHED".equals(probe.status()) && !probe.indexed()) {
             findings.add(blocker("SEARCH_DOCUMENT_MISSING", "وثيقة البحث غير موجودة للمادة المنشورة.", "search"));
         }
+        if ("PUBLISHED".equals(probe.status()) && probe.invalidCanonical()) {
+            findings.add(finding(QualitySeverity.WARNING, "INVALID_CANONICAL_SLUG", "المسار العام غير صالح كعنوان متعارف.", "slug"));
+        }
+        if ("PUBLISHED".equals(probe.status()) && probe.unlinked()) {
+            findings.add(finding(QualitySeverity.INFO, "DISCOVERABILITY_ORPHAN", "مدخل منشور بلا جذر وبلا علاقة داخلية.", "relation"));
+        }
         switch (probe.type()) {
             case DICTIONARY_ENTRY -> dictionary(probe, findings);
             case GRAMMAR_RULE -> grammar(probe, findings);

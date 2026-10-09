@@ -2,16 +2,17 @@ import type { Metadata } from "next";
 import { connection } from "next/server";
 import { AssistantPanel } from "@/components/assistant-panel";
 import { assistantDescription, assistantName, assistantPromise } from "@/lib/assistant";
-import { resolveSiteUrl } from "@/lib/site";
+import { publicMetadata } from "@/lib/metadata";
 
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata({ searchParams }: { searchParams: Promise<{ q?: string }> }): Promise<Metadata> {
   await connection();
-  return {
+  const { q } = await searchParams;
+  return publicMetadata({
     title: assistantName,
     description: assistantDescription,
-    alternates: { canonical: `${resolveSiteUrl()}/assistant` },
-    robots: { index: true, follow: true },
-  };
+    path: "/assistant",
+    index: !q?.trim(),
+  });
 }
 
 export default async function AssistantPage({ searchParams }: { searchParams: Promise<{ q?: string }> }) {

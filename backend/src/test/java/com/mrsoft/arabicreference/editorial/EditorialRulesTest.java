@@ -46,6 +46,9 @@ class EditorialRulesTest {
 
         QualityProbe broken = probe(ContentType.ARTICLE, "NOPE", "", "ملخص طويل بما يكفي للفحص", false, false).withArticle(1, 1);
         assertThat(codes(broken)).contains("MISSING_TITLE", "INVALID_WORKFLOW_STATE");
+
+        QualityProbe discoverability = probe(ContentType.DICTIONARY_ENTRY, "PUBLISHED", "كتاب", null, false, false).withDiscoverability(true, true);
+        assertThat(codes(discoverability)).contains("INVALID_CANONICAL_SLUG", "DISCOVERABILITY_ORPHAN");
         assertThat(QualityRules.invalidStatus("NOPE")).isTrue();
 
         QualityProbe relation = probe(ContentType.DICTIONARY_ENTRY, "PUBLISHED", "علم", null, true, true).withRelations(1, 1, 1);
@@ -105,6 +108,8 @@ class EditorialRulesTest {
         private int invalidQuestions;
         private int unpublishedKnowledgeRefs;
         private int commonMistakesWithoutEvidence;
+        private boolean invalidCanonical;
+        private boolean unlinked;
         private boolean hasSnapshot = true;
         private boolean indexed = true;
 
@@ -160,6 +165,14 @@ class EditorialRulesTest {
             return build();
         }
 
+        private QualityProbe withDiscoverability(boolean invalid, boolean orphan) {
+            this.invalidCanonical = invalid;
+            this.unlinked = orphan;
+            this.indexed = true;
+            this.hasSnapshot = true;
+            return build();
+        }
+
         private QualityProbe withRelations(int unpublished, int orphans, int broken) {
             this.unpublishedRelations = unpublished;
             this.orphanRelations = orphans;
@@ -172,7 +185,7 @@ class EditorialRulesTest {
             return new QualityProbe(type, UUID.randomUUID(), title, summary, status, summaryRequired, citationRequired, hasSnapshot, indexed,
                     senseCount, sensesWithoutCitation, brokenRoot, unpublishedRoot, unpublishedRelations, orphanRelations, brokenCitations,
                     duplicateSlug, componentCount, quotedExamplesWithoutCitation, citationCount, rights, excerptCount, sectionCount,
-                    lessonsWithoutObjective, invalidQuestions, unpublishedKnowledgeRefs, commonMistakesWithoutEvidence);
+                    lessonsWithoutObjective, invalidQuestions, unpublishedKnowledgeRefs, commonMistakesWithoutEvidence, invalidCanonical, unlinked);
         }
     }
 }

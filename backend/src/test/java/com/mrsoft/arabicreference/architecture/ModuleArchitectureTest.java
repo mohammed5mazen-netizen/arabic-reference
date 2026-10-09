@@ -351,6 +351,47 @@ class ModuleArchitectureTest {
                     "com.mrsoft.arabicreference.learning.infrastructure..");
 
     @ArchTest
+    static final ArchRule seo_root_stays_a_marker = classes()
+            .that().resideInAPackage("com.mrsoft.arabicreference.seo")
+            .should().haveSimpleName("package-info");
+
+    @ArchTest
+    static final ArchRule seo_domain_stays_free_of_frameworks = noClasses()
+            .that().resideInAPackage("com.mrsoft.arabicreference.seo.domain..")
+            .should().dependOnClassesThat().resideInAnyPackage(
+                    "org.springframework..",
+                    "jakarta.persistence..",
+                    "com.mrsoft.arabicreference.dictionary..",
+                    "com.mrsoft.arabicreference.search.infrastructure..");
+
+    @ArchTest
+    static final ArchRule seo_does_not_depend_on_foreign_infrastructure = noClasses()
+            .that().resideInAPackage("com.mrsoft.arabicreference.seo..")
+            .should().dependOnClassesThat().resideInAnyPackage(
+                    "com.mrsoft.arabicreference.dictionary.infrastructure..",
+                    "com.mrsoft.arabicreference.grammar.infrastructure..",
+                    "com.mrsoft.arabicreference.search.infrastructure..",
+                    "com.mrsoft.arabicreference.learning.infrastructure..",
+                    "com.mrsoft.arabicreference.content.infrastructure..");
+
+    @ArchTest
+    static final ArchRule knowledge_modules_do_not_depend_on_seo = noClasses()
+            .that().resideInAnyPackage(
+                    "com.mrsoft.arabicreference.dictionary..",
+                    "com.mrsoft.arabicreference.morphology..",
+                    "com.mrsoft.arabicreference.grammar..",
+                    "com.mrsoft.arabicreference.search..",
+                    "com.mrsoft.arabicreference.spelling..",
+                    "com.mrsoft.arabicreference.rhetoric..",
+                    "com.mrsoft.arabicreference.literature..",
+                    "com.mrsoft.arabicreference.content..",
+                    "com.mrsoft.arabicreference.tools..",
+                    "com.mrsoft.arabicreference.ai..",
+                    "com.mrsoft.arabicreference.learning..",
+                    "com.mrsoft.arabicreference.editorial..")
+            .should().dependOnClassesThat().resideInAPackage("com.mrsoft.arabicreference.seo..");
+
+    @ArchTest
     static final ArchRule knowledge_modules_do_not_depend_on_learning = noClasses()
             .that().resideInAnyPackage(
                     "com.mrsoft.arabicreference.dictionary..",

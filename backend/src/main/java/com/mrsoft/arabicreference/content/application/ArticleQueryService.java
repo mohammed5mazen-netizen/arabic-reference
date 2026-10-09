@@ -7,10 +7,13 @@ import com.mrsoft.arabicreference.content.infrastructure.persistence.ArticleRepo
 import com.mrsoft.arabicreference.content.infrastructure.persistence.KnowledgeRelationRepository;
 import com.mrsoft.arabicreference.linguistics.domain.editorial.PublicationStatus;
 import com.mrsoft.arabicreference.shared.kernel.exception.ResourceNotFoundException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,10 +22,12 @@ public class ArticleQueryService {
 
     private final ArticleRepository articles;
     private final KnowledgeRelationRepository relations;
+    private final JdbcTemplate jdbc;
 
-    public ArticleQueryService(ArticleRepository articles, KnowledgeRelationRepository relations) {
+    public ArticleQueryService(ArticleRepository articles, KnowledgeRelationRepository relations, JdbcTemplate jdbc) {
         this.articles = articles;
         this.relations = relations;
+        this.jdbc = jdbc;
     }
 
     @Transactional(readOnly = true)
@@ -49,7 +54,9 @@ public class ArticleQueryService {
                 maps(snapshot.get("sections")),
                 strings(snapshot.get("tags")),
                 maps(snapshot.get("relations")),
-                maps(snapshot.get("sources")));
+                maps(snapshot.get("sources")),
+                publishedAt(article.getId()),
+                article.getUpdatedAt() == null ? "" : article.getUpdatedAt().toString());
     }
 
     @Transactional(readOnly = true)
@@ -67,6 +74,18 @@ public class ArticleQueryService {
             links.add(new PublicArticleLink(text(snapshot.get("title")), text(snapshot.get("slug")), text(snapshot.get("excerpt")), text(snapshot.get("articleType")), text(snapshot.get("coverLabel"))));
         }
         return links;
+    }
+
+    private String publishedAt(UUID articleId) {
+        try {
+            Timestamp published = jdbc.queryForObject(
+                    "select published_at from search_document where entity_type = 'ARTICLE' and entity_id = ?",
+                    Timestamp.class,
+                    articleId);
+            return published == null ? "" : published.toInstant().toString();
+        } catch (EmptyResultDataAccessException exception) {
+            return "";
+        }
     }
 
     private static String text(Object value) {

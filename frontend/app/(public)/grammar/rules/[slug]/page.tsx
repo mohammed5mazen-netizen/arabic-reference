@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { attributionLine, publicJson } from "@/lib/dictionary";
 import { exampleCards, grammarAttribution, grammarCrumbs, grammarLabel, grammarSlug, grammarTitle, missingAnnotationMessage, type GrammarExample } from "@/lib/grammar";
-import { resolveSiteUrl } from "@/lib/site";
+import { publicMetadata } from "@/lib/metadata";
 
 export const dynamic = "force-dynamic";
 
@@ -25,13 +25,18 @@ type Rule = {
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const rule = await load(params);
-  if (!rule) return { title: "قاعدة غير منشورة", robots: { index: false, follow: false } };
-  return { title: grammarTitle("rule", rule.title), description: rule.summary ?? rule.ruleText ?? undefined, alternates: { canonical: `${resolveSiteUrl()}/grammar/rules/${rule.slug}` } };
+  if (!rule) return publicMetadata({ title: "قاعدة غير منشورة", description: "هذه القاعدة غير منشورة.", path: "/grammar", index: false });
+  return publicMetadata({
+    title: grammarTitle("rule", rule.title),
+    description: rule.summary ?? rule.ruleText ?? rule.title,
+    path: `/grammar/rules/${rule.slug}`,
+  });
 }
 
 export default async function GrammarRulePage({ params }: { params: Promise<{ slug: string }> }) {
   const rule = await load(params);
   if (!rule) notFound();
+  const lessons = await publicJson<Array<{ title: string; pathSlug: string; lessonSlug: string }>>(`/api/v1/public/learning/references?kind=GRAMMAR_RULE&slug=${encodeURIComponent(rule.slug)}`);
   const crumbs = grammarCrumbs([
     ...(rule.topic ? [{ label: rule.topic.title, href: `/grammar/${rule.topic.slug}` }] : []),
     { label: rule.title },
@@ -102,6 +107,12 @@ export default async function GrammarRulePage({ params }: { params: Promise<{ sl
         <section className="mt-8">
           <h2 className="font-display text-3xl">موضوعات ذات صلة</h2>
           <ul className="mt-3 space-y-2">{rule.relations.map((relation) => <li key={relation.slug}><Link href={`/grammar/rules/${relation.slug}`}>{relation.typeLabel || grammarLabel(relation.type)}: {relation.title}</Link></li>)}</ul>
+        </section>
+      ) : null}
+      {lessons?.length ? (
+        <section className="mt-8">
+          <h2 className="font-display text-3xl">دروس مرتبطة</h2>
+          <ul className="mt-3 space-y-2">{lessons.map((lesson) => <li key={lesson.lessonSlug}><Link href={`/learn/${lesson.pathSlug}/${lesson.lessonSlug}`}>{lesson.title}</Link></li>)}</ul>
         </section>
       ) : null}
       {rule.sources.length > 0 ? (

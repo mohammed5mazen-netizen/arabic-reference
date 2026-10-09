@@ -3,11 +3,12 @@ import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { canonicalSlug, publicJson } from "@/lib/dictionary";
 import { excerptBlockedMessage, knowledgeCrumbs, poetryClass, rightsAllowExcerpt, rightsLabel, showsFullTextButton } from "@/lib/knowledge";
-import { resolveSiteUrl } from "@/lib/site";
+import { publicMetadata } from "@/lib/metadata";
 
 export const dynamic = "force-dynamic";
 type Work = {
   title: string;
+  slug: string;
   description?: string | null;
   rights?: string | null;
   rightsNote?: string | null;
@@ -24,8 +25,8 @@ type Work = {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const work = await publicJson<Work>(`/api/v1/public/literature/works/${encodeURIComponent(canonicalSlug(slug))}`);
-  const title = work?.title ?? "عمل أدبي";
-  return { title, description: work?.description || title, alternates: { canonical: `${resolveSiteUrl()}/literature/works/${slug}` }, openGraph: { title, description: work?.description || title, url: `${resolveSiteUrl()}/literature/works/${slug}` } };
+  if (!work) return publicMetadata({ title: "عمل غير منشور", description: "هذا العمل غير منشور.", path: "/literature", index: false });
+  return publicMetadata({ title: work.title, description: work.description || work.title, path: `/literature/works/${work.slug}` });
 }
 
 export default async function WorkPage({ params }: { params: Promise<{ slug: string }> }) {

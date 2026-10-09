@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -39,6 +40,11 @@ public class PublicLearningController {
     @GetMapping("/api/v1/public/learning/lessons/{slug}")
     public ApiResponse<Map<String, Object>> lesson(@PathVariable String slug) {
         return ApiResponses.ok(learning.publicLesson(slug), time);
+    }
+
+    @GetMapping("/api/v1/public/learning/references")
+    public ApiResponse<List<Map<String, Object>>> references(@RequestParam String kind, @RequestParam String slug) {
+        return ApiResponses.ok(learning.publishedReferences(kind, slug), time);
     }
 
     @PostMapping("/api/v1/public/learning/quizzes/{id}/attempts")

@@ -18,6 +18,7 @@ export const adminNav: AdminNavItem[] = [
   { href: "/admin/morphology", label: "الصرف", permission: "morphology.view" },
   { href: "/admin/grammar", label: "النحو", permission: "grammar.topic.view" },
   { href: "/admin/search", label: "البحث", permission: "search.admin.view" },
+  { href: "/admin/seo", label: "الفهرسة", permission: "seo.admin.view" },
   { href: "/admin/spelling", label: "الإملاء", anyOf: ["spelling.topic.view", "spelling.rule.review", "spelling.rule.publish"] },
   { href: "/admin/rhetoric", label: "البلاغة", anyOf: ["rhetoric.topic.view", "rhetoric.device.review", "rhetoric.device.publish"] },
   { href: "/admin/literature", label: "الأدب", anyOf: ["literature.view", "literature.review", "literature.publish"] },

@@ -1,16 +1,24 @@
 import type { MetadataRoute } from "next";
-import { resolveSiteUrl } from "@/lib/site";
+import { indexingEnabled, resolveSiteUrl } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
 export default function robots(): MetadataRoute.Robots {
+  const origin = resolveSiteUrl();
+  if (!indexingEnabled()) {
+    return {
+      rules: { userAgent: "*", disallow: "/" },
+      sitemap: `${origin}/sitemap.xml`,
+      host: origin,
+    };
+  }
   return {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: ["/admin", "/admin/"],
+      disallow: ["/admin/", "/api/", "/search"],
     },
-    sitemap: `${resolveSiteUrl()}/sitemap.xml`,
-    host: resolveSiteUrl(),
+    sitemap: `${origin}/sitemap.xml`,
+    host: origin,
   };
 }

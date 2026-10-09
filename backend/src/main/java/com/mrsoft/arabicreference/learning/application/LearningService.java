@@ -335,6 +335,31 @@ public class LearningService {
         return cached("lesson:" + slug, () -> findPublicLesson(slug));
     }
 
+    @Transactional(readOnly = true)
+    public List<Map<String, Object>> publishedReferences(String kind, String slug) {
+        if (kind == null || slug == null || kind.length() > 40 || slug.isBlank() || slug.length() > 180) {
+            return List.of();
+        }
+        return jdbc.query("""
+                select lesson.slug as lesson_slug, lesson.title as lesson_title, path.slug as path_slug, path.title as path_title
+                from learning_reference reference
+                join learning_lesson lesson on lesson.id = reference.lesson_id
+                join learning_unit unit on unit.id = lesson.unit_id
+                join learning_path path on path.id = unit.path_id
+                where reference.target_kind = ? and reference.target_slug = ?
+                  and path.status = 'PUBLISHED' and path.published_snapshot is not null
+                order by path.title, lesson.title
+                limit 8
+                """, (row, index) -> {
+            Map<String, Object> item = new LinkedHashMap<>();
+            item.put("title", row.getString("lesson_title"));
+            item.put("pathSlug", row.getString("path_slug"));
+            item.put("lessonSlug", row.getString("lesson_slug"));
+            item.put("pathTitle", row.getString("path_title"));
+            return item;
+        }, kind, slug);
+    }
+
     @Transactional
     public Map<String, Object> startAttempt(UUID quizId, String client) {
         limits.acquire(client);

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { breadcrumbJsonLd, type GrammarCrumb } from "@/lib/grammar";
+import { jsonLd } from "@/lib/seo";
 import { resolveSiteUrl } from "@/lib/site";
 
 export function Breadcrumbs({ items }: { items: GrammarCrumb[] }) {
@@ -19,7 +20,7 @@ export function Breadcrumbs({ items }: { items: GrammarCrumb[] }) {
           ))}
         </ol>
       </nav>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd(items, resolveSiteUrl())) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbJsonLd(items, resolveSiteUrl())) }} />
     </>
   );
 }

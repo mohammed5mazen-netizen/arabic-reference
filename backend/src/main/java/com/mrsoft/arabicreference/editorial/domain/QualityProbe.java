@@ -29,5 +29,7 @@ public record QualityProbe(
         int lessonsWithoutObjective,
         int invalidQuestions,
         int unpublishedKnowledgeRefs,
-        int commonMistakesWithoutEvidence) {
+        int commonMistakesWithoutEvidence,
+        boolean invalidCanonical,
+        boolean unlinked) {
 }

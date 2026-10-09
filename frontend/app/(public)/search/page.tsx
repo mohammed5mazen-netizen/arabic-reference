@@ -6,6 +6,7 @@ import { ProvenanceBadge } from "@/components/ui/badge";
 import { LinkButton } from "@/components/ui/button";
 import { formatNumber } from "@/lib/format";
 import { publicJson } from "@/lib/dictionary";
+import { publicMetadata } from "@/lib/metadata";
 import {
   dictionaryCard,
   emptySearchMessage,
@@ -21,10 +22,14 @@ import {
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "البحث",
-  robots: { index: false, follow: true },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return publicMetadata({
+    title: "البحث",
+    description: "بحث في المعرفة المنشورة. نتائج البحث لا تُفهرس.",
+    path: "/search",
+    index: false,
+  });
+}
 
 export default async function SearchPage({ searchParams }: { searchParams: Promise<{ q?: string; type?: string; page?: string }> }) {
   const params = await searchParams;

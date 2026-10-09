@@ -4,11 +4,12 @@ import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { canonicalSlug, publicJson } from "@/lib/dictionary";
 import { emptyWorksMessage, knowledgeCrumbs, literaryRoleLabel, literatureWorkPath } from "@/lib/knowledge";
-import { resolveSiteUrl } from "@/lib/site";
+import { publicMetadata } from "@/lib/metadata";
 
 export const dynamic = "force-dynamic";
 type Figure = {
   name: string;
+  slug: string;
   biography?: string | null;
   birthLabel?: string | null;
   deathLabel?: string | null;
@@ -23,8 +24,8 @@ type Figure = {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const figure = await publicJson<Figure>(`/api/v1/public/literature/figures/${encodeURIComponent(canonicalSlug(slug))}`);
-  const title = figure?.name ?? "أديب";
-  return { title, description: figure?.biography || title, alternates: { canonical: `${resolveSiteUrl()}/literature/figures/${slug}` }, openGraph: { title, description: figure?.biography || title, url: `${resolveSiteUrl()}/literature/figures/${slug}` } };
+  if (!figure) return publicMetadata({ title: "أديب غير منشور", description: "هذه الصفحة غير منشورة.", path: "/literature", index: false });
+  return publicMetadata({ title: figure.name, description: figure.biography || figure.name, path: `/literature/figures/${figure.slug}` });
 }
 
 export default async function FigurePage({ params }: { params: Promise<{ slug: string }> }) {

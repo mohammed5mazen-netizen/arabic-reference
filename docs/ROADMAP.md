@@ -1,6 +1,6 @@
 # Roadmap
 
-S11 is the current stage. Later stages are sequencing, not a commitment to build them now. Public reading stays anonymous. Staff authentication is for internal administration only. S12 is not started.
+S12 is the current stage. Later stages are sequencing, not a commitment to build them now. Public reading stays anonymous. Staff authentication is for internal administration only. S13 is not started.
 
 | Stage | Name | Intent |
 | --- | --- | --- |
@@ -15,8 +15,8 @@ S11 is the current stage. Later stages are sequencing, not a commitment to build
 | S8 | AI Linguistic Assistant + RAG | Done: retrieval-first assistant over published knowledge. No vector index and no automatic publishing |
 | S9 | Learning Platform | Done: anonymous paths, lessons, and quizzes over published knowledge. No learner accounts |
 | S10 | Public Experience & Design System | Done: one public experience, tokens, navigation, and shared states |
-| S11 | Editorial Operations, Quality & Governance | **Current:** operations room, queue, quality scans, and source governance. No new linguistic domain |
-| S12 | SEO / Public Knowledge Platform | Not started |
-| S13 | Production Hardening | Operational maturity |
+| S11 | Editorial Operations, Quality & Governance | Done: operations room, queue, quality scans, and source governance |
+| S12 | SEO / Public Knowledge Platform | **Current:** canonical URLs, sitemap, robots, and structured data for published knowledge |
+| S13 | Production Hardening | Not started |
 
 S1 does not introduce a visitor account, and it does not put authentication in front of public linguistic pages.

@@ -1,21 +1,32 @@
 import type { Metadata } from "next";
-import { resolveSiteUrl, siteName } from "./site.ts";
+import { absoluteUrl, canonicalPath, indexingEnabled, siteName } from "./site.ts";
+import { describe } from "./seo.ts";
 
-export function publicMetadata(input: { title: string; description: string; path: string; index?: boolean }): Metadata {
-  const canonical = `${resolveSiteUrl()}${input.path}`;
-  const index = input.index !== false;
+export function publicMetadata(input: {
+  title: string;
+  description?: string | null;
+  path: string;
+  index?: boolean;
+  type?: "website" | "article";
+}): Metadata {
+  const path = canonicalPath(input.path);
+  const canonical = absoluteUrl(path);
+  const index = input.index !== false && indexingEnabled();
+  const description = describe(input.description, input.title);
+  const verification = process.env.GOOGLE_SITE_VERIFICATION?.trim();
   return {
     title: input.title,
-    description: input.description,
+    description,
     alternates: { canonical },
     openGraph: {
       title: input.title,
-      description: input.description,
+      description,
       url: canonical,
       locale: "ar",
       siteName,
-      type: "website",
+      type: input.type ?? "website",
     },
-    robots: { index, follow: true },
+    robots: { index, follow: index },
+    ...(verification ? { verification: { google: verification } } : {}),
   };
 }

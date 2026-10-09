@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { connection } from "next/server";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { LearnStatus } from "@/components/learning-progress";
@@ -8,7 +8,7 @@ import { LessonQuiz } from "@/components/lesson-quiz";
 import { ProvenanceBadge } from "@/components/ui/badge";
 import { publicJson } from "@/lib/dictionary";
 import { assistantLessonQuestion, durationLabel, learningSlug, lessonHref, type LearningLesson, type LearningPath } from "@/lib/learning";
-import { resolveSiteUrl } from "@/lib/site";
+import { publicMetadata } from "@/lib/metadata";
 
 export const dynamic = "force-dynamic";
 
@@ -17,13 +17,10 @@ export async function generateMetadata({ params }: { params: Promise<{ pathSlug:
   const pathSlug = learningSlug((await params).pathSlug);
   const lessonSlug = learningSlug((await params).lessonSlug);
   const lesson = await publicJson<LearningLesson>(`/api/v1/public/learning/lessons/${encodeURIComponent(lessonSlug)}`);
-  const title = lesson?.title ?? "درس";
-  return {
-    title,
-    description: lesson?.summary ?? title,
-    alternates: { canonical: `${resolveSiteUrl()}/learn/${encodeURIComponent(pathSlug)}/${encodeURIComponent(lessonSlug)}` },
-    robots: { index: true, follow: true },
-  };
+  if (!lesson || lesson.pathSlug !== pathSlug) {
+    return publicMetadata({ title: "درس غير منشور", description: "هذا الدرس غير منشور.", path: "/learn", index: false });
+  }
+  return publicMetadata({ title: lesson.title, description: lesson.summary, path: `/learn/${lesson.pathSlug}/${lesson.slug}` });
 }
 
 export default async function LessonPage({ params }: { params: Promise<{ pathSlug: string; lessonSlug: string }> }) {
@@ -31,6 +28,7 @@ export default async function LessonPage({ params }: { params: Promise<{ pathSlu
   const lessonSlug = learningSlug((await params).lessonSlug);
   const lesson = await publicJson<LearningLesson>(`/api/v1/public/learning/lessons/${encodeURIComponent(lessonSlug)}`);
   if (!lesson || lesson.pathSlug !== pathSlug) notFound();
+  if (lesson.slug !== lessonSlug) permanentRedirect(`/learn/${lesson.pathSlug}/${lesson.slug}`);
   const path = await publicJson<LearningPath>(`/api/v1/public/learning/paths/${encodeURIComponent(pathSlug)}`);
   const lessonSlugs = path?.units.flatMap((unit) => unit.lessons.map((item) => item.slug)) ?? [lesson.slug];
 

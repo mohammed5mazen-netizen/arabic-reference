@@ -16,6 +16,8 @@ Dictionary checks an entry without a sense, a sense without a citation, and a br
 
 A published-scope scan also asks the existing search ports whether a published document is missing from the index. That surfaces `SEARCH_INDEX_INCONSISTENCY` and per-record `SEARCH_DOCUMENT_MISSING`. It does not retune ranking.
 
+S12 adds two discoverability findings. `INVALID_CANONICAL_SLUG` is a warning when a published slug is blank or contains whitespace, `%`, `?`, `#`, or `/`. `DISCOVERABILITY_ORPHAN` is informational when a published dictionary entry has no root and no relation. A description is still derived from the published summary. It is not a required manual SEO field.
+
 If the catalog grows past a single request, the next step is a database job and a worker in this process. There is no message broker in S11.
 
 An open blocker also stops domain publish through `PublicationChecks`. The domain's own publish rules still run first. Clearing the data and leaving the old finding open keeps publication blocked until a rescan marks it stale.

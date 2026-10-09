@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { connection } from "next/server";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { LearnStatus } from "@/components/learning-progress";
 import { publicJson } from "@/lib/dictionary";
 import { durationLabel, learningSlug, lessonHref, type LearningPath } from "@/lib/learning";
-import { resolveSiteUrl } from "@/lib/site";
+import { publicMetadata } from "@/lib/metadata";
 
 export const dynamic = "force-dynamic";
 
@@ -14,19 +14,15 @@ export async function generateMetadata({ params }: { params: Promise<{ pathSlug:
   await connection();
   const pathSlug = learningSlug((await params).pathSlug);
   const path = await publicJson<LearningPath>(`/api/v1/public/learning/paths/${encodeURIComponent(pathSlug)}`);
-  const title = path?.title ?? "مسار تعليمي";
-  return {
-    title,
-    description: path?.summary ?? title,
-    alternates: { canonical: `${resolveSiteUrl()}/learn/${encodeURIComponent(pathSlug)}` },
-    robots: { index: true, follow: true },
-  };
+  if (!path) return publicMetadata({ title: "مسار غير منشور", description: "هذا المسار غير منشور.", path: "/learn", index: false });
+  return publicMetadata({ title: path.title, description: path.summary, path: `/learn/${path.slug}` });
 }
 
 export default async function LearningPathPage({ params }: { params: Promise<{ pathSlug: string }> }) {
   const pathSlug = learningSlug((await params).pathSlug);
   const path = await publicJson<LearningPath>(`/api/v1/public/learning/paths/${encodeURIComponent(pathSlug)}`);
   if (!path) notFound();
+  if (path.slug !== pathSlug) permanentRedirect(`/learn/${path.slug}`);
   const lessonSlugs = path.units.flatMap((unit) => unit.lessons.map((lesson) => lesson.slug));
 
   return (

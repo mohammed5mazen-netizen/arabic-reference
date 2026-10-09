@@ -1,6 +1,6 @@
 # Modules
 
-The backend is one process with explicit package boundaries. S10 does not add a module: navigation, tokens, and shared states live in the frontend. A module may depend on `shared` and on its own domain. It must not reach into another module's infrastructure, and domain packages must not depend on API or infrastructure packages.
+The backend is one process with explicit package boundaries. A module may depend on `shared` and on its own domain. It must not reach into another module's infrastructure, and domain packages must not depend on API or infrastructure packages.
 
 ## shared
 
@@ -85,3 +85,7 @@ Paths, units, lessons, activities, and quizzes. The root `learning` package stay
 ## editorial
 
 Orchestration and read models for the operations room. The root `editorial` package stays a package marker. Domain rules do not use Spring or JPA. Infrastructure reads `editorial_record` and the quality tables through JDBC. It may call identity application services, `PublicationBarrier`, and the search domain ports. Knowledge modules do not depend on `editorial`, and editorial does not depend on their infrastructure. See [EDITORIAL_OPERATIONS.md](EDITORIAL_OPERATIONS.md).
+
+## seo
+
+Published URL discovery for the sitemap and the admin indexing status. The root `seo` package stays a package marker. Domain types do not use Spring. Infrastructure reads `search_document` and a few published counts through JDBC. It does not call knowledge repositories. Knowledge modules do not depend on `seo`. See [SEO_ARCHITECTURE.md](SEO_ARCHITECTURE.md).

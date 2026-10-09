@@ -22,7 +22,7 @@ Future public pages, not built in S0:
 
 `/`, `/search`, `/dictionary`, `/word/[slug]`, `/root/[root]`, `/grammar`, `/morphology`, `/spelling`, `/rhetoric`, `/literature`, `/articles`, `/sources`, `/tools`, `/learn`
 
-S0 implements `/` only. These paths are architectural examples so later routes stay crawlable and free of an authentication middleware.
+S0 implements `/` only. These paths are architectural examples so later routes stay crawlable and free of an authentication middleware. S12 adds canonical URLs, a dynamic sitemap, and robots rules for the routes that exist. `/sources` is still not a public page.
 
 API conventions:
 

@@ -52,7 +52,7 @@ test("GET / is public and renders the Arabic homepage", async () => {
   const nextBin = path.join(root, "node_modules", "next", "dist", "bin", "next");
   const child = spawn(process.execPath, [nextBin, "start", "-H", "127.0.0.1", "-p", String(port)], {
     cwd: root,
-    env: { ...process.env, NODE_ENV: "production" },
+    env: { ...process.env, NODE_ENV: "production", SITE_URL: "https://reference.example", SEO_INDEXING_ENABLED: "false" },
     stdio: ["ignore", "pipe", "pipe"],
   });
 

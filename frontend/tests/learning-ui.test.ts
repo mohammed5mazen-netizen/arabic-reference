@@ -38,7 +38,8 @@ test("learning pages keep answers off the server render and stay readable", () =
   const quiz = readFileSync(new URL("../components/lesson-quiz.tsx", import.meta.url), "utf8");
   const admin = readFileSync(new URL("../app/admin/(desk)/learning/page.tsx", import.meta.url), "utf8");
   const header = readFileSync(new URL("../lib/navigation.ts", import.meta.url), "utf8");
-  assert.match(home, /canonical/);
+  assert.match(home, /publicMetadata/);
+  assert.match(home, /path: "\/learn"/);
   assert.match(home, /index: true/);
   assert.match(path, /learningSlug/);
   assert.match(path, /difficultyLabel/);

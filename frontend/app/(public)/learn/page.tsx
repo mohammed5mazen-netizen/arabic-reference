@@ -5,18 +5,18 @@ import { Breadcrumbs } from "@/components/breadcrumbs";
 import { LearnStatus } from "@/components/learning-progress";
 import { publicJson } from "@/lib/dictionary";
 import { durationLabel, type LearningPathCard } from "@/lib/learning";
-import { resolveSiteUrl } from "@/lib/site";
+import { publicMetadata } from "@/lib/metadata";
 
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
   await connection();
-  return {
+  return publicMetadata({
     title: "التعلّم",
     description: "مسارات عربية قصيرة مبنية على معرفة المرجع المنشورة.",
-    alternates: { canonical: `${resolveSiteUrl()}/learn` },
-    robots: { index: true, follow: true },
-  };
+    path: "/learn",
+    index: true,
+  });
 }
 
 export default async function LearnPage() {

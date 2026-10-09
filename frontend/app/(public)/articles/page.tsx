@@ -3,17 +3,18 @@ import Link from "next/link";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { publicJson } from "@/lib/dictionary";
 import { articlePath, emptyArticlesMessage, knowledgeCrumbs } from "@/lib/knowledge";
-import { resolveSiteUrl } from "@/lib/site";
+import { publicMetadata } from "@/lib/metadata";
 
 export const dynamic = "force-dynamic";
 type Item = { title: string; slug: string; excerpt?: string | null };
 
-export const metadata: Metadata = {
-  title: "المقالات",
-  description: "مقالات معرفية منشورة عن العربية.",
-  alternates: { canonical: `${resolveSiteUrl()}/articles` },
-  openGraph: { title: "المقالات | المرجع العربي", description: "مقالات معرفية منشورة.", url: `${resolveSiteUrl()}/articles` },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return publicMetadata({
+    title: "المقالات",
+    description: "مقالات معرفية منشورة عن العربية.",
+    path: "/articles",
+  });
+}
 
 export default async function ArticlesPage() {
   const articles = await publicJson<Item[]>("/api/v1/public/articles");

@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { connection } from "next/server";
 import { Amiri, IBM_Plex_Sans_Arabic } from "next/font/google";
-import { resolveSiteUrl, siteName, siteTagline, textDirection } from "@/lib/site";
+import { publicMetadata } from "@/lib/metadata";
+import { indexingEnabled, resolveSiteUrl, siteName, textDirection } from "@/lib/site";
 import "./globals.css";
 
 const amiri = Amiri({
@@ -21,28 +22,15 @@ const plex = IBM_Plex_Sans_Arabic({
 
 export async function generateMetadata(): Promise<Metadata> {
   await connection();
-  const siteUrl = resolveSiteUrl();
+  const page = publicMetadata({ title: siteName, description: "بوابتك الشاملة إلى اللغة العربية", path: "/" });
   return {
-  metadataBase: new URL(siteUrl),
-  title: {
-    default: siteName,
-    template: `%s | ${siteName}`,
-  },
-  description: siteTagline,
-  alternates: {
-    canonical: "/",
-  },
-  openGraph: {
-    title: siteName,
-    description: siteTagline,
-    locale: "ar",
-    type: "website",
-    url: "/",
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
+    ...page,
+    metadataBase: new URL(resolveSiteUrl()),
+    title: {
+      default: siteName,
+      template: `%s | ${siteName}`,
+    },
+    robots: indexingEnabled() ? { index: true, follow: true } : { index: false, follow: false },
   };
 }
 
@@ -61,14 +49,6 @@ const themeScript = `
 
 export default async function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   await connection();
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: siteName,
-    description: siteTagline,
-    inLanguage: "ar",
-    url: resolveSiteUrl(),
-  };
 
   return (
     <html lang="ar" dir={textDirection} className={`${amiri.variable} ${plex.variable}`} suppressHydrationWarning>
@@ -80,7 +60,6 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
           تجاوز إلى المحتوى
         </a>
         {children}
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       </body>
     </html>
   );

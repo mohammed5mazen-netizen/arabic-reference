@@ -103,6 +103,9 @@ app:
   editorial:
     bulk-limit: ${EDITORIAL_BULK_LIMIT:100}
     scan-limit: ${EDITORIAL_SCAN_LIMIT:200}
+  seo:
+    site-url: ${SITE_URL:}
+    indexing-enabled: ${SEO_INDEXING_ENABLED:false}
 
 logging:
   level:

@@ -85,6 +85,8 @@ public final class ArticleViews {
             List<Map<String, Object>> sections,
             List<String> tags,
             List<Map<String, Object>> relations,
-            List<Map<String, Object>> sources) {
+            List<Map<String, Object>> sources,
+            String publishedAt,
+            String modifiedAt) {
     }
 }

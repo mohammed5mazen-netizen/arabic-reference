@@ -4,7 +4,9 @@ import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { attributionLine, publicJson } from "@/lib/dictionary";
 import { grammarCrumbs, grammarSlug, grammarTitle } from "@/lib/grammar";
-import { resolveSiteUrl } from "@/lib/site";
+import { publicMetadata } from "@/lib/metadata";
+import { definedTermJsonLd, describe, jsonLd } from "@/lib/seo";
+import { absoluteUrl } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
@@ -20,8 +22,12 @@ type Concept = {
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const concept = await load(params);
-  if (!concept) return { title: "مصطلح غير منشور", robots: { index: false, follow: false } };
-  return { title: grammarTitle("concept", concept.term), description: concept.shortDefinition ?? undefined, alternates: { canonical: `${resolveSiteUrl()}/grammar/concepts/${concept.slug}` } };
+  if (!concept) return publicMetadata({ title: "مصطلح غير منشور", description: "هذا المصطلح غير منشور.", path: "/grammar", index: false });
+  return publicMetadata({
+    title: grammarTitle("concept", concept.term),
+    description: concept.shortDefinition ?? concept.term,
+    path: `/grammar/concepts/${concept.slug}`,
+  });
 }
 
 export default async function GrammarConceptPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -30,6 +36,7 @@ export default async function GrammarConceptPage({ params }: { params: Promise<{
   return (
     <main id="content" className="relative z-10 mx-auto w-full max-w-3xl px-5 py-10">
       <Breadcrumbs items={grammarCrumbs([{ label: concept.term }])} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(definedTermJsonLd({ name: concept.term, description: describe(concept.shortDefinition, concept.term), url: absoluteUrl(`/grammar/concepts/${concept.slug}`) })) }} />
       <h1 className="font-display text-5xl">{concept.term}</h1>
       {concept.shortDefinition ? <p className="mt-4 text-lg leading-8">{concept.shortDefinition}</p> : null}
       {concept.detailedDefinition ? <p className="mt-4 leading-8">{concept.detailedDefinition}</p> : null}

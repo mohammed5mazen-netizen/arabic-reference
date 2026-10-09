@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { canonicalSlug, publicJson } from "@/lib/dictionary";
 import { knowledgeCrumbs, rhetoricDevicePath } from "@/lib/knowledge";
-import { resolveSiteUrl } from "@/lib/site";
+import { publicMetadata } from "@/lib/metadata";
 
 export const dynamic = "force-dynamic";
 type Topic = { title: string; slug: string; summary?: string | null; categoryLabel?: string; devices: { title: string; slug: string; summary?: string | null }[] };
@@ -12,8 +12,8 @@ type Topic = { title: string; slug: string; summary?: string | null; categoryLab
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const topic = await publicJson<Topic>(`/api/v1/public/rhetoric/topics/${encodeURIComponent(canonicalSlug(slug))}`);
-  const title = topic?.title ?? "موضوع بلاغي";
-  return { title, description: topic?.summary || title, alternates: { canonical: `${resolveSiteUrl()}/rhetoric/${slug}` }, openGraph: { title, description: topic?.summary || title, url: `${resolveSiteUrl()}/rhetoric/${slug}` } };
+  if (!topic) return publicMetadata({ title: "موضوع بلاغي غير منشور", description: "هذا الموضوع غير منشور.", path: "/rhetoric", index: false });
+  return publicMetadata({ title: topic.title, description: topic.summary || topic.title, path: `/rhetoric/${topic.slug}` });
 }
 
 export default async function RhetoricTopicPage({ params }: { params: Promise<{ slug: string }> }) {

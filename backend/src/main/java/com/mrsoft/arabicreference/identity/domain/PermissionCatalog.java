@@ -108,6 +108,7 @@ public final class PermissionCatalog {
     public static final String EDITORIAL_QUALITY_RUN = "editorial.quality.run";
     public static final String EDITORIAL_DIFF_VIEW = "editorial.diff.view";
     public static final String SOURCE_USAGE_VIEW = "source.usage.view";
+    public static final String SEO_ADMIN_VIEW = "seo.admin.view";
 
     private static final List<String> ALL = List.of(
             USER_VIEW,
@@ -212,7 +213,8 @@ public final class PermissionCatalog {
             EDITORIAL_QUALITY_VIEW,
             EDITORIAL_QUALITY_RUN,
             EDITORIAL_DIFF_VIEW,
-            SOURCE_USAGE_VIEW);
+            SOURCE_USAGE_VIEW,
+            SEO_ADMIN_VIEW);
 
     private PermissionCatalog() {
     }

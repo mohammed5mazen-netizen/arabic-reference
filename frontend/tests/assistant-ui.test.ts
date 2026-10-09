@@ -17,8 +17,9 @@ test("assistant copy stays reference-bound and disabled-safe", () => {
   assert.match(panel, /role="alert"/);
   assert.match(panel, /grid-cols-1/);
   assert.match(panel, /whitespace-pre-wrap/);
-  assert.match(page, /canonical/);
-  assert.match(page, /index: true/);
+  assert.match(page, /publicMetadata/);
+  assert.match(page, /path: "\/assistant"/);
+  assert.match(page, /index: !q/);
   const header = readFileSync(new URL("../lib/navigation.ts", import.meta.url), "utf8");
   const home = readFileSync(new URL("../app/(public)/page.tsx", import.meta.url), "utf8");
   assert.match(header, /href: "\/assistant"/);

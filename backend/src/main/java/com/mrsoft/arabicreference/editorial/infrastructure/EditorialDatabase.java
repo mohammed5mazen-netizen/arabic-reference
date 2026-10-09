@@ -390,7 +390,7 @@ public class EditorialDatabase {
     private List<QualityProbe> dictionary(String scope, UUID id, int limit) {
         Prepared filter = filter("e", scope, id, limit);
         return jdbc.query("""
-                select e.id, e.lemma_original as title, cast(null as varchar) as summary, e.status, (e.published_snapshot is not null) as has_snapshot,
+                select e.id, e.lemma_original as title, e.slug, cast(null as varchar) as summary, e.status, (e.published_snapshot is not null) as has_snapshot,
                        exists (select 1 from search_document d where d.entity_type = 'DICTIONARY_ENTRY' and d.entity_id = e.id) as indexed,
                        (select count(*) from lexical_sense s where s.lexical_entry_id = e.id) as senses,
                        (select count(*) from lexical_sense s where s.lexical_entry_id = e.id and not exists (select 1 from sense_citation c where c.sense_id = s.id)) as bare_senses,
@@ -399,17 +399,21 @@ public class EditorialDatabase {
                        (select count(*) from linguistic_relation rel join lexical_entry target on target.id = rel.target_entry_id where rel.source_entry_id = e.id and rel.status = 'PUBLISHED' and (target.status <> 'PUBLISHED' or target.published_snapshot is null)) as unpublished_relations,
                        (select count(*) from linguistic_relation rel where rel.source_entry_id = e.id and not exists (select 1 from lexical_entry target where target.id = rel.target_entry_id)) as orphans,
                        (select count(*) from sense_citation sc join lexical_sense s on s.id = sc.sense_id where s.lexical_entry_id = e.id and not exists (select 1 from source_citation c where c.id = sc.citation_id)) as broken_citations,
-                       exists (select 1 from lexical_entry other where other.slug = e.slug and other.id <> e.id) as duplicate_slug
+                       exists (select 1 from lexical_entry other where other.slug = e.slug and other.id <> e.id) as duplicate_slug,
+                       (e.root_id is null and not exists (select 1 from linguistic_relation rel where rel.source_entry_id = e.id or rel.target_entry_id = e.id)) as unlinked
                 from lexical_entry e
                 %s
-                """.formatted(filter.sql()), (rs, index) -> base(ContentType.DICTIONARY_ENTRY, rs, false, false)
-                .withDictionary(rs.getInt("senses"), rs.getInt("bare_senses"), rs.getBoolean("broken_root"), rs.getBoolean("unpublished_root"), rs.getInt("unpublished_relations"), rs.getInt("orphans"), rs.getInt("broken_citations"), rs.getBoolean("duplicate_slug")), filter.values());
+                """.formatted(filter.sql()), (rs, index) -> {
+                    MutableProbe probe = base(ContentType.DICTIONARY_ENTRY, rs, false, false);
+                    probe.unlinked(rs.getBoolean("unlinked"));
+                    return probe.withDictionary(rs.getInt("senses"), rs.getInt("bare_senses"), rs.getBoolean("broken_root"), rs.getBoolean("unpublished_root"), rs.getInt("unpublished_relations"), rs.getInt("orphans"), rs.getInt("broken_citations"), rs.getBoolean("duplicate_slug"));
+                }, filter.values());
     }
 
     private List<QualityProbe> grammar(String scope, UUID id, int limit) {
         Prepared filter = filter("r", scope, id, limit);
         return jdbc.query("""
-                select r.id, r.title_original as title, r.summary, r.status, (r.published_snapshot is not null) as has_snapshot,
+                select r.id, r.title_original as title, r.slug, r.summary, r.status, (r.published_snapshot is not null) as has_snapshot,
                        exists (select 1 from search_document d where d.entity_type = 'GRAMMAR_RULE' and d.entity_id = r.id) as indexed,
                        (select count(*) from grammar_rule_component c where c.rule_id = r.id) as components,
                        (select count(*) from grammar_example ex where ex.rule_id = r.id and ex.example_type in ('QUOTED', 'QURANIC', 'POETRY', 'PROSE') and ex.citation_id is null) as bare_quotes,
@@ -424,7 +428,7 @@ public class EditorialDatabase {
     private List<QualityProbe> spelling(String scope, UUID id, int limit) {
         Prepared filter = filter("r", scope, id, limit);
         return jdbc.query("""
-                select r.id, r.title_original as title, r.summary, r.status, (r.published_snapshot is not null) as has_snapshot,
+                select r.id, r.title_original as title, r.slug, r.summary, r.status, (r.published_snapshot is not null) as has_snapshot,
                        exists (select 1 from search_document d where d.entity_type = 'SPELLING_RULE' and d.entity_id = r.id) as indexed,
                        (select count(*) from spelling_rule_citation c where c.owner_id = r.id) as citations,
                        (select count(*) from spelling_example ex where ex.rule_id = r.id and ex.kind = 'COMMON_MISTAKE' and ex.citation_id is null) as bare_mistakes,
@@ -438,7 +442,7 @@ public class EditorialDatabase {
     private List<QualityProbe> literature(String scope, UUID id, int limit) {
         Prepared filter = filter("w", scope, id, limit);
         return jdbc.query("""
-                select w.id, w.title_original as title, w.description as summary, w.status, w.rights_status,
+                select w.id, w.title_original as title, w.slug, w.description as summary, w.status, w.rights_status,
                        (w.published_snapshot is not null) as has_snapshot,
                        exists (select 1 from search_document d where d.entity_type = 'LITERARY_WORK' and d.entity_id = w.id) as indexed,
                        (select count(*) from literary_excerpt x where x.work_id = w.id) as excerpts,
@@ -452,7 +456,7 @@ public class EditorialDatabase {
     private List<QualityProbe> articles(String scope, UUID id, int limit) {
         Prepared filter = filter("a", scope, id, limit);
         return jdbc.query("""
-                select a.id, a.title_original as title, a.excerpt as summary, a.status, (a.published_snapshot is not null) as has_snapshot,
+                select a.id, a.title_original as title, a.slug, a.excerpt as summary, a.status, (a.published_snapshot is not null) as has_snapshot,
                        exists (select 1 from search_document d where d.entity_type = 'ARTICLE' and d.entity_id = a.id) as indexed,
                        (select count(*) from article_section s where s.article_id = a.id) as sections,
                        (select count(*) from article_citation c where c.article_id = a.id) as citations,
@@ -466,7 +470,7 @@ public class EditorialDatabase {
     private List<QualityProbe> learning(String scope, UUID id, int limit) {
         Prepared filter = filter("p", scope, id, limit);
         return jdbc.query("""
-                select p.id, p.title, p.summary, p.status, (p.published_snapshot is not null) as has_snapshot,
+                select p.id, p.title, p.slug, p.summary, p.status, (p.published_snapshot is not null) as has_snapshot,
                        exists (select 1 from search_document d where d.entity_type = 'LEARNING_PATH' and d.entity_id = p.id) as indexed,
                        (select count(*) from learning_lesson l join learning_unit u on u.id = l.unit_id
                          where u.path_id = p.id and not exists (select 1 from learning_objective o where o.lesson_id = l.id)) as bare_lessons,
@@ -502,7 +506,7 @@ public class EditorialDatabase {
         args.add(limit);
         String extra = where + " order by r.updated_at desc limit ? ";
         return jdbc.query("""
-                select r.id, r.title, r.summary, r.status, r.has_snapshot,
+                select r.id, r.title, r.slug, r.summary, r.status, r.has_snapshot,
                        exists (select 1 from search_document d where d.entity_type = r.content_type and d.entity_id = r.id) as indexed,
                        exists (select 1 from editorial_record other where other.content_type = r.content_type and other.slug = r.slug and other.id <> r.id) as duplicate_slug
                 from editorial_record r
@@ -534,8 +538,14 @@ public class EditorialDatabase {
     }
 
     private MutableProbe base(ContentType type, ResultSet rs, boolean summaryRequired, boolean citationRequired) throws SQLException {
-        return new MutableProbe(type, rs.getObject("id", UUID.class), rs.getString("title"), text(rs, "summary"), rs.getString("status"),
+        MutableProbe probe = new MutableProbe(type, rs.getObject("id", UUID.class), rs.getString("title"), text(rs, "summary"), rs.getString("status"),
                 summaryRequired, citationRequired, flag(rs, "has_snapshot"), rs.getBoolean("indexed"));
+        probe.invalidCanonical(invalidSlug(text(rs, "slug")));
+        return probe;
+    }
+
+    static boolean invalidSlug(String slug) {
+        return slug == null || slug.isBlank() || slug.chars().anyMatch(character -> character <= ' ' || character == '%' || character == '?' || character == '#' || character == '/');
     }
 
     private static String text(ResultSet rs, String column) throws SQLException {
@@ -713,6 +723,8 @@ public class EditorialDatabase {
         private int invalidQuestions;
         private int unpublishedKnowledgeRefs;
         private int commonMistakesWithoutEvidence;
+        private boolean invalidCanonical;
+        private boolean unlinked;
 
         private MutableProbe(ContentType type, UUID id, String title, String summary, String status, boolean summaryRequired, boolean citationRequired, boolean hasSnapshot, boolean indexed) {
             this.type = type;
@@ -779,11 +791,19 @@ public class EditorialDatabase {
             return build();
         }
 
+        private void unlinked(boolean value) {
+            this.unlinked = value;
+        }
+
+        private void invalidCanonical(boolean value) {
+            this.invalidCanonical = value;
+        }
+
         private QualityProbe build() {
             return new QualityProbe(type, id, title, summary, status, summaryRequired, citationRequired, hasSnapshot, indexed,
                     senseCount, sensesWithoutCitation, brokenRoot, unpublishedRoot, unpublishedRelations, orphanRelations, brokenCitations,
                     duplicateSlug, componentCount, quotedExamplesWithoutCitation, citationCount, rights, excerptCount, sectionCount,
-                    lessonsWithoutObjective, invalidQuestions, unpublishedKnowledgeRefs, commonMistakesWithoutEvidence);
+                    lessonsWithoutObjective, invalidQuestions, unpublishedKnowledgeRefs, commonMistakesWithoutEvidence, invalidCanonical, unlinked);
         }
     }
 }
