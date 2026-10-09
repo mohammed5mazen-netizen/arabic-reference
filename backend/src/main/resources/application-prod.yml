@@ -12,7 +12,7 @@ server:
 
 app:
   admin:
-    jwt-secret: ${ADMIN_JWT_SECRET}
+    jwt-secret: ${ADMIN_JWT_SECRET:}
 
 logging:
   level:

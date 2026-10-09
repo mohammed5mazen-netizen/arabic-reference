@@ -41,7 +41,8 @@ export function indexableOrigin(origin: string): boolean {
 export function resolveSiteUrl(): string {
   const preferred = process.env.SITE_URL?.trim();
   const fallback = process.env.NEXT_PUBLIC_SITE_URL?.trim();
-  const configured = preferred || fallback || "";
+  const vercelProductionUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL?.trim();
+  const configured = preferred || fallback || (vercelProductionUrl ? `https://${vercelProductionUrl}` : "");
   if (configured) {
     const origin = normalizeSiteUrl(configured);
     if (indexingEnabled() && !indexableOrigin(origin)) {

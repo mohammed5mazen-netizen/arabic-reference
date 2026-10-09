@@ -120,13 +120,16 @@ export function apiBase(): string {
   return process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8080";
 }
 
+function isApiResponse<T>(value: unknown): value is { data?: T } {
+  return typeof value === "object" && value !== null && "data" in value;
+}
+
 export async function publicJson<T>(path: string): Promise<T | null> {
-  try {
-    const response = await fetch(`${apiBase()}${path}`, { cache: "no-store" });
-    if (response.status === 404 || !response.ok) return null;
-    const body = (await response.json()) as { data?: T };
-    return body.data ?? null;
-  } catch {
-    return null;
-  }
+  const response = await fetch(`${apiBase()}${path}`, { cache: "no-store" });
+  if (response.status === 404) return null;
+  if (!response.ok) throw new Error(`Public API request failed (${response.status}) for ${path}`);
+
+  const body: unknown = await response.json();
+  if (!isApiResponse<T>(body)) throw new TypeError(`Public API response is missing its data field for ${path}`);
+  return body.data ?? null;
 }

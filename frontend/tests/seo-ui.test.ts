@@ -39,8 +39,8 @@ test("site origin rejects a query, a fragment, and a path", () => {
   assert.equal(indexableOrigin("https://localhost"), false);
 });
 
-test("production does not fall back to localhost", () => {
-  withEnv({ NODE_ENV: "production", SITE_URL: undefined, NEXT_PUBLIC_SITE_URL: undefined, SEO_INDEXING_ENABLED: undefined, NEXT_PHASE: undefined }, () => {
+test("production resolves its configured or Vercel canonical origin without localhost fallback", () => {
+  withEnv({ NODE_ENV: "production", SITE_URL: undefined, NEXT_PUBLIC_SITE_URL: undefined, VERCEL_PROJECT_PRODUCTION_URL: undefined, SEO_INDEXING_ENABLED: undefined, NEXT_PHASE: undefined }, () => {
     assert.throws(() => resolveSiteUrl(), /SITE_URL is required/);
   });
   withEnv({ NODE_ENV: "production", SITE_URL: "http://localhost:3000", SEO_INDEXING_ENABLED: "true", NEXT_PHASE: undefined }, () => {
@@ -49,6 +49,9 @@ test("production does not fall back to localhost", () => {
   withEnv({ NODE_ENV: "production", SITE_URL: "https://reference.example/", SEO_INDEXING_ENABLED: "false" }, () => {
     assert.equal(resolveSiteUrl(), "https://reference.example");
     assert.equal(indexingEnabled(), false);
+  });
+  withEnv({ NODE_ENV: "production", SITE_URL: undefined, NEXT_PUBLIC_SITE_URL: undefined, VERCEL_PROJECT_PRODUCTION_URL: "arabic-reference.vercel.app", SEO_INDEXING_ENABLED: "false", NEXT_PHASE: undefined }, () => {
+    assert.equal(resolveSiteUrl(), "https://arabic-reference.vercel.app");
   });
 });
 

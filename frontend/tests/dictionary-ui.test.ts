@@ -5,6 +5,7 @@ import {
   canonicalSlug,
   emptyLookupMessage,
   licenseNeedsWarning,
+  publicJson,
   searchPath,
   wordDescription,
   wordTitle,
@@ -39,6 +40,28 @@ test("restricted and unknown licenses stay visibly blocked", () => {
   assert.equal(licenseNeedsWarning("RESTRICTED"), true);
   assert.equal(licenseNeedsWarning("UNKNOWN"), true);
   assert.equal(licenseNeedsWarning("CC_BY"), false);
+});
+
+test("public API distinguishes empty data, missing resources, and failed responses", async () => {
+  const originalFetch = globalThis.fetch;
+  try {
+    globalThis.fetch = async () => new Response(JSON.stringify({ data: [] }), { status: 200 });
+    assert.deepEqual(await publicJson<unknown[]>("/api/v1/public/rhetoric/topics"), []);
+
+    globalThis.fetch = async () => new Response(null, { status: 404 });
+    assert.equal(await publicJson<unknown[]>("/api/v1/public/rhetoric/topics"), null);
+
+    globalThis.fetch = async () => new Response("unavailable", { status: 500 });
+    await assert.rejects(publicJson("/api/v1/public/rhetoric/topics"), /500/);
+
+    globalThis.fetch = async () => new Response(JSON.stringify({ items: [] }), { status: 200 });
+    await assert.rejects(publicJson("/api/v1/public/rhetoric/topics"), /missing its data field/);
+
+    globalThis.fetch = async () => { throw new TypeError("network unavailable"); };
+    await assert.rejects(publicJson("/api/v1/public/rhetoric/topics"), /network unavailable/);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
 });
 
 test("dictionary navigation follows editorial permissions", () => {

@@ -37,7 +37,7 @@ class AdminJwtSecretBindingTest {
                         "DB_NAME=arabic_reference")
                 .run(context -> assertThat(context.getEnvironment().getProperty("app.admin.jwt-secret"))
                         .as("prod must not keep the local JWT default")
-                        .isEqualTo("unset-admin-jwt-secret"));
+                        .isEmpty());
     }
 
     @Test

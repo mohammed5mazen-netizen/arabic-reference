@@ -8,7 +8,7 @@ export default function PublicError({ reset }: { error: Error; reset: () => void
     <main id="content" className="mx-auto w-full max-w-3xl px-5 py-16">
       <ErrorState
         title="تعذر فتح الصفحة"
-        description="الاتصال لم يكتمل. أعد المحاولة. لا نعرض تفاصيل تقنية."
+        description="حدث خطأ أثناء عرض الصفحة. أعد المحاولة."
         action={<Button onClick={reset}>إعادة المحاولة</Button>}
       />
     </main>
