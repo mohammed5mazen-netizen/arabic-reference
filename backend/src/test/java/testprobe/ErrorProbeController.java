@@ -8,6 +8,7 @@ import com.mrsoft.arabicreference.shared.kernel.exception.ValidationException;
 import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -27,6 +28,10 @@ public class ErrorProbeController {
     @GetMapping("/validation")
     void validation() {
         throw new ValidationException("Validation failed.", List.of(new FieldErrorDetail("q", "must not be blank")));
+    }
+
+    @GetMapping("/required-query")
+    void requiredQuery(@RequestParam String q) {
     }
 
     @GetMapping("/forbidden")

@@ -75,6 +75,16 @@ class GlobalExceptionHandlerTest {
     }
 
     @Test
+    void missingRequiredQueryParameterReturnsBadRequest() throws Exception {
+        mockMvc.perform(get("/api/v1/public/__probe/required-query"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("VALIDATION_FAILED"))
+                .andExpect(jsonPath("$.message").value("معامل البحث مطلوب."))
+                .andExpect(jsonPath("$.fieldErrors[0].field").value("q"))
+                .andExpect(jsonPath("$.fieldErrors[0].message").value("مطلوب"));
+    }
+
+    @Test
     void forbiddenUsesStableCode() throws Exception {
         mockMvc.perform(get("/api/v1/public/__probe/forbidden"))
                 .andExpect(status().isForbidden())

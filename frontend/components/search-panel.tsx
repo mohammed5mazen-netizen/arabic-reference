@@ -3,8 +3,22 @@
 import { useEffect, useId, useState, type FormEvent, type KeyboardEvent } from "react";
 import { useRouter } from "next/navigation";
 import { searchPath } from "@/lib/dictionary";
-import { searchDebounceMs, suggestionIndex, suggestionUrl, type SearchSuggestion } from "@/lib/search";
+import { logSearchFailure, searchDebounceMs, suggestionIndex, suggestionUrl, type SearchSuggestion } from "@/lib/search";
 import { searchPlaceholder } from "@/lib/site";
+
+function suggestionsFrom(value: unknown): SearchSuggestion[] {
+  if (typeof value !== "object" || value === null || !("data" in value) || !Array.isArray(value.data)) return [];
+  return value.data.filter((item): item is SearchSuggestion =>
+    typeof item === "object"
+    && item !== null
+    && "kind" in item
+    && typeof item.kind === "string"
+    && "title" in item
+    && typeof item.title === "string"
+    && "url" in item
+    && typeof item.url === "string",
+  );
+}
 
 export function SearchPanel({ initialQuery = "", variant = "page" }: { initialQuery?: string; variant?: "page" | "header" }) {
   const inputId = useId();
@@ -28,15 +42,24 @@ export function SearchPanel({ initialQuery = "", variant = "page" }: { initialQu
         return;
       }
       fetch(url, { signal: controller.signal })
-        .then((response) => (response.ok ? response.json() : { data: [] }))
-        .then((body: { data?: SearchSuggestion[] }) => {
+        .then((response) => {
+          if (!response.ok) {
+            logSearchFailure(response.status, null, "/api/v1/public/search/suggestions");
+            return { data: [] };
+          }
+          return response.json();
+        })
+        .then((body: unknown) => {
           if (!controller.signal.aborted) {
-            setSuggestions((body.data ?? []).slice(0, 8));
+            setSuggestions(suggestionsFrom(body).slice(0, 8));
             setActive(-1);
           }
         })
         .catch(() => {
-          if (!controller.signal.aborted) setSuggestions([]);
+          if (!controller.signal.aborted) {
+            logSearchFailure(null, null, "/api/v1/public/search/suggestions");
+            setSuggestions([]);
+          }
         });
     }, searchDebounceMs);
     return () => {

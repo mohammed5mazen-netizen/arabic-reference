@@ -24,7 +24,7 @@ public final class SearchViews {
             Map<String, String> metadata) {
     }
 
-    public record FacetView(long dictionary, long roots, long grammar, long content) {
+    public record FacetView(long dictionary, long roots, long grammar, long content, long learning) {
     }
 
     public record SearchPageView(String query, List<SearchHitView> items, int page, int size, long total, FacetView facets) {

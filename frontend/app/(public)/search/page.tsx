@@ -5,12 +5,13 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { ProvenanceBadge } from "@/components/ui/badge";
 import { LinkButton } from "@/components/ui/button";
 import { formatNumber } from "@/lib/format";
-import { apiBase } from "@/lib/dictionary";
 import { publicMetadata } from "@/lib/metadata";
 import {
   dictionaryCard,
   emptySearchMessage,
+  emptySearchPrompt,
   searchPresentation,
+  searchPublic,
   unavailableSearchMessage,
   highlightSegments,
   matchReasonLabel,
@@ -42,37 +43,32 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
   let results: SearchPage | null = null;
   if (query) {
     try {
-      const response = await fetch(
-        `${apiBase()}/api/v1/public/search?q=${encodeURIComponent(query)}&type=${encodeURIComponent(type)}&page=${page}&size=20`,
-        { cache: "no-store" },
-      );
-      if (!response.ok) {
-        failed = true;
-      } else {
-        const body = (await response.json()) as { data?: SearchPage };
-        results = body.data ?? null;
-        if (!results) failed = true;
-      }
+      results = await searchPublic(query, { type, page, size: 20 });
     } catch {
       failed = true;
     }
   }
   const presentation = query ? searchPresentation(results, failed) : null;
   const facets = results?.facets;
+  const allCount = facets
+    ? facets.learning === undefined
+      ? (type === "all" ? results?.total : undefined)
+      : facets.dictionary + facets.roots + facets.grammar + facets.content + facets.learning
+    : undefined;
 
   return (
     <main id="content" className="relative z-10 mx-auto w-full max-w-3xl px-5 py-10">
       <h1 className="font-display text-4xl sm:text-5xl">{query ? `نتائج البحث عن «${query}»` : "البحث"}</h1>
       <SearchPanel initialQuery={query} />
-      {query ? (
+      {!query ? <p className="mt-6 text-muted">{emptySearchPrompt}</p> : (
         <section className="mt-8 space-y-4" aria-live="polite">
           <nav aria-label="تصفية النتائج" className={`flex gap-2 overflow-x-auto pb-1 ${searchFilterLayout}`}>
-            <Filter href={searchHref(query, "all")} current={type === "all"} label={`الكل${facets ? ` (${formatNumber(facets.dictionary + facets.roots + facets.grammar + (facets.content ?? 0))})` : ""}`} />
+            <Filter href={searchHref(query, "all")} current={type === "all"} label={`الكل${allCount === undefined ? "" : ` (${formatNumber(allCount)})`}`} />
             <Filter href={searchHref(query, "dictionary")} current={type === "dictionary"} label={`المعجم${facets ? ` (${formatNumber(facets.dictionary)})` : ""}`} />
             <Filter href={searchHref(query, "root")} current={type === "root"} label={`الجذور${facets ? ` (${formatNumber(facets.roots)})` : ""}`} />
             <Filter href={searchHref(query, "grammar")} current={type === "grammar"} label={`النحو${facets ? ` (${formatNumber(facets.grammar)})` : ""}`} />
-            <Filter href={searchHref(query, "content")} current={type === "content"} label={`المحتوى${facets ? ` (${formatNumber(facets.content ?? 0)})` : ""}`} />
-            <Filter href={searchHref(query, "learning")} current={type === "learning"} label="التعلّم" />
+            <Filter href={searchHref(query, "content")} current={type === "content"} label={`المحتوى${facets ? ` (${formatNumber(facets.content)})` : ""}`} />
+            <Filter href={searchHref(query, "learning")} current={type === "learning"} label={`التعلّم${facets?.learning === undefined ? "" : ` (${formatNumber(facets.learning)})`}`} />
           </nav>
           {presentation === "unavailable" ? (
             <EmptyState
@@ -102,7 +98,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
             </nav>
           ) : null}
         </section>
-      ) : null}
+      )}
     </main>
   );
 }
@@ -128,9 +124,9 @@ function ResultCard({ hit }: { hit: SearchHit }) {
       </Link>
       {hit.type === "DICTIONARY_ENTRY" ? (
         <p className="mt-2 text-sm text-muted">{[card.vocalized, card.speech, card.root].filter(Boolean).join(" · ")}</p>
-      ) : null}
+      ) : hit.subtitle ? <p className="mt-2 text-sm text-muted">{hit.subtitle}</p> : null}
       {hit.type === "ROOT" && hit.metadata?.relatedCount ? <p className="mt-2 text-sm text-muted">{hit.metadata.relatedCount} مدخلًا منشورًا</p> : null}
-      {hit.type === "ROOT" && hit.subtitle ? <p className="mt-2 leading-8">{hit.subtitle}</p> : null}
+      {hit.metadata?.category ? <p className="mt-2 text-sm text-muted">التصنيف: {hit.metadata.category}</p> : null}
       {hit.snippet ? <p className="mt-3 leading-8"><Highlighted text={hit.snippet} ranges={snippetRanges} /></p> : null}
       {hit.matchReason === "FUZZY" ? <p className="mt-3"><ProvenanceBadge kind="near" /></p> : null}
       {reason && hit.matchReason !== "FUZZY" ? <p className="mt-3 text-sm text-muted">{reason}</p> : null}
