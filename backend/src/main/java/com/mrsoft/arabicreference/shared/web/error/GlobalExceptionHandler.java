@@ -149,10 +149,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     ResponseEntity<ApiErrorResponse> handleMissingRequestParameter(MissingServletRequestParameterException exception) {
+        String message = "q".equals(exception.getParameterName()) ? "معامل البحث مطلوب." : "معامل الطلب مطلوب.";
         return respond(
                 HttpStatus.BAD_REQUEST,
                 ErrorCode.VALIDATION_FAILED,
-                "معامل البحث مطلوب.",
+                message,
                 List.of(),
                 List.of(new FieldErrorDetail(exception.getParameterName(), "مطلوب")));
     }
