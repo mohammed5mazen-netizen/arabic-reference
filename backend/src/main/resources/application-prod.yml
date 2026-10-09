@@ -1,0 +1,11 @@
+# Active only when SPRING_PROFILES_ACTIVE=prod.
+# ProductionStartupGuard refuses local placeholders before traffic is accepted.
+spring:
+  jpa:
+    show-sql: false
+
+logging:
+  level:
+    root: INFO
+    org.hibernate.SQL: WARN
+    io.lettuce: WARN

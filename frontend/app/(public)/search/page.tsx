@@ -5,11 +5,13 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { ProvenanceBadge } from "@/components/ui/badge";
 import { LinkButton } from "@/components/ui/button";
 import { formatNumber } from "@/lib/format";
-import { publicJson } from "@/lib/dictionary";
+import { apiBase } from "@/lib/dictionary";
 import { publicMetadata } from "@/lib/metadata";
 import {
   dictionaryCard,
   emptySearchMessage,
+  searchPresentation,
+  unavailableSearchMessage,
   highlightSegments,
   matchReasonLabel,
   resultTypeLabel,
@@ -36,9 +38,26 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
   const query = params.q?.trim() ?? "";
   const type = params.type ?? "all";
   const page = Math.max(1, Number(params.page ?? "1") || 1);
-  const results = query
-    ? await publicJson<SearchPage>(`/api/v1/public/search?q=${encodeURIComponent(query)}&type=${encodeURIComponent(type)}&page=${page}&size=20`)
-    : null;
+  let failed = false;
+  let results: SearchPage | null = null;
+  if (query) {
+    try {
+      const response = await fetch(
+        `${apiBase()}/api/v1/public/search?q=${encodeURIComponent(query)}&type=${encodeURIComponent(type)}&page=${page}&size=20`,
+        { cache: "no-store" },
+      );
+      if (!response.ok) {
+        failed = true;
+      } else {
+        const body = (await response.json()) as { data?: SearchPage };
+        results = body.data ?? null;
+        if (!results) failed = true;
+      }
+    } catch {
+      failed = true;
+    }
+  }
+  const presentation = query ? searchPresentation(results, failed) : null;
   const facets = results?.facets;
 
   return (
@@ -55,7 +74,13 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
             <Filter href={searchHref(query, "content")} current={type === "content"} label={`المحتوى${facets ? ` (${formatNumber(facets.content ?? 0)})` : ""}`} />
             <Filter href={searchHref(query, "learning")} current={type === "learning"} label="التعلّم" />
           </nav>
-          {!results || results.items.length === 0 ? (
+          {presentation === "unavailable" ? (
+            <EmptyState
+              title={unavailableSearchMessage}
+              description="الخدمة غير متاحة مؤقتًا. أعد المحاولة بعد لحظات."
+              action={<LinkButton href={searchHref(query, type, page)}>إعادة المحاولة</LinkButton>}
+            />
+          ) : !results || results.items.length === 0 ? (
             <EmptyState
               title={emptySearchMessage}
               description="جرّب صيغة أقصر، أو أزل التشكيل، أو افتح أداة ذات صلة."

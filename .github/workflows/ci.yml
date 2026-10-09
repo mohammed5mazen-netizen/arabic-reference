@@ -17,7 +17,7 @@ jobs:
           distribution: temurin
           java-version: "25"
           cache: maven
-      - name: Backend verify
+      - name: Verify
         working-directory: backend
         run: ./mvnw -B clean verify
 
@@ -42,6 +42,9 @@ jobs:
       - name: Build
         working-directory: frontend
         run: npm run build
-      - name: Public access test
+      - name: Test
         working-directory: frontend
         run: npm test
+        env:
+          SITE_URL: https://reference.example
+          SEO_INDEXING_ENABLED: "false"

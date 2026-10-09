@@ -3,7 +3,7 @@
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <charset>UTF-8</charset>
-            <pattern>{"timestamp":"%d{yyyy-MM-dd'T'HH:mm:ss.SSSXXX}","level":"%level","logger":"%logger{40}","traceId":"%X{traceId:-}","message":"%msg"}%n</pattern>
+            <pattern>{"timestamp":"%d{yyyy-MM-dd'T'HH:mm:ss.SSSXXX}","level":"%level","logger":"%logger{40}","traceId":"%X{traceId:-}","message":"%replace(%msg){'[\r\n\u0000-\u001F]', ' '}"}%n</pattern>
         </encoder>
     </appender>
 

@@ -20,6 +20,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.core.env.Environment;
+import org.springframework.core.env.Profiles;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -38,6 +40,7 @@ public class OwnerBootstrap implements ApplicationRunner {
     private final TimeProvider timeProvider;
     private final JdbcTemplate jdbc;
     private final ObjectProvider<OwnerBootstrap> self;
+    private final boolean production;
 
     public OwnerBootstrap(
             AdminUserRepository users,
@@ -47,7 +50,8 @@ public class OwnerBootstrap implements ApplicationRunner {
             AdminSecurityProperties properties,
             TimeProvider timeProvider,
             JdbcTemplate jdbc,
-            ObjectProvider<OwnerBootstrap> self) {
+            ObjectProvider<OwnerBootstrap> self,
+            Environment environment) {
         this.users = users;
         this.roles = roles;
         this.links = links;
@@ -56,6 +60,7 @@ public class OwnerBootstrap implements ApplicationRunner {
         this.timeProvider = timeProvider;
         this.jdbc = jdbc;
         this.self = self;
+        this.production = environment.acceptsProfiles(Profiles.of("prod"));
     }
 
     @Override
@@ -89,7 +94,7 @@ public class OwnerBootstrap implements ApplicationRunner {
         owner.setDisplayName(displayName);
         owner.setPasswordHash(passwordEncoder.encode(bootstrap.getPassword()));
         owner.setStatus(AccountStatus.ACTIVE);
-        owner.setMustChangePassword(false);
+        owner.setMustChangePassword(production);
         owner.setFailedLoginAttempts(0);
         owner.setPasswordChangedAt(now);
         owner.setCreatedAt(now);

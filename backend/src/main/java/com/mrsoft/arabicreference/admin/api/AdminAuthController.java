@@ -3,6 +3,7 @@ package com.mrsoft.arabicreference.admin.api;
 import com.mrsoft.arabicreference.identity.application.AdminSessionService;
 import com.mrsoft.arabicreference.identity.application.StaffViews.SessionView;
 import com.mrsoft.arabicreference.identity.application.StaffViews.TokenPair;
+import com.mrsoft.arabicreference.shared.web.ClientAddresses;
 import com.mrsoft.arabicreference.shared.kernel.time.TimeProvider;
 import com.mrsoft.arabicreference.shared.web.api.ApiResponse;
 import com.mrsoft.arabicreference.shared.web.api.ApiResponses;
@@ -29,12 +30,12 @@ public class AdminAuthController {
 
     @PostMapping("/login")
     public ApiResponse<TokenPair> login(@Valid @RequestBody LoginRequest request, HttpServletRequest http) {
-        return ApiResponses.ok(sessions.login(request.username(), request.password(), http.getRemoteAddr()), timeProvider);
+        return ApiResponses.ok(sessions.login(request.username(), request.password(), ClientAddresses.read(http)), timeProvider);
     }
 
     @PostMapping("/refresh")
     public ApiResponse<TokenPair> refresh(@Valid @RequestBody RefreshRequest request, HttpServletRequest http) {
-        return ApiResponses.ok(sessions.refresh(request.refreshToken(), http.getRemoteAddr()), timeProvider);
+        return ApiResponses.ok(sessions.refresh(request.refreshToken(), ClientAddresses.read(http)), timeProvider);
     }
 
     @PostMapping("/logout")
@@ -44,8 +45,8 @@ public class AdminAuthController {
     }
 
     @PostMapping("/change-password")
-    public ApiResponse<TokenPair> changePassword(@Valid @RequestBody ChangePasswordRequest request) {
-        return ApiResponses.ok(sessions.changePassword(request.currentPassword(), request.newPassword()), timeProvider);
+    public ApiResponse<TokenPair> changePassword(@Valid @RequestBody ChangePasswordRequest request, HttpServletRequest http) {
+        return ApiResponses.ok(sessions.changePassword(request.currentPassword(), request.newPassword(), ClientAddresses.read(http)), timeProvider);
     }
 
     @GetMapping("/session")

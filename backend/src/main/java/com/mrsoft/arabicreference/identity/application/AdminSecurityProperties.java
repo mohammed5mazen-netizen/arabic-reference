@@ -65,6 +65,7 @@ public class AdminSecurityProperties {
     public static class RateLimit {
         private int login = 10;
         private int refresh = 30;
+        private int password = 10;
         private Duration window = Duration.ofMinutes(1);
 
         public int getLogin() {
@@ -81,6 +82,14 @@ public class AdminSecurityProperties {
 
         public void setRefresh(int refresh) {
             this.refresh = refresh;
+        }
+
+        public int getPassword() {
+            return password;
+        }
+
+        public void setPassword(int password) {
+            this.password = password;
         }
 
         public Duration getWindow() {

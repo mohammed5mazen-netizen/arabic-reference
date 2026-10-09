@@ -36,9 +36,25 @@ Content mutations on `/api/v1/public/**` stay closed. The public dictionary API 
 
 ## Sessions and CSRF
 
-The API is stateless. Staff authentication uses a bearer access token, not a browser session cookie, so CSRF protection stays disabled. See ADR-014. If a later stage moves the admin credential into a cookie, CSRF must be revisited.
+The API is stateless. Staff authentication uses a bearer access token, not a browser session cookie, so CSRF protection stays disabled. See ADR-014. There is no auth cookie to mark `Secure` or `HttpOnly`. If a later stage moves the admin credential into a cookie, CSRF and cookie flags must be revisited.
 
-CORS allows the configured `FRONTEND_URL` to call public reads and the admin API. Credentials are not allowed. The admin browser sends `Authorization` instead.
+CORS allows only the configured `FRONTEND_URL`. Credentials are not allowed, and `*` is not used. The admin browser sends `Authorization` instead.
+
+## Production profile
+
+`SPRING_PROFILES_ACTIVE=prod` runs `ProductionStartupGuard` before the application accepts traffic. Missing or local database passwords, Redis passwords, JWT secrets, and non-https public origins abort startup. The guard does not print secret values. See ADR-130.
+
+Owner bootstrap runs only when `BOOTSTRAP_OWNER_*` is complete and no platform owner exists. A second start does not create another owner. In the production profile the new owner has `mustChangePassword`. Change it with `POST /api/v1/admin/auth/change-password`, which is rate limited. Until that change, other admin routes return 403 `PASSWORD_CHANGE_REQUIRED`. Session and the change-password route stay available. Remove the bootstrap password from the environment after the first start.
+
+## Headers and client address
+
+API responses send `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, `X-Frame-Options: DENY`, and `Content-Security-Policy: default-src 'none'`. HSTS is off unless `app.security.hsts` is true. The frontend policy is in ADR-131. `unsafe-inline` scripts exist because theme initialization and JSON-LD are inline and `middleware.ts` is forbidden.
+
+`X-Forwarded-For` is ignored unless the socket peer is listed in `TRUSTED_PROXIES`. See ADR-132.
+
+## Redis failure
+
+Login, refresh, password change, the assistant, and quiz attempts fail closed when Redis is unavailable. Morphology, tools, and the in-memory search throttle fail open so reading continues. See ADR-133.
 
 ## Secrets and logs
 
@@ -48,7 +64,7 @@ Logs include method, path, status, duration, and trace id. They do not include q
 
 ## Anonymous abuse
 
-Accounts are not the abuse-control mechanism for public reading. Admin login and refresh are rate limited in Redis. Search and the linguistic tools have their own limiters. `POST /api/v1/public/ai/ask` is anonymous and rate limited. The assistant does not log the question or the API key. See [AI_PRIVACY.md](AI_PRIVACY.md).
+Accounts are not the abuse-control mechanism for public reading. Admin login, refresh, and password change are rate limited in Redis and fail closed. Search uses an in-memory throttle. Morphology and tools fail open if Redis is down. `POST /api/v1/public/ai/ask` and quiz attempts are anonymous, rate limited, and fail closed. The assistant does not log the question or the API key. See [AI_PRIVACY.md](AI_PRIVACY.md).
 
 Quiz start and submit are anonymous and rate limited. The attempt token is random and only its SHA-256 is stored. The public start response does not include which option is correct. Attempt rows are operational data, not admin audit events. See [QUIZ_ENGINE.md](QUIZ_ENGINE.md).
 

@@ -1,6 +1,6 @@
 # Roadmap
 
-S12 is the current stage. Later stages are sequencing, not a commitment to build them now. Public reading stays anonymous. Staff authentication is for internal administration only. S13 is not started.
+S13 is the current stage. No product stage follows it until the owner reviews the release candidate. Public reading stays anonymous. Staff authentication is for internal administration only.
 
 | Stage | Name | Intent |
 | --- | --- | --- |
@@ -16,7 +16,7 @@ S12 is the current stage. Later stages are sequencing, not a commitment to build
 | S9 | Learning Platform | Done: anonymous paths, lessons, and quizzes over published knowledge. No learner accounts |
 | S10 | Public Experience & Design System | Done: one public experience, tokens, navigation, and shared states |
 | S11 | Editorial Operations, Quality & Governance | Done: operations room, queue, quality scans, and source governance |
-| S12 | SEO / Public Knowledge Platform | **Current:** canonical URLs, sitemap, robots, and structured data for published knowledge |
-| S13 | Production Hardening | Not started |
+| S12 | SEO / Public Knowledge Platform | Done: canonical URLs, sitemap, robots, and structured data for published knowledge |
+| S13 | Production Hardening | **Current:** production configuration, security headers, health, backup, and release docs |
 
 S1 does not introduce a visitor account, and it does not put authentication in front of public linguistic pages.

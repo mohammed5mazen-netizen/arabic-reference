@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
+import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -156,6 +157,17 @@ public class GlobalExceptionHandler {
                 HttpStatus.METHOD_NOT_ALLOWED,
                 ErrorCode.METHOD_NOT_ALLOWED,
                 "This method is not allowed.",
+                List.of(),
+                List.of());
+    }
+
+    @ExceptionHandler(CannotCreateTransactionException.class)
+    ResponseEntity<ApiErrorResponse> handleBusy(CannotCreateTransactionException exception) {
+        log.error("Database connection was not available traceId={}", TraceIds.current());
+        return respond(
+                HttpStatus.SERVICE_UNAVAILABLE,
+                ErrorCode.SERVICE_UNAVAILABLE,
+                "The service is temporarily busy.",
                 List.of(),
                 List.of());
     }

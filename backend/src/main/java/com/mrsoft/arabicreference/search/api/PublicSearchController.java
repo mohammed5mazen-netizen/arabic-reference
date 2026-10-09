@@ -4,6 +4,7 @@ import com.mrsoft.arabicreference.search.application.SearchQueryService;
 import com.mrsoft.arabicreference.search.application.SearchViews.SearchPageView;
 import com.mrsoft.arabicreference.search.application.SearchViews.SuggestionView;
 import com.mrsoft.arabicreference.search.domain.SearchTuning;
+import com.mrsoft.arabicreference.shared.web.ClientAddresses;
 import com.mrsoft.arabicreference.shared.kernel.time.TimeProvider;
 import com.mrsoft.arabicreference.shared.web.api.ApiResponse;
 import com.mrsoft.arabicreference.shared.web.api.ApiResponses;
@@ -34,11 +35,11 @@ public class PublicSearchController {
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "" + SearchTuning.DEFAULT_PAGE_SIZE) int size,
             HttpServletRequest request) {
-        return ApiResponses.ok(search.search(q, type, partOfSpeech, page, size, request.getRemoteAddr()), timeProvider);
+        return ApiResponses.ok(search.search(q, type, partOfSpeech, page, size, ClientAddresses.read(request)), timeProvider);
     }
 
     @GetMapping("/suggestions")
     public ApiResponse<List<SuggestionView>> suggestions(@RequestParam String q, HttpServletRequest request) {
-        return ApiResponses.ok(search.suggest(q, request.getRemoteAddr()), timeProvider);
+        return ApiResponses.ok(search.suggest(q, ClientAddresses.read(request)), timeProvider);
     }
 }

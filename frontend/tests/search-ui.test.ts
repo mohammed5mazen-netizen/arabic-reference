@@ -5,6 +5,8 @@ import { textDirection } from "../lib/site.ts";
 import {
   dictionaryCard,
   emptySearchMessage,
+  searchPresentation,
+  unavailableSearchMessage,
   highlightSegments,
   matchReasonLabel,
   rebuildConfirmation,
@@ -60,6 +62,9 @@ test("result cards stay textual and do not expose a score", () => {
   assert.equal(resultTypeLabel("GRAMMAR_CONCEPT"), "مصطلح");
   assert.equal(showsScore(hit), false);
   assert.equal(emptySearchMessage, "لم نعثر على نتائج مطابقة.");
+  assert.equal(unavailableSearchMessage, "تعذر إتمام البحث الآن.");
+  assert.equal(searchPresentation(null, true), "unavailable");
+  assert.equal(searchPresentation({ query: "كتاب", items: [], total: 0, page: 1, size: 20, facets: { dictionary: 0, roots: 0, grammar: 0 } }, false), "empty");
 });
 
 test("highlights are text segments, including hostile input", () => {

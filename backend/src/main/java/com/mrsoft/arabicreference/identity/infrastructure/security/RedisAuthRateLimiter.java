@@ -29,6 +29,10 @@ public class RedisAuthRateLimiter {
         hit("refresh", clientAddress, properties.getRateLimit().getRefresh());
     }
 
+    public void checkPassword(String clientAddress) {
+        hit("password", clientAddress, properties.getRateLimit().getPassword());
+    }
+
     private void hit(String action, String clientAddress, int limit) {
         String address = clientAddress == null || clientAddress.isBlank() ? "unknown" : clientAddress;
         String key = "admin:auth:rl:" + action + ":" + address;

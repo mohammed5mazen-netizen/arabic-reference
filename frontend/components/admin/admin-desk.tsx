@@ -94,7 +94,7 @@ export function AdminDesk({ children }: { children: ReactNode }) {
           </button>
         </div>
       </aside>
-      <div>
+      <div className="min-w-0">
         {current.mustChangePassword ? <PasswordChange onChanged={publishSession} /> : children}
       </div>
     </div>

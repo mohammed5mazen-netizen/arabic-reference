@@ -106,7 +106,7 @@ export default function QualityCenterPage() {
           <button type="submit" className="min-h-12 rounded-2xl bg-library text-[var(--paper)]">تشغيل الفحص</button>
         </form>
       ) : null}
-      <div className="overflow-x-auto rounded-[var(--radius)] border border-line bg-raised">
+      <div className="min-w-0 overflow-x-auto rounded-[var(--radius)] border border-line bg-raised">
         <table className="w-full min-w-[40rem] text-right">
           <caption className="sr-only">نتائج الجودة</caption>
           <thead>

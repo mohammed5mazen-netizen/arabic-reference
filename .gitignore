@@ -18,6 +18,11 @@ frontend/*.tsbuildinfo
 *.log
 logs/
 *.pid
+*.dump
+*.sql.gz
+*.bak
+backups/
+tmp/
 
 # IDE and OS
 .idea/

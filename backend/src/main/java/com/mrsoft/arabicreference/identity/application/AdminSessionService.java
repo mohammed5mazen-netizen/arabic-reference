@@ -198,7 +198,8 @@ public class AdminSessionService {
     }
 
     @Transactional
-    public TokenPair changePassword(String currentPassword, String newPassword) {
+    public TokenPair changePassword(String currentPassword, String newPassword, String clientAddress) {
+        rateLimiter.checkPassword(clientAddress);
         PasswordPolicy.check(newPassword);
         AuthenticatedAccess access = authorization.requireAccess();
         AdminUserEntity user = users.lockById(access.userId()).orElseThrow();

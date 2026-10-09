@@ -2,6 +2,7 @@ package com.mrsoft.arabicreference.ai.infrastructure;
 
 import com.mrsoft.arabicreference.ai.application.AiRateLimitPort;
 import com.mrsoft.arabicreference.shared.kernel.exception.RateLimitedException;
+import com.mrsoft.arabicreference.shared.kernel.exception.ServiceUnavailableException;
 import java.time.Duration;
 import java.time.Instant;
 import org.slf4j.Logger;
@@ -34,7 +35,8 @@ public class AiRateLimiter implements AiRateLimitPort {
         } catch (RateLimitedException limited) {
             throw limited;
         } catch (RuntimeException exception) {
-            log.warn("Assistant rate limit skipped");
+            log.error("Assistant rate limiter is unavailable");
+            throw new ServiceUnavailableException("The assistant is temporarily unavailable.");
         }
     }
 }

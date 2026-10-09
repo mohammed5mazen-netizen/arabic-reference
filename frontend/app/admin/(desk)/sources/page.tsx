@@ -128,23 +128,23 @@ export default function SourcesPage() {
       {error ? <p role="alert">{error}</p> : null}
       {notice ? <p role="status">{notice}</p> : null}
       {can(permissions, "source.manage") ? (
-        <form onSubmit={createSource} className="grid gap-3 rounded-[1.5rem] border border-line bg-raised p-5">
-          <input name="title" required placeholder="عنوان المصدر" className="min-h-12 rounded-2xl border border-line bg-transparent px-4" />
-          <input name="author" placeholder="المؤلف" className="min-h-12 rounded-2xl border border-line bg-transparent px-4" />
-          <input name="publisher" placeholder="الناشر" className="min-h-12 rounded-2xl border border-line bg-transparent px-4" />
-          <input name="edition" placeholder="الطبعة" className="min-h-12 rounded-2xl border border-line bg-transparent px-4" />
-          <input name="year" inputMode="numeric" placeholder="السنة" className="min-h-12 rounded-2xl border border-line bg-transparent px-4" />
-          <select name="licenseType" value={license} onChange={(event) => setLicense(event.target.value)} className="min-h-12 rounded-2xl border border-line bg-transparent px-4">
+        <form onSubmit={createSource} className="grid min-w-0 gap-3 rounded-[1.5rem] border border-line bg-raised p-5">
+          <input name="title" required placeholder="عنوان المصدر" className="min-h-12 w-full min-w-0 rounded-2xl border border-line bg-transparent px-4" />
+          <input name="author" placeholder="المؤلف" className="min-h-12 w-full min-w-0 rounded-2xl border border-line bg-transparent px-4" />
+          <input name="publisher" placeholder="الناشر" className="min-h-12 w-full min-w-0 rounded-2xl border border-line bg-transparent px-4" />
+          <input name="edition" placeholder="الطبعة" className="min-h-12 w-full min-w-0 rounded-2xl border border-line bg-transparent px-4" />
+          <input name="year" inputMode="numeric" placeholder="السنة" className="min-h-12 w-full min-w-0 rounded-2xl border border-line bg-transparent px-4" />
+          <select name="licenseType" value={license} onChange={(event) => setLicense(event.target.value)} className="min-h-12 w-full min-w-0 rounded-2xl border border-line bg-transparent px-4">
             {licenses.map((item) => (
               <option key={item} value={item}>{licenseLabel(item)}</option>
             ))}
           </select>
           {licenseNeedsWarning(license) ? <p role="alert">{licenseWarning}</p> : null}
-          <textarea name="attributionText" required placeholder="نص الإسناد" className="min-h-24 rounded-2xl border border-line bg-transparent px-4 py-3" />
+          <textarea name="attributionText" required placeholder="نص الإسناد" className="min-h-24 w-full min-w-0 rounded-2xl border border-line bg-transparent px-4 py-3" />
           <button type="submit" className="min-h-12 rounded-2xl bg-library text-[var(--paper)]">حفظ المصدر</button>
         </form>
       ) : null}
-      <div className="overflow-x-auto rounded-[var(--radius)] border border-line bg-raised">
+      <div className="min-w-0 overflow-x-auto rounded-[var(--radius)] border border-line bg-raised">
         <table className="w-full min-w-[56rem] text-right">
           <caption className="sr-only">فهرس المصادر</caption>
           <thead>

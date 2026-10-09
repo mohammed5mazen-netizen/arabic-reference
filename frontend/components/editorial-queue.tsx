@@ -13,7 +13,7 @@ export function EditorialQueue({
     return <EmptyState title={emptyTitle} />;
   }
   return (
-    <div className="overflow-x-auto rounded-[var(--radius)] border border-line bg-raised">
+    <div className="min-w-0 overflow-x-auto rounded-[var(--radius)] border border-line bg-raised">
       <table className="w-full min-w-[48rem] text-right">
         <caption className="sr-only">قائمة التحرير</caption>
         <thead>

@@ -10,6 +10,9 @@ spring:
     password: ${DB_PASSWORD:local-dev-only}
     hikari:
       pool-name: arabic-reference
+      maximum-pool-size: ${DB_POOL_SIZE:20}
+      connection-timeout: 3000
+      validation-timeout: 1000
   jpa:
     open-in-view: false
     hibernate:
@@ -20,7 +23,10 @@ spring:
           time_zone: UTC
   flyway:
     enabled: true
+    clean-disabled: true
     locations: classpath:db/migration
+  lifecycle:
+    timeout-per-shutdown-phase: 20s
   data:
     redis:
       host: ${REDIS_HOST:localhost}
@@ -35,11 +41,19 @@ spring:
 
 server:
   port: ${SERVER_PORT:8080}
+  shutdown: graceful
+  error:
+    include-stacktrace: never
+    include-message: never
+    include-binding-errors: never
   servlet:
     encoding:
       charset: UTF-8
       enabled: true
       force: true
+  tomcat:
+    max-http-form-post-size: 2MB
+    max-swallow-size: 2MB
 
 management:
   endpoints:
@@ -51,9 +65,17 @@ management:
       show-details: never
       probes:
         enabled: true
+      group:
+        liveness:
+          include: livenessState
+        readiness:
+          include: readinessState,db
 
 app:
   frontend-url: ${FRONTEND_URL:http://localhost:3000}
+  security:
+    hsts: ${ENABLE_HSTS:false}
+    trusted-proxies: ${TRUSTED_PROXIES:}
   admin:
     jwt-secret: ${ADMIN_JWT_SECRET:local-dev-only-admin-jwt-secret-key-32b}
     access-token-ttl: ${ADMIN_ACCESS_TOKEN_TTL:10m}
@@ -63,6 +85,7 @@ app:
     rate-limit:
       login: ${ADMIN_LOGIN_RATE_LIMIT:10}
       refresh: ${ADMIN_REFRESH_RATE_LIMIT:30}
+      password: ${ADMIN_PASSWORD_RATE_LIMIT:10}
       window: ${ADMIN_AUTH_RATE_WINDOW:1m}
     bootstrap:
       username: ${BOOTSTRAP_OWNER_USERNAME:}

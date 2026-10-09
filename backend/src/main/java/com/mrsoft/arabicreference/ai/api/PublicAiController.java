@@ -4,6 +4,7 @@ import com.mrsoft.arabicreference.ai.application.AiViews.AssistantAnswer;
 import com.mrsoft.arabicreference.ai.application.AiViews.AssistantStatus;
 import com.mrsoft.arabicreference.ai.application.AiViews.PriorTurn;
 import com.mrsoft.arabicreference.ai.application.AssistantService;
+import com.mrsoft.arabicreference.shared.web.ClientAddresses;
 import com.mrsoft.arabicreference.shared.kernel.time.TimeProvider;
 import com.mrsoft.arabicreference.shared.web.api.ApiResponse;
 import com.mrsoft.arabicreference.shared.web.api.ApiResponses;
@@ -32,15 +33,7 @@ public class PublicAiController {
 
     @PostMapping("/api/v1/public/ai/ask")
     public ApiResponse<AssistantAnswer> ask(@RequestBody AskRequest request, HttpServletRequest http) {
-        return ApiResponses.ok(assistant.ask(request.question(), request.priorTurns(), client(http)), time);
-    }
-
-    private static String client(HttpServletRequest request) {
-        String forwarded = request.getHeader("X-Forwarded-For");
-        if (forwarded != null && !forwarded.isBlank()) {
-            return forwarded.split(",")[0].trim();
-        }
-        return request.getRemoteAddr();
+        return ApiResponses.ok(assistant.ask(request.question(), request.priorTurns(), ClientAddresses.read(http)), time);
     }
 
     public record AskRequest(String question, List<PriorTurn> priorTurns) {

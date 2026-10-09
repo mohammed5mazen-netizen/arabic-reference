@@ -1,6 +1,7 @@
 package com.mrsoft.arabicreference.learning.infrastructure;
 
 import com.mrsoft.arabicreference.shared.kernel.exception.RateLimitedException;
+import com.mrsoft.arabicreference.shared.kernel.exception.ServiceUnavailableException;
 import java.time.Duration;
 import java.time.Instant;
 import org.slf4j.Logger;
@@ -32,7 +33,8 @@ public class LearningRateLimiter {
         } catch (RateLimitedException limited) {
             throw limited;
         } catch (RuntimeException exception) {
-            log.warn("Learning rate limit skipped");
+            log.error("Learning rate limiter is unavailable");
+            throw new ServiceUnavailableException("Quiz attempts are temporarily unavailable.");
         }
     }
 }

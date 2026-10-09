@@ -1,6 +1,7 @@
 import { apiBase, partOfSpeechLabel } from "./dictionary.ts";
 
 export const emptySearchMessage = "لم نعثر على نتائج مطابقة.";
+export const unavailableSearchMessage = "تعذر إتمام البحث الآن.";
 export const searchDebounceMs = 250;
 export const suggestionLimit = 8;
 export const searchFilterLayout = "scroll-row";
@@ -80,6 +81,12 @@ export function resultTypeLabel(type: string): string {
     default:
       return type;
   }
+}
+
+export function searchPresentation(loaded: SearchPage | null, failed: boolean): "results" | "empty" | "unavailable" {
+  if (failed) return "unavailable";
+  if (!loaded || loaded.items.length === 0) return "empty";
+  return "results";
 }
 
 export function searchHref(query: string, type = "all", page = 1): string {

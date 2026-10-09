@@ -5,6 +5,7 @@ import com.mrsoft.arabicreference.morphology.application.MorphologyViews.Conjuga
 import com.mrsoft.arabicreference.morphology.application.MorphologyViews.EntryMorphology;
 import com.mrsoft.arabicreference.morphology.application.MorphologyViews.RootMorphology;
 import com.mrsoft.arabicreference.morphology.domain.AnalysisReport;
+import com.mrsoft.arabicreference.shared.web.ClientAddresses;
 import com.mrsoft.arabicreference.shared.kernel.time.TimeProvider;
 import com.mrsoft.arabicreference.shared.web.api.ApiResponse;
 import com.mrsoft.arabicreference.shared.web.api.ApiResponses;
@@ -28,7 +29,7 @@ public class PublicMorphologyController {
 
     @GetMapping("/api/v1/public/morphology/analyze")
     public ApiResponse<AnalysisReport> analyze(@RequestParam(name = "word", required = false) String word, HttpServletRequest request) {
-        return ApiResponses.ok(morphology.analyze(word, client(request)), timeProvider);
+        return ApiResponses.ok(morphology.analyze(word, ClientAddresses.read(request)), timeProvider);
     }
 
     @GetMapping("/api/v1/public/morphology/conjugate")
@@ -46,11 +47,4 @@ public class PublicMorphologyController {
         return ApiResponses.ok(morphology.rootMorphology(slug), timeProvider);
     }
 
-    private static String client(HttpServletRequest request) {
-        String forwarded = request.getHeader("X-Forwarded-For");
-        if (forwarded != null && !forwarded.isBlank()) {
-            return forwarded.split(",")[0].trim();
-        }
-        return request.getRemoteAddr();
-    }
 }
