@@ -41,7 +41,15 @@ Set them in the host's secret store. Never commit them. Required in production: 
 
 ## Database
 
-The pool defaults to 20 connections, with a 3 second connection timeout. A request that cannot get a connection returns 503 and does not include SQL. `ddl-auto` is `validate`. Flyway migrates and refuses `clean`. A failed migration stops startup. SSL for a managed database is set with `sslmode` on the JDBC URL when the provider requires it. Do not open 5432 or 6379 to the internet.
+The pool defaults to 20 connections, with a 3 second connection timeout. A request that cannot get a connection returns 503 and does not include SQL. `ddl-auto` is `validate`. Flyway migrates and refuses `clean`. A failed migration stops startup. With `SPRING_PROFILES_ACTIVE=prod`, the JDBC URL adds `sslmode=require` (`DB_SSLMODE` can raise that, not turn it off by leaving the profile). `DB_HOST` is the hostname only, `DB_NAME` is the database name only, and neither value is a full connection string. Do not open 5432 or 6379 to the internet.
+
+## Render, Neon, and Key Value
+
+The backend image listens on `PORT` when the `prod` profile is active, and on 8080 when `PORT` is unset. Render's health check path is `GET /actuator/health/liveness`. That path is public. Other actuator paths are denied. Readiness, which also checks the database, is `GET /actuator/health/readiness`.
+
+Set these on the Render web service runtime environment, not only as Docker build arguments. The image does not bake them. `ADMIN_JWT_SECRET` maps to `app.admin.jwt-secret`. In `prod` there is no local default: an unset variable fails startup, and the local placeholder `local-dev-only-admin-jwt-secret-key-32b` is still rejected. Use a different secret of at least 32 characters. `FRONTEND_URL` is the only CORS origin. `SITE_URL` is the public site origin used for canonical URLs, not the API host.
+
+Redis uses `REDIS_HOST`, `REDIS_PORT`, and `REDIS_PASSWORD`. Password authentication is the Redis `AUTH` password. No username is required for the current client. Generate secrets in the host. Do not copy them from `.env.example`.
 
 ## First boot
 

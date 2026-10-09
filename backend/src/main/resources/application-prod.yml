@@ -1,8 +1,18 @@
 # Active only when SPRING_PROFILES_ACTIVE=prod.
 # ProductionStartupGuard refuses local placeholders before traffic is accepted.
+# ADMIN_JWT_SECRET has no local fallback here. PORT is the port Render injects.
 spring:
   jpa:
     show-sql: false
+  datasource:
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT:5432}/${DB_NAME}?sslmode=${DB_SSLMODE:require}
+
+server:
+  port: ${PORT:${SERVER_PORT:8080}}
+
+app:
+  admin:
+    jwt-secret: ${ADMIN_JWT_SECRET}
 
 logging:
   level:

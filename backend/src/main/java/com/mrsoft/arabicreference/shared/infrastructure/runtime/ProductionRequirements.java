@@ -46,8 +46,12 @@ public final class ProductionRequirements {
         if (blank(settings.redisPassword()) || LOCAL_PASSWORD.equals(settings.redisPassword())) {
             problems.add("REDIS_PASSWORD is missing or still the local development placeholder.");
         }
-        if (blank(settings.jwtSecret()) || settings.jwtSecret().length() < 32 || LOCAL_JWT.equals(settings.jwtSecret())) {
-            problems.add("ADMIN_JWT_SECRET is missing, shorter than 32 characters, or still the local development placeholder.");
+        if (blank(settings.jwtSecret())) {
+            problems.add("ADMIN_JWT_SECRET is not set.");
+        } else if (LOCAL_JWT.equals(settings.jwtSecret())) {
+            problems.add("ADMIN_JWT_SECRET is still the local development placeholder.");
+        } else if (settings.jwtSecret().length() < 32) {
+            problems.add("ADMIN_JWT_SECRET is shorter than 32 characters.");
         }
         if (!publicHttps(settings.siteUrl())) {
             problems.add("SITE_URL must be an absolute public https origin.");
