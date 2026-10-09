@@ -12,6 +12,7 @@ import com.mrsoft.arabicreference.learning.domain.QuizScorer;
 import com.mrsoft.arabicreference.learning.domain.ReferenceKind;
 import com.mrsoft.arabicreference.learning.domain.SectionType;
 import com.mrsoft.arabicreference.learning.infrastructure.LearningRateLimiter;
+import com.mrsoft.arabicreference.linguistics.application.PublicationChecks;
 import com.mrsoft.arabicreference.linguistics.domain.editorial.EditorialGuards;
 import com.mrsoft.arabicreference.linguistics.domain.editorial.EditorialWorkflow;
 import com.mrsoft.arabicreference.linguistics.domain.editorial.PublicationStatus;
@@ -253,6 +254,7 @@ public class LearningService {
             throw conflict();
         }
         EditorialGuards.requireDifferentPerson(path.verifiedBy, actor, "لا ينشر المراجع المادة التي راجعها.");
+        PublicationChecks.assertNoOpenBlocker("LEARNING_PATH", pathId);
         PublicationStatus next = EditorialWorkflow.publish(path.status);
         validatePublishable(pathId);
         String previous = path.snapshot;

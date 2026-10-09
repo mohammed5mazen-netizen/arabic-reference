@@ -256,7 +256,7 @@ public class LiteratureAdminService {
         LiteraryEraEntity era = lockedEra(id, version);
         UUID actor = authorization.requireAccess().userId();
         var lines = sourcesOf(ids(eraCitations.findByOwnerId(id)));
-        editorial.publish(era, actor);
+        editorial.publish(era, actor, "LITERARY_ERA");
         era.setPublishedSnapshot(eraSnapshot(era, lines));
         editorial.persist(eras, era, actor, AuditEventType.LITERARY_ERA_PUBLISHED, ERA);
         search.onEraPublished(era);
@@ -354,7 +354,7 @@ public class LiteratureAdminService {
         LiteraryGenreEntity genre = lockedGenre(id, version);
         UUID actor = authorization.requireAccess().userId();
         var lines = sourcesOf(ids(genreCitations.findByOwnerId(id)));
-        editorial.publish(genre, actor);
+        editorial.publish(genre, actor, "LITERARY_GENRE");
         genre.setPublishedSnapshot(genreSnapshot(genre, lines));
         editorial.persist(genres, genre, actor, AuditEventType.LITERARY_GENRE_PUBLISHED, GENRE);
         return genreAdmin(genre);
@@ -450,7 +450,7 @@ public class LiteratureAdminService {
         LiterarySchoolEntity school = lockedSchool(id, version);
         UUID actor = authorization.requireAccess().userId();
         var lines = sourcesOf(ids(schoolCitations.findByOwnerId(id)));
-        editorial.publish(school, actor);
+        editorial.publish(school, actor, "LITERARY_SCHOOL");
         school.setPublishedSnapshot(schoolSnapshot(school, lines));
         editorial.persist(schools, school, actor, AuditEventType.LITERARY_SCHOOL_PUBLISHED, SCHOOL);
         return schoolAdmin(school);
@@ -618,7 +618,7 @@ public class LiteratureAdminService {
         LiteraryFigureEntity figure = lockedFigure(id, version);
         UUID actor = authorization.requireAccess().userId();
         var lines = sourcesOf(ids(figureCitations.findByOwnerId(id)));
-        editorial.publish(figure, actor);
+        editorial.publish(figure, actor, "LITERARY_FIGURE");
         figure.setPublishedSnapshot(figureSnapshot(figure, lines));
         editorial.persist(figures, figure, actor, AuditEventType.LITERARY_FIGURE_PUBLISHED, FIGURE);
         search.onFigurePublished(figure);
@@ -800,7 +800,7 @@ public class LiteratureAdminService {
             citationIds.add(excerpt.getCitationId());
         }
         var lines = sourcesOf(citationIds);
-        editorial.publish(work, actor);
+        editorial.publish(work, actor, "LITERARY_WORK");
         work.setPublishedSnapshot(workSnapshot(work, samples, lines));
         editorial.persist(works, work, actor, AuditEventType.LITERARY_WORK_PUBLISHED, WORK);
         search.onWorkPublished(work);

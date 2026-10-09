@@ -378,6 +378,7 @@ public class DictionaryEntryService {
         EditorialGuards.requireDifferentPerson(entry.getCreatedBy(), actor.userId(), "The creator cannot publish their own entry.");
         EditorialGuards.requireDifferentPerson(entry.getReviewedBy(), actor.userId(), "The reviewer cannot publish the same entry.");
         assertPublishable(entry);
+        com.mrsoft.arabicreference.linguistics.application.PublicationChecks.assertNoOpenBlocker("DICTIONARY_ENTRY", entry.getId());
         cascade(entry.getId(), PublicationStatus.VERIFIED, PublicationStatus.PUBLISHED);
         entry.setStatus(EditorialWorkflow.publish(entry.getStatus()));
         entry.setPublishedLemmaNormalized(entry.getLemmaNormalized());

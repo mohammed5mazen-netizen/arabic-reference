@@ -68,6 +68,9 @@ public class ReferenceSourceEntity {
     @Column(nullable = false, length = 160)
     private String slug;
 
+    @Column(name = "identity_key", nullable = false, length = 700)
+    private String identityKey;
+
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "published_snapshot", columnDefinition = "jsonb")
     private Map<String, Object> publishedSnapshot;
@@ -124,6 +127,8 @@ public class ReferenceSourceEntity {
     public void setStatus(PublicationStatus status) { this.status = status; }
     public String getSlug() { return slug; }
     public void setSlug(String slug) { this.slug = slug; }
+    public String getIdentityKey() { return identityKey; }
+    public void setIdentityKey(String identityKey) { this.identityKey = identityKey; }
     public Map<String, Object> getPublishedSnapshot() { return publishedSnapshot; }
     public void setPublishedSnapshot(Map<String, Object> publishedSnapshot) { this.publishedSnapshot = publishedSnapshot; }
     public UUID getReviewedBy() { return reviewedBy; }

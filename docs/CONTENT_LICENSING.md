@@ -24,4 +24,6 @@ S6 uses the same citation record for spelling, rhetoric, literature, and article
 
 S8 does not add a new license. The assistant may quote only a short published excerpt already allowed by that policy. It does not send a full literary work to a model, and it does not publish model output into the reference. See [AI_GROUNDING_POLICY.md](AI_GROUNDING_POLICY.md).
 
+S11 shows the same license states in Arabic on the source catalog and lists restricted, unknown, and missing-attribution blockers in the publishing inbox. It does not infer public domain from the age of a work. Duplicate source candidates are shown and are not merged. See [SOURCE_GOVERNANCE.md](SOURCE_GOVERNANCE.md).
+
 S9 lessons do not copy the knowledge base. A constructed example is labeled **مثال تعليمي**. A section marked as a quotation cannot be published unless the lesson also points at a published reference. The editor writes quiz answers. The assistant does not invent a citation or a correct option.

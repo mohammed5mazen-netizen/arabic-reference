@@ -325,6 +325,7 @@ public class GrammarAdminService {
         }
         List<UUID> citationIds = citationIds(topicCitations.findByOwnerId(id));
         assertPublishable(citationIds);
+        com.mrsoft.arabicreference.linguistics.application.PublicationChecks.assertNoOpenBlocker("GRAMMAR_TOPIC", topic.getId());
         topic.setStatus(EditorialWorkflow.publish(topic.getStatus()));
         topic.setPublishedTitle(topic.getTitleOriginal());
         topic.setPublishedNormalized(topic.getTitleNormalized());
@@ -562,6 +563,7 @@ public class GrammarAdminService {
             }
         }
         assertPublishable(citationIds);
+        com.mrsoft.arabicreference.linguistics.application.PublicationChecks.assertNoOpenBlocker("GRAMMAR_RULE", rule.getId());
         rule.setStatus(EditorialWorkflow.publish(rule.getStatus()));
         rule.setPublishedTitle(rule.getTitleOriginal());
         rule.setPublishedNormalized(rule.getTitleNormalized());
@@ -719,6 +721,7 @@ public class GrammarAdminService {
             throw new ConflictException("A published concept needs at least one citation.");
         }
         assertPublishable(citationIds);
+        com.mrsoft.arabicreference.linguistics.application.PublicationChecks.assertNoOpenBlocker("GRAMMAR_CONCEPT", concept.getId());
         concept.setStatus(EditorialWorkflow.publish(concept.getStatus()));
         concept.setPublishedTitle(concept.getTermOriginal());
         concept.setPublishedNormalized(concept.getTermNormalized());

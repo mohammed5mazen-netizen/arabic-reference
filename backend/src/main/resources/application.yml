@@ -100,6 +100,9 @@ app:
   learning:
     attempt-ttl: ${LEARNING_ATTEMPT_TTL:60m}
     rate-limit-per-minute: ${LEARNING_RATE_LIMIT:20}
+  editorial:
+    bulk-limit: ${EDITORIAL_BULK_LIMIT:100}
+    scan-limit: ${EDITORIAL_SCAN_LIMIT:200}
 
 logging:
   level:

@@ -61,6 +61,10 @@ The compose service initializes PostgreSQL with UTF-8. Timestamps use `timestamp
 
 `V14__learning_platform.sql` adds the learning tables: path, unit, lesson, objective, section, reference, activity, quiz, question, option, attempt, and revision. It extends the audit and search type checks, sets `index_version` to 3, and grants the `learning.*` permissions. There is no progress table and no production lesson seed. `V1` through `V13` are unchanged.
 
+## S11 schema
+
+`V15__editorial_operations.sql` adds `editorial_assignment`, `editorial_comment`, `quality_scan`, and `quality_finding`, plus the `editorial_record` view and `reference_source.identity_key`. It extends the audit check with assignment, comment, scan, and source events, and grants the `editorial.*` and `source.usage.view` permissions. It does not insert linguistic content. `V1` through `V14` are unchanged.
+
 ## What is postponed
 
 Staff and public identifiers are UUIDs. Sequential keys may exist inside the database but are not the public id. Grammar tables wait for a later stage.

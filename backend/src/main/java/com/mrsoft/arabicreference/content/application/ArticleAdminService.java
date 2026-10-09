@@ -273,7 +273,7 @@ public class ArticleAdminService {
                 resolved.add(target);
             });
         }
-        editorial.publish(article, actor);
+        editorial.publish(article, actor, "ARTICLE");
         article.setPublishedSnapshot(snapshot(article, parts, cites, views, links, resolved));
         editorial.persist(articles, article, actor, AuditEventType.ARTICLE_PUBLISHED, ARTICLE);
         search.onPublished(article);

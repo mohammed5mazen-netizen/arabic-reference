@@ -51,6 +51,7 @@ Base package: `com.mrsoft.arabicreference`
 | `content` | Articles. The root package stays a marker |
 | `learning` | Paths, lessons, and quizzes over published knowledge. The root package stays a marker |
 | `ai` | Retrieval-first assistant over published knowledge |
+| `editorial` | Queue, assignments, comments, diffs, and quality scans. It does not own linguistic entities |
 
 Domain code does not depend on web or persistence. Controllers do not call repositories.
 
@@ -68,7 +69,7 @@ Editorial lifecycle:
 
 `DRAFT → IN_REVIEW → VERIFIED → PUBLISHED → ARCHIVED`
 
-`CHANGES_REQUESTED` returns an item from review. A verified record that fails publication can also return to `CHANGES_REQUESTED`, so it becomes editable again. A published edit keeps the last public snapshot and opens a new draft.
+`CHANGES_REQUESTED` returns an item from review. A verified record that fails publication can also return to `CHANGES_REQUESTED`, so it becomes editable again. A published edit keeps the last public snapshot and opens a new draft. S11 reads that lifecycle through `editorial_record` and does not replace it. See [EDITORIAL_OPERATIONS.md](EDITORIAL_OPERATIONS.md).
 
 ## Anonymous scale
 

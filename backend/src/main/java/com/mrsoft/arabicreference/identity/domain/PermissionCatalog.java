@@ -99,6 +99,15 @@ public final class PermissionCatalog {
     public static final String LEARNING_LESSON_ARCHIVE = "learning.lesson.archive";
     public static final String LEARNING_QUIZ_MANAGE = "learning.quiz.manage";
     public static final String LEARNING_QUESTION_MANAGE = "learning.question.manage";
+    public static final String EDITORIAL_DASHBOARD_VIEW = "editorial.dashboard.view";
+    public static final String EDITORIAL_QUEUE_VIEW = "editorial.queue.view";
+    public static final String EDITORIAL_REVIEW_ASSIGN = "editorial.review.assign";
+    public static final String EDITORIAL_COMMENT_CREATE = "editorial.comment.create";
+    public static final String EDITORIAL_COMMENT_RESOLVE = "editorial.comment.resolve";
+    public static final String EDITORIAL_QUALITY_VIEW = "editorial.quality.view";
+    public static final String EDITORIAL_QUALITY_RUN = "editorial.quality.run";
+    public static final String EDITORIAL_DIFF_VIEW = "editorial.diff.view";
+    public static final String SOURCE_USAGE_VIEW = "source.usage.view";
 
     private static final List<String> ALL = List.of(
             USER_VIEW,
@@ -194,7 +203,16 @@ public final class PermissionCatalog {
             LEARNING_LESSON_PUBLISH,
             LEARNING_LESSON_ARCHIVE,
             LEARNING_QUIZ_MANAGE,
-            LEARNING_QUESTION_MANAGE);
+            LEARNING_QUESTION_MANAGE,
+            EDITORIAL_DASHBOARD_VIEW,
+            EDITORIAL_QUEUE_VIEW,
+            EDITORIAL_REVIEW_ASSIGN,
+            EDITORIAL_COMMENT_CREATE,
+            EDITORIAL_COMMENT_RESOLVE,
+            EDITORIAL_QUALITY_VIEW,
+            EDITORIAL_QUALITY_RUN,
+            EDITORIAL_DIFF_VIEW,
+            SOURCE_USAGE_VIEW);
 
     private PermissionCatalog() {
     }

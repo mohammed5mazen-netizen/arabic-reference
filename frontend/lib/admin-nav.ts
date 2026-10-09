@@ -7,6 +7,7 @@ export type AdminNavItem = {
 
 export const adminNav: AdminNavItem[] = [
   { href: "/admin", label: "الرئيسية" },
+  { href: "/admin/editorial", label: "غرفة العمليات", permission: "editorial.dashboard.view" },
   { href: "/admin/users", label: "المستخدمون", permission: "admin.user.view" },
   { href: "/admin/roles", label: "الأدوار والصلاحيات", permission: "admin.role.view" },
   { href: "/admin/audit", label: "سجل التدقيق", permission: "admin.audit.view" },

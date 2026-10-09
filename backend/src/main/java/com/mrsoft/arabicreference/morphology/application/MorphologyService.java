@@ -393,6 +393,7 @@ public class MorphologyService {
         UUID actor = authorization.requireAccess().userId();
         EditorialGuards.requireDifferentPerson(analysis.getCreatedBy(), actor, "The creator cannot publish their own analysis.");
         EditorialGuards.requireDifferentPerson(analysis.getReviewedBy(), actor, "The reviewer cannot publish the same analysis.");
+        com.mrsoft.arabicreference.linguistics.application.PublicationChecks.assertNoOpenBlocker("MORPHOLOGY_ANALYSIS", analysis.getId());
         analysis.setStatus(EditorialWorkflow.publish(analysis.getStatus()));
         analysis.setPublishedSnapshot(snapshot(analysis));
         return finish(analysis, AuditEventType.MORPHOLOGY_ANALYSIS_PUBLISHED);

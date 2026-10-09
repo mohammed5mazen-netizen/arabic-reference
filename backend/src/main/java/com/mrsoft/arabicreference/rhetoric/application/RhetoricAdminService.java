@@ -147,7 +147,7 @@ public class RhetoricAdminService {
         RhetoricTopicEntity topic = lockedTopic(id, version);
         UUID actor = authorization.requireAccess().userId();
         var lines = SourceLines.of(citations.requirePublishable(ids(topicCitations.findByOwnerId(id))));
-        editorial.publish(topic, actor);
+        editorial.publish(topic, actor, "RHETORIC_TOPIC");
         Map<String, Object> snapshot = new LinkedHashMap<>();
         snapshot.put("title", topic.getTitleOriginal());
         snapshot.put("slug", topic.getSlug());
@@ -338,7 +338,7 @@ public class RhetoricAdminService {
         }
         var lines = SourceLines.of(citations.requirePublishable(citationIds));
         RhetoricTopicEntity topic = topics.findById(device.getTopicId()).orElseThrow(() -> missing("Topic"));
-        editorial.publish(device, actor);
+        editorial.publish(device, actor, "RHETORIC_DEVICE");
         device.setPublishedSnapshot(deviceSnapshot(device, topic, parts, examples.findByDeviceIdOrderByDisplayOrderAsc(id), lines));
         editorial.persist(devices, device, actor, AuditEventType.RHETORIC_DEVICE_PUBLISHED, DEVICE);
         search.onDevicePublished(device);

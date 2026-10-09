@@ -8,10 +8,14 @@ import com.mrsoft.arabicreference.source.application.SourceViews.CitationDraft;
 import com.mrsoft.arabicreference.source.application.SourceViews.CitationView;
 import com.mrsoft.arabicreference.source.application.SourceViews.PageResult;
 import com.mrsoft.arabicreference.source.application.SourceViews.SourceDraft;
+import com.mrsoft.arabicreference.source.application.SourceViews;
 import com.mrsoft.arabicreference.source.application.SourceViews.SourceView;
+import java.util.List;
+import java.util.Map;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,9 +42,25 @@ public class AdminSourceController {
         return ApiResponses.ok(sources.list(page, size), timeProvider);
     }
 
+    @GetMapping("/duplicates")
+    public ApiResponse<List<SourceViews.DuplicateGroup>> duplicates() {
+        return ApiResponses.ok(sources.duplicates(), timeProvider);
+    }
+
     @GetMapping("/{id}")
     public ApiResponse<SourceView> get(@PathVariable UUID id) {
         return ApiResponses.ok(sources.get(id), timeProvider);
+    }
+
+    @GetMapping("/{id}/usage")
+    public ApiResponse<List<SourceViews.SourceUsage>> usage(@PathVariable UUID id) {
+        return ApiResponses.ok(sources.usage(id), timeProvider);
+    }
+
+    @DeleteMapping("/{id}")
+    public ApiResponse<Map<String, String>> remove(@PathVariable UUID id, @Valid @RequestBody VersionBody request) {
+        sources.remove(id, request.version());
+        return ApiResponses.ok(Map.of("status", "DELETED"), timeProvider);
     }
 
     @PostMapping

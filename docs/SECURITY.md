@@ -26,7 +26,7 @@ A valid token without the required permission receives `403`. That is different 
 
 The staff UI is `/admin/login` and `/admin`. The public header and footer do not link to it. A visual pass must not reveal quiz answers, draft records, or provider keys. The backend remains the authority.
 
-Content mutations on `/api/v1/public/**` stay closed. The public dictionary API is read-only and returns published snapshots only. Admin dictionary and source routes require a staff token and a matching permission. A creator cannot verify their own content, and the reviewer cannot publish it.
+Content mutations on `/api/v1/public/**` stay closed. The public dictionary API is read-only and returns published snapshots only. Admin dictionary and source routes require a staff token and a matching permission. A creator cannot verify their own content, and the reviewer cannot publish it. S11 keeps comments, assignments, quality findings, and diffs on `/api/v1/admin/editorial/**`. Anonymous access is `401`. A missing permission is `403`. A stale assignment, comment, or content version is `409`. Bulk publish, delete, and verify are forbidden. The assistant cannot verify, publish, or decide a license.
 
 ## Actuator
 

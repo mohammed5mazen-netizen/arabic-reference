@@ -81,3 +81,7 @@ Retrieval-first linguistic assistant. `ai.domain` holds intents, evidence, and t
 ## learning
 
 Paths, units, lessons, activities, and quizzes. The root `learning` package stays a package marker. Domain code does not use Spring or JPA. References to dictionary, grammar, spelling, rhetoric, articles, and the morphology tool go through `PublishedReferencePort`. Learning does not depend on `ai` or on another module's infrastructure. See [LEARNING_PLATFORM.md](LEARNING_PLATFORM.md).
+
+## editorial
+
+Orchestration and read models for the operations room. The root `editorial` package stays a package marker. Domain rules do not use Spring or JPA. Infrastructure reads `editorial_record` and the quality tables through JDBC. It may call identity application services, `PublicationBarrier`, and the search domain ports. Knowledge modules do not depend on `editorial`, and editorial does not depend on their infrastructure. See [EDITORIAL_OPERATIONS.md](EDITORIAL_OPERATIONS.md).

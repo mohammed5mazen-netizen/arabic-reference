@@ -45,7 +45,16 @@ public final class SourceViews {
             String status,
             String slug,
             long version,
-            boolean publishableLicense) {
+            boolean publishableLicense,
+            long citationCount,
+            String lastUsedAt,
+            String licenseLabel) {
+    }
+
+    public record SourceUsage(String contentType, UUID id, String title, String status, String href) {
+    }
+
+    public record DuplicateGroup(String identityKey, List<SourceView> sources) {
     }
 
     public record CitationDraft(

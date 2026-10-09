@@ -80,7 +80,8 @@ public class EditorialStore {
         record.setChangeReason(null);
     }
 
-    public void publish(EditorialEntity record, UUID actor) {
+    public void publish(EditorialEntity record, UUID actor, String contentType) {
+        PublicationChecks.assertNoOpenBlocker(contentType, record.getId());
         EditorialGuards.requireDifferentPerson(record.getCreatedBy(), actor, "The creator cannot publish their own content.");
         EditorialGuards.requireDifferentPerson(record.getReviewedBy(), actor, "The reviewer cannot publish the same content.");
         record.setStatus(EditorialWorkflow.publish(record.getStatus()));

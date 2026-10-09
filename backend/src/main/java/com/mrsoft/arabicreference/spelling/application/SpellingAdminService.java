@@ -172,7 +172,7 @@ public class SpellingAdminService {
         UUID actor = authorization.requireAccess().userId();
         List<UUID> citationIds = ids(topicCitations.findByOwnerId(id));
         var lines = SourceLines.of(citations.requirePublishable(citationIds));
-        editorial.publish(topic, actor);
+        editorial.publish(topic, actor, "SPELLING_TOPIC");
         topic.setPublishedSnapshot(topicSnapshot(topic, lines));
         editorial.persist(topics, topic, actor, AuditEventType.SPELLING_TOPIC_PUBLISHED, TOPIC);
         search.onTopicPublished(topic);
@@ -336,7 +336,7 @@ public class SpellingAdminService {
         }
         var lines = SourceLines.of(citations.requirePublishable(citationIds));
         SpellingTopicEntity topic = topics.findById(rule.getTopicId()).orElseThrow(() -> missing("Topic"));
-        editorial.publish(rule, actor);
+        editorial.publish(rule, actor, "SPELLING_RULE");
         rule.setPublishedSnapshot(ruleSnapshot(rule, topic, parts, samples, lines));
         editorial.persist(rules, rule, actor, AuditEventType.SPELLING_RULE_PUBLISHED, RULE);
         search.onRulePublished(rule);
