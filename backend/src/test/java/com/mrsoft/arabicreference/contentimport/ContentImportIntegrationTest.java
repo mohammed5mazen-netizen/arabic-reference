@@ -93,7 +93,7 @@ class ContentImportIntegrationTest {
 
     @Test
     void importsDraftsWithProvenanceAndReimportDoesNotDuplicate() throws Exception {
-        Path file = writePack("record-1", "بيت", "بيت", "بُيوت", "مكان للسكن.");
+        Path file = writePack("record-1", "كتاب", "كتب", "كُتُب", "Meaning supported by the test source.");
 
         var first = imports.importPack(file, source.getSlug(), false);
         assertThat(first.committed()).isTrue();
@@ -104,7 +104,7 @@ class ContentImportIntegrationTest {
         assertThat(jdbc.queryForObject("select count(*) from content_import_record where source_id = ?", Integer.class, source.getId())).isEqualTo(1);
         assertThat(jdbc.queryForObject("select count(*) from entry_citation ec join lexical_entry e on e.id = ec.entry_id where e.created_by = ?", Integer.class, IMPORT_ACTOR())).isEqualTo(1);
 
-        var entry = entries.findByLemmaNormalizedAndPartOfSpeech("بيت", PartOfSpeech.NOUN).orElseThrow();
+        var entry = entries.findByLemmaNormalizedAndPartOfSpeech("كتاب", PartOfSpeech.NOUN).orElseThrow();
         assertThat(entry.getStatus()).isEqualTo(PublicationStatus.DRAFT);
         assertThat(entry.getPublishedSnapshot()).isNull();
         assertThat(entry.getRootId()).isNotNull();

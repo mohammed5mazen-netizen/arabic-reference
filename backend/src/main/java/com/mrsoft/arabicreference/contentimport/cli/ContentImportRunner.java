@@ -8,7 +8,9 @@ import java.util.List;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.WebApplicationContext;
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.json.JsonMapper;
 
@@ -17,14 +19,19 @@ import tools.jackson.databind.json.JsonMapper;
 public class ContentImportRunner implements ApplicationRunner {
     private final ContentImportService imports;
     private final JsonMapper mapper;
+    private final ApplicationContext applicationContext;
 
-    public ContentImportRunner(ContentImportService imports, JsonMapper mapper) {
+    public ContentImportRunner(ContentImportService imports, JsonMapper mapper, ApplicationContext applicationContext) {
         this.imports = imports;
         this.mapper = mapper;
+        this.applicationContext = applicationContext;
     }
 
     @Override
     public void run(ApplicationArguments arguments) {
+        if (applicationContext instanceof WebApplicationContext) {
+            throw new ContentImportException("Content import is CLI-only; start with spring.main.web-application-type=none.");
+        }
         String file = requiredOption(arguments, "file");
         String source = requiredOption(arguments, "source");
         boolean dryRun = booleanOption(arguments, "dry-run");

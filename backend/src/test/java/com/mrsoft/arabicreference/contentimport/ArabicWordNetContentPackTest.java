@@ -14,6 +14,7 @@ import tools.jackson.databind.json.JsonMapper;
 
 class ArabicWordNetContentPackTest {
     private static final Path PACK = Path.of("..", "content", "dictionary", "arabic-wordnet-v2-seed.json");
+    private static final Path MANIFEST = Path.of("..", "content", "sources", "arabic-wordnet-v2.json");
 
     @Test
     void productionPackContainsOnlyValidSourceBackedRowsAndKnownSamples() throws Exception {
@@ -23,6 +24,12 @@ class ArabicWordNetContentPackTest {
 
         assertThat(records).hasSize(500);
         assertThat(records.stream().map(record -> record.recordKey()).collect(Collectors.toSet())).hasSize(500);
+        assertThat(records.stream()
+                .map(record -> validator.validate(record, 1).record().normalizedLemma() + "|" + record.partOfSpeech())
+                .collect(Collectors.toSet())).hasSize(500);
+        assertThat(records.stream()
+                .mapToInt(record -> validator.validate(record, 1).warnings().size())
+                .sum()).isEqualTo(423);
         assertThat(records).allSatisfy(record -> {
             assertThat(record.sourceLocator()).contains("#L");
             assertThat(record.definition()).isNull();
@@ -35,10 +42,21 @@ class ArabicWordNetContentPackTest {
                 .collect(Collectors.toSet()))
                 .contains(
                         "\u0643\u062A\u0627\u0628",
+                        "\u0643\u0627\u062A\u0628",
+                        "\u0645\u0643\u062A\u0648\u0628",
+                        "\u0645\u0643\u062A\u0628\u0629",
+                        "\u0643\u062A\u0627\u0628\u0629",
                         "\u0634\u0645\u0633",
                         "\u0642\u0645\u0631",
                         "\u0628\u0627\u0628",
+                        "\u0639\u064A\u0646",
                         "\u0645\u062F\u0631\u0633\u0629");
+
+        var manifest = JsonMapper.builder().build().readTree(Files.readString(MANIFEST));
+        assertThat(manifest.path("source").path("license").asString()).isEqualTo("CC BY-SA 3.0");
+        assertThat(manifest.path("source").path("licenseDecision").asString()).isEqualTo("APPROVED");
+        assertThat(manifest.path("source").path("commercialReuse").asBoolean()).isTrue();
+        assertThat(manifest.path("source").path("attribution").asString()).contains("Polit\u00e8cnica de Val\u00e8ncia");
     }
 
     @Test

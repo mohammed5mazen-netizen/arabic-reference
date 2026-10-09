@@ -14,7 +14,7 @@
     "commercialReuse": true,
     "attributionRequired": true,
     "shareAlikeRequired": true,
-    "attribution": "Abouenour Lahsen, Karim Bouzoubaa, Paolo Rosso (c) 2015, Mohammed V Rabat University, Morocco and Universitat Polit?cnica de Val?ncia, Spain; Musa Alkhalifa and Sabri Elkateb (c) 2007, UPC and the University of Manchester. Arabic WordNet data, CC BY-SA 3.0."
+    "attribution": "Abouenour Lahsen, Karim Bouzoubaa, Paolo Rosso (c) 2015, Mohammed V Rabat University, Morocco and Universitat Polit\u00e8cnica de Val\u00e8ncia, Spain; Musa Alkhalifa and Sabri Elkateb (c) 2007, UPC and the University of Manchester. Arabic WordNet data, CC BY-SA 3.0."
   },
   "selection": {
     "method": "Deterministic SHA-256 ordering of unique, unambiguous source lemma+part-of-speech rows with a source-declared valid Arabic root or broken plural; includes ten source-verified sample records.",
